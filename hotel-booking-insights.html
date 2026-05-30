@@ -662,23 +662,28 @@ function submitLeadForm(){
   if(!lead.email){showLeadError('Please enter your work email.');return;}
   if(btn){btn.disabled=true;btn.textContent='Submitting...';}
 
-  fetch(GAS_URL + '?action=submitBenchmarkLead', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(lead)
-  })
-  .then(res => res.json())
-  .then(function() {
+  // ── ส่งผ่าน JSONP (GET) — ไม่มี CORS issue ──
+  lead.action = 'submitBenchmarkLead';
+  const cbName = 'mcLead_' + Date.now();
+  const qs = Object.keys(lead).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(lead[k])).join('&');
+  const script = document.createElement('script');
+  window[cbName] = function() {
+    delete window[cbName];
+    try { document.body.removeChild(script); } catch(e) {}
     localStorage.setItem('mcLeadUnlocked','1');
     const s=document.getElementById('leadSuccess');if(s)s.classList.add('open');
     if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
     setTimeout(function(){closeLeadModal();renderManualBenchmark();},350);
-  })
-  .catch(function() {
+  };
+  script.onerror = function() {
+    delete window[cbName];
+    try { document.body.removeChild(script); } catch(e) {}
     localStorage.setItem('mcLeadUnlocked','1');
     if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
     setTimeout(function(){closeLeadModal();renderManualBenchmark();},350);
-  });
+  };
+  script.src = GAS_URL + '?' + qs + '&callback=' + cbName;
+  document.body.appendChild(script);
 }
 
 // ─── GEO TABLE ────────────────────────────────────────────────────────────────
