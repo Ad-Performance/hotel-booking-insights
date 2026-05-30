@@ -254,29 +254,40 @@ let currentView = null;
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
   buildGeoTable();
-  fetch(GAS_URL + '?action=getClientPayload')
-    .then(res => res.json())
-    .then(function(res) {
-      try {
-        if (!res || !res.ok) {
-          showLoadError('Backend error: ' + (res && res.message ? res.message : 'Unknown error'));
-          return;
-        }
-        payload = res.payload || {};
-        applyContent();
-        setupFilters();
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        render();
-        initLeadLock();
-      } catch (err) {
-        showLoadError('Render error: ' + err.message);
-      }
-    })
-    .catch(function(err) {
-      showLoadError('Failed to load data: ' + String(err));
-    });
+  loadViaJsonp();
 });
+
+function loadViaJsonp() {
+  const callbackName = 'gasCallback_' + Date.now();
+  const script = document.createElement('script');
+
+  window[callbackName] = function(res) {
+    delete window[callbackName];
+    document.body.removeChild(script);
+    try {
+      if (!res || !res.ok) {
+        showLoadError('Backend error: ' + (res && res.message ? res.message : 'Unknown error'));
+        return;
+      }
+      payload = res.payload || {};
+      applyContent();
+      setupFilters();
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      render();
+      initLeadLock();
+    } catch (err) {
+      showLoadError('Render error: ' + err.message);
+    }
+  };
+
+  script.onerror = function() {
+    showLoadError('Failed to load data. Please try again.');
+  };
+
+  script.src = GAS_URL + '?action=getClientPayload&callback=' + callbackName;
+  document.body.appendChild(script);
+}
 
 function showLoadError(message) {
   document.getElementById('loading').innerHTML = '<div class="error">' + escapeHtml(message) + '</div>';
