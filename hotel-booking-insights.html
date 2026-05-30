@@ -514,11 +514,11 @@ function getBehaviorRows(view,type){
 function renderBehaviorCharts(view){
   const bltOrder=['0–3 Days','4–7 Days','8–14 Days','15–30 Days','30–60 Days','60+ Days'];
   const bltRows=getBehaviorRows(view,'blt'),bltTotal=Math.max(bltRows.reduce((s,r)=>s+numVal(r.Bookings),0),1);
-  const bltValues=bltOrder.map(k=>bltRows.filter(r=>r['BLT Bucket']===k).reduce((s,r)=>s+numVal(r.Bookings),0)/bltTotal*100);
+  const bltValues=bltOrder.map(k=>bltRows.filter(r=>{const b=String(r['BLT Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['BLT Bucket']===k;}).reduce((s,r)=>s+numVal(r.Bookings),0)/bltTotal*100);
   createChart('bltDistributionChart',{type:'bar',data:{labels:bltOrder,datasets:[{label:'% of Bookings',data:bltValues,backgroundColor:'rgba(0,88,255,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatDecimal(v,0)+'%','% of Bookings')});
   const losOrder=['1 Night','2 Nights','3–4 Nights','5–6 Nights','7+ Nights'];
   const losRows=getBehaviorRows(view,'los');
-  const losValues=losOrder.map(k=>losRows.filter(r=>r['LOS Bucket']===k).reduce((s,r)=>s+numVal(r.Revenue),0));
+  const losValues=losOrder.map(k=>losRows.filter(r=>{const b=String(r['LOS Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['LOS Bucket']===k;}).reduce((s,r)=>s+numVal(r.Revenue),0));
   createChart('losDistributionChart',{type:'bar',data:{labels:losOrder,datasets:[{label:'Revenue',data:losValues,backgroundColor:'rgba(0,88,255,.50)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatRevenue(v),'Revenue')});
 }
 
