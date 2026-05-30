@@ -617,6 +617,8 @@ function showLeadError(msg){ const e=document.getElementById('leadError');if(e){
 function submitLeadForm(){
   clearLeadMessages();
   const btn=document.getElementById('leadSubmitBtn');
+
+  // ── Contact info ──
   const lead={
     name:(document.getElementById('leadName')?.value||'').trim(),
     hotel:(document.getElementById('leadHotel')?.value||document.getElementById('manualHotelName')?.value||'').trim(),
@@ -627,18 +629,39 @@ function submitLeadForm(){
     month:(getSelectedMonths().join(',')),
     userAgent:navigator.userAgent
   };
+
+  // ── Benchmark form data ──
+  lead.property_revenue   = inputNum('manualRevenue')   || '';
+  lead.property_bookings  = inputNum('manualBookings')  || '';
+  lead.property_nights    = inputNum('manualNights')    || '';
+  lead.property_abv       = inputNum('manualAbv')       || '';
+  lead.property_los       = inputNum('manualLos')       || '';
+  lead.property_blt       = inputNum('manualBlt')       || '';
+
+  // ── Top 10 Geo ──
+  const geoData = parseManualGeoTable();
+  lead.top_geo_json = geoData.length ? JSON.stringify(geoData) : '';
+
+  // ── Behavior data ──
+  const beh = window._mcBehavior || {};
+  lead.time_on_page   = beh.timeOnPage   || 0;
+  lead.scroll_depth   = beh.scrollDepth  || 0;
+  lead.click_count    = beh.clickCount   || 0;
+  lead.sections_seen  = (beh.sectionsSeen || []).join(', ');
+
+  // ── UTM ──
   const params=new URLSearchParams(window.location.search||'');
-  lead.utm_source=params.get('utm_source')||'';
-  lead.utm_medium=params.get('utm_medium')||'';
-  lead.utm_campaign=params.get('utm_campaign')||'';
-  lead.utm_content=params.get('utm_content')||'';
-  lead.utm_term=params.get('utm_term')||'';
+  lead.utm_source   = params.get('utm_source')   || '';
+  lead.utm_medium   = params.get('utm_medium')   || '';
+  lead.utm_campaign = params.get('utm_campaign') || '';
+  lead.utm_content  = params.get('utm_content')  || '';
+  lead.utm_term     = params.get('utm_term')     || '';
+
   if(!lead.name){showLeadError('Please enter your name.');return;}
   if(!lead.hotel){showLeadError('Please enter your hotel name.');return;}
   if(!lead.email){showLeadError('Please enter your work email.');return;}
   if(btn){btn.disabled=true;btn.textContent='Submitting...';}
 
-  // ── ส่ง lead ผ่าน fetch แทน google.script.run ──
   fetch(GAS_URL + '?action=submitBenchmarkLead', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -651,8 +674,7 @@ function submitLeadForm(){
     if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
     setTimeout(function(){closeLeadModal();renderManualBenchmark();},350);
   })
-  .catch(function(err) {
-    // Unlock anyway — ถ้า CORS block POST ให้ unlock ได้เลย lead จะถูก log จาก GET request แทน
+  .catch(function() {
     localStorage.setItem('mcLeadUnlocked','1');
     if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
     setTimeout(function(){closeLeadModal();renderManualBenchmark();},350);
@@ -763,11 +785,48 @@ document.addEventListener('click', function(e) {
   const GAS_TRACK_URL = 'https://script.google.com/a/macros/media-console.com/s/AKfycbwxQbPJgEq7_3XvYCqgT6ukcbpcPPqXVmrow94_QUKkYxvb3AFs9LzSB1a3tud4M_wlrQ/exec';
   const SESSION_KEY = 'mc_vis_session_v1';
 
-  // ── ป้องกันนับซ้ำใน session เดียวกัน ──
   if (sessionStorage.getItem(SESSION_KEY)) return;
   sessionStorage.setItem(SESSION_KEY, '1');
 
+  // ── Behavior state (shared กับ submitLeadForm) ──
+  window._mcBehavior = { timeOnPage: 0, scrollDepth: 0, clickCount: 0, sectionsSeen: [] };
+  const sessionStart = Date.now();
+
+  window.addEventListener('scroll', function() {
+    const pct = Math.round((window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight)) * 100);
+    if (pct > window._mcBehavior.scrollDepth) window._mcBehavior.scrollDepth = Math.min(100, pct);
+  }, { passive: true });
+
+  document.addEventListener('click', function() { window._mcBehavior.clickCount++; });
+
+  setInterval(function() {
+    window._mcBehavior.timeOnPage = Math.round((Date.now() - sessionStart) / 1000);
+  }, 5000);
+
+  function observeSections() {
+    const sections = [
+      { id: 'app',              label: 'Hero' },
+      { sel: '.testimonials',   label: 'Testimonials' },
+      { sel: '.kpi-grid',       label: 'KPI Dashboard' },
+      { sel: '.behavior-grid',  label: 'Behavior Charts' },
+      { id: 'propertyBenchmark',label: 'Benchmark Tool' },
+    ];
+    const obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          const lbl = e.target.getAttribute('data-mc-lbl');
+          if (lbl && !window._mcBehavior.sectionsSeen.includes(lbl)) window._mcBehavior.sectionsSeen.push(lbl);
+        }
+      });
+    }, { threshold: 0.3 });
+    sections.forEach(function(s) {
+      const el = s.id ? document.getElementById(s.id) : document.querySelector(s.sel);
+      if (el) { el.setAttribute('data-mc-lbl', s.label); obs.observe(el); }
+    });
+  }
+
   async function track() {
+    observeSections();
     const ua = navigator.userAgent;
     const isMobile = /Mobile|Android|iPhone|iPad/i.test(ua);
     const isTablet = /iPad|Tablet/i.test(ua);
