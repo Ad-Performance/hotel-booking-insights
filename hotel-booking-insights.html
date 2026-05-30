@@ -123,7 +123,7 @@
     .benchmark-result-unlock .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;}
     #dashboard,#dashboard .card,#dashboard .kpi-card,#dashboard .insight-card,#dashboard .chart-box,#dashboard .table-wrap{filter:none!important;opacity:1!important;pointer-events:auto!important;user-select:auto!important}
     @media(max-width:820px){.lead-form-grid{grid-template-columns:1fr}.lead-modal-box{padding:20px;border-radius:22px}.lead-submit-row{display:grid;grid-template-columns:1fr}.lead-submit-row .btn{width:100%}.benchmark-lock-card{display:block}.benchmark-lock-card .btn{width:100%;margin-top:16px}}
-  .month-cb-label{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#1f2937;white-space:nowrap;}.month-cb-label:hover{background:#f0f5ff}.month-cb{width:15px;height:15px;accent-color:#0058ff;cursor:pointer;flex-shrink:0;}</style>
+  .month-item{padding:10px 14px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1f2937;white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:12px;}.month-item:hover{background:#f8fafc;}.month-item.selected{font-weight:600;color:#0058ff;}</style>
 </head>
 <body>
   <div id="loading" class="loading">Loading dashboard...</div>
@@ -163,13 +163,6 @@
   <label>Booking Month</label>
   <input id="monthFilterBtn" readonly placeholder="All Months" value="" onclick="toggleMonthDropdown()" style="cursor:pointer;caret-color:transparent;" autocomplete="off">
   <div id="monthDropdown" style="display:none;position:absolute;top:52px;left:0;z-index:999;background:#fff;border:1px solid #dfe5ee;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.10);padding:8px;min-width:220px;max-height:300px;overflow-y:auto;">
-    <div style="padding:6px 8px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f2f6;">
-      <span style="font-size:11px;font-weight:700;color:#7b8798;letter-spacing:.06em;text-transform:uppercase">Select Months</span>
-      <div style="display:flex;gap:8px;">
-        <span onclick="selectAllMonths()" style="font-size:11px;font-weight:700;color:#0058ff;cursor:pointer;">All</span>
-        <span onclick="clearAllMonths()" style="font-size:11px;font-weight:700;color:#e11d48;cursor:pointer;">Clear</span>
-      </div>
-    </div>
     <div id="monthCheckboxList"></div>
   </div>
 </div>
@@ -352,7 +345,7 @@ function setupFilters() {
   const months = unique((payload.monthly || []).map(r => r.Month)).sort((a,b)=>monthIndex(a)-monthIndex(b));
   const monthList = document.getElementById('monthCheckboxList');
   if (monthList) {
-    monthList.innerHTML = months.map(v => '<label class="month-cb-label"><input type="checkbox" class="month-cb" value="' + escapeAttr(v) + '" onchange="onMonthCheckChange()"> ' + escapeHtml(v) + '</label>').join('');
+    monthList.innerHTML = months.map(v => '<div class="month-item" data-month="' + escapeAttr(v) + '" onclick="toggleMonth(\'' + escapeJs(v) + '\')"> ' + escapeHtml(v) + '</div>').join('');
   }
 }
 
@@ -706,35 +699,44 @@ function formatMetric(v,type){if(type==='revenue')return formatRevenue(v);if(typ
 function formatGap(diff,pct,type){const prefix=diff>0?'+':'';let main=type==='revenue'?prefix+formatRevenue(diff):type==='los'?prefix+formatDecimal(diff,1)+' nights':type==='blt'?prefix+formatDecimal(diff,0)+' days':prefix+formatNumber(diff);return main+(pct==null?'':' · '+prefix+formatDecimal(pct,1)+'%');}
 
 // ─── MULTI-SELECT MONTH FILTER ────────────────────────────────────────────────
-function getSelectedMonths() {
-  return Array.from(document.querySelectorAll('.month-cb:checked')).map(cb => cb.value);
-}
+let _selectedMonths = [];
 
-function onMonthCheckChange() {
-  updateMonthLabel();
+function getSelectedMonths() { return _selectedMonths.slice(); }
+
+function toggleMonth(v) {
+  const idx = _selectedMonths.indexOf(v);
+  if (idx >= 0) _selectedMonths.splice(idx, 1);
+  else _selectedMonths.push(v);
+  updateMonthUI();
   render();
 }
 
-function updateMonthLabel() {
-  const selected = getSelectedMonths();
+function updateMonthUI() {
+  document.querySelectorAll('.month-item').forEach(el => {
+    const m = el.getAttribute('data-month');
+    if (_selectedMonths.includes(m)) {
+      el.classList.add('selected');
+      el.innerHTML = escapeHtml(m) + ' <span style="font-size:13px;">✓</span>';
+    } else {
+      el.classList.remove('selected');
+      el.innerHTML = escapeHtml(m);
+    }
+  });
   const btn = document.getElementById('monthFilterBtn');
   if (!btn) return;
-  if (!selected.length) btn.value = '';
-  else if (selected.length === 1) btn.value = selected[0];
-  else btn.value = selected.length + ' months selected';
-  btn.placeholder = selected.length ? '' : 'All Months';
+  if (!_selectedMonths.length) { btn.value = ''; btn.placeholder = 'All Months'; }
+  else if (_selectedMonths.length === 1) { btn.value = _selectedMonths[0]; btn.placeholder = ''; }
+  else { btn.value = _selectedMonths.length + ' months selected'; btn.placeholder = ''; }
 }
 
 function selectAllMonths() {
-  document.querySelectorAll('.month-cb').forEach(cb => cb.checked = true);
-  updateMonthLabel();
-  render();
+  _selectedMonths = Array.from(document.querySelectorAll('.month-item')).map(el => el.getAttribute('data-month'));
+  updateMonthUI(); render();
 }
 
 function clearAllMonths() {
-  document.querySelectorAll('.month-cb').forEach(cb => cb.checked = false);
-  updateMonthLabel();
-  render();
+  _selectedMonths = [];
+  updateMonthUI(); render();
 }
 
 function toggleMonthDropdown() {
