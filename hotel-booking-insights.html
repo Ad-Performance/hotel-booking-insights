@@ -159,7 +159,23 @@
           <div><div class="dash-title-small">HOSPITALITY COMMERCIAL INTELLIGENCE</div><div class="dash-title">Free Hotel Booking Benchmark Assessment</div></div>
           <div class="filters">
             <div class="filter-group"><label>Destination</label><input id="destinationFilter" list="destinationOptions" placeholder="All Destinations" oninput="scheduleRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="destinationOptions"></datalist></div>
-            <div class="filter-group"><label>Booking Month</label><select id="monthFilter" onchange="render()"></select></div>
+            <div class="filter-group" style="position:relative">
+  <label>Booking Month</label>
+  <div id="monthFilterBtn" onclick="toggleMonthDropdown()" style="height:44px;border:1px solid #dfe5ee;background:#fff;border-radius:14px;color:#1f2937;font-size:14px;font-weight:500;padding:0 13px;min-width:220px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;">
+    <span id="monthFilterLabel">All Months</span>
+    <span style="margin-left:8px;color:#8a96aa;font-size:11px;">▼</span>
+  </div>
+  <div id="monthDropdown" style="display:none;position:absolute;top:52px;left:0;z-index:999;background:#fff;border:1px solid #dfe5ee;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.10);padding:8px;min-width:220px;max-height:280px;overflow-y:auto;">
+    <div style="padding:6px 8px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f2f6;">
+      <span style="font-size:11px;font-weight:700;color:#7b8798;letter-spacing:.06em;text-transform:uppercase">Select Months</span>
+      <div style="display:flex;gap:8px;">
+        <span onclick="selectAllMonths()" style="font-size:11px;font-weight:700;color:#0058ff;cursor:pointer;">All</span>
+        <span onclick="clearAllMonths()" style="font-size:11px;font-weight:700;color:#e11d48;cursor:pointer;">Clear</span>
+      </div>
+    </div>
+    <div id="monthCheckboxList"></div>
+  </div>
+</div>
             <button class="btn" onclick="resetFilters()">Reset</button>
           </div>
         </div>
@@ -337,14 +353,17 @@ function setupFilters() {
   const destinations = unique((payload.destination || []).map(r => r.Destination)).sort((a,b)=>String(a).localeCompare(String(b)));
   document.getElementById('destinationOptions').innerHTML = destinations.map(v => '<option value="' + escapeAttr(v) + '"></option>').join('');
   const months = unique((payload.monthly || []).map(r => r.Month)).sort((a,b)=>monthIndex(a)-monthIndex(b));
-  document.getElementById('monthFilter').innerHTML = '<option value="">All Months</option>' + months.map(v => '<option value="' + escapeAttr(v) + '">' + escapeHtml(v) + '</option>').join('');
+  const monthList = document.getElementById('monthCheckboxList');
+  if (monthList) {
+    monthList.innerHTML = months.map(v => '<label style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:#344054;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'"><input type="checkbox" class="month-cb" value="' + escapeAttr(v) + '" onchange="onMonthCheckChange()" style="width:15px;height:15px;accent-color:#0058ff;cursor:pointer;"> ' + escapeHtml(v) + '</label>').join('');
+  }
 }
 
 let renderDebounceTimer = null;
 function scheduleRender() { clearTimeout(renderDebounceTimer); renderDebounceTimer = setTimeout(render, 250); }
 let benchmarkDebounceTimer = null;
 function scheduleBenchmarkRender() { clearTimeout(benchmarkDebounceTimer); benchmarkDebounceTimer = setTimeout(renderManualBenchmark, 250); }
-function resetFilters() { document.getElementById('destinationFilter').value = ''; document.getElementById('monthFilter').value = ''; render(); }
+function resetFilters() { document.getElementById('destinationFilter').value = ''; clearAllMonths(); render(); }
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function render() {
@@ -364,15 +383,16 @@ function render() {
 
 function getFilteredView() {
   const dest = document.getElementById('destinationFilter').value;
-  const month = document.getElementById('monthFilter').value;
+  const selectedMonths = getSelectedMonths();
+  const month = selectedMonths.length === 1 ? selectedMonths[0] : '';
   let monthlyRows = [], sourceRows = [], futureRows = [];
   if (dest) {
-    monthlyRows = (payload.destinationMonth || []).filter(r => r.Destination === dest && (!month || r.Month === month));
-    sourceRows = (payload.destinationSourceMarketMonth || []).filter(r => r.Destination === dest && (!month || r.Month === month)).map(toSourceRow);
+    monthlyRows = (payload.destinationMonth || []).filter(r => r.Destination === dest && (!selectedMonths.length || selectedMonths.includes(r.Month)));
+    sourceRows = (payload.destinationSourceMarketMonth || []).filter(r => r.Destination === dest && (!selectedMonths.length || selectedMonths.includes(r.Month))).map(toSourceRow);
     futureRows = (payload.destinationFuturePipeline || []).filter(r => r.Destination === dest).map(toFutureRow);
-  } else if (month) {
-    monthlyRows = (payload.monthly || []).filter(r => r.Month === month);
-    sourceRows = (payload.sourceMarketMonth || []).filter(r => r.Month === month).map(toSourceRow);
+  } else if (selectedMonths.length) {
+    monthlyRows = (payload.monthly || []).filter(r => selectedMonths.includes(r.Month));
+    sourceRows = (payload.sourceMarketMonth || []).filter(r => selectedMonths.includes(r.Month)).map(toSourceRow);
     futureRows = (payload.futurePipeline || []).map(toFutureRow);
   } else {
     monthlyRows = (payload.monthly || []);
@@ -509,7 +529,8 @@ function renderFutureCharts(rows){
 function getBehaviorRows(view,type){
   const dest=view.dest,month=view.month;
   const source=type==='blt'?(dest?(payload.destinationBltDistribution||[]):(payload.bltDistribution||[])):(dest?(payload.destinationLosRevenueDistribution||[]):(payload.losRevenueDistribution||[]));
-  return source.filter(r=>(!dest||r.Destination===dest)&&(!month||r.Month===month));
+  const selMonths=getSelectedMonths();
+  return source.filter(r=>(!dest||r.Destination===dest)&&(!selMonths.length||selMonths.includes(r.Month)));
 }
 function renderBehaviorCharts(view){
   const bltOrder=['0-3 Days','4-7 Days','8-14 Days','15-30 Days','30-60 Days','60+ Days'];
@@ -556,7 +577,7 @@ function buildBenchmarkResultHtml(){
   const dest=document.getElementById('benchmarkDestination').value,hotel=(document.getElementById('manualHotelName').value||'Selected Property').trim();
   const revenue=inputNum('manualRevenue'),bookings=inputNum('manualBookings'),nights=inputNum('manualNights');
   const abv=inputNum('manualAbv')||(bookings?revenue/bookings:0),los=inputNum('manualLos')||(bookings?nights/bookings:0),blt=inputNum('manualBlt');
-  const geo=parseManualGeoTable(),activeMonth=document.getElementById('monthFilter')?document.getElementById('monthFilter').value:'';
+  const geo=parseManualGeoTable(),_selM=getSelectedMonths(),activeMonth=_selM.length===1?_selM[0]:'';
   const d=getBenchmarkDestinationSummary(dest,activeMonth);
   const bench={revenue:numVal(d.Revenue),bookings:numVal(d.Bookings),nights:numVal(d['Room Nights']),abv:numVal(d['Avg Booking Value']),los:numVal(d['Avg LOS']),blt:numVal(d['Avg BLT'])};
   return'<div class="metric-grid">'+metricCard('Revenue',revenue,bench.revenue,'revenue',null)+metricCard('Bookings',bookings,bench.bookings,'number',null)+metricCard('Room Nights',nights,bench.nights,'number',null)+metricCard('Avg Booking Value',abv,bench.abv,'revenue',null)+metricCard('Avg LOS',los,bench.los,'los',null)+metricCard('Avg BLT',blt,bench.blt,'blt',null)+'</div><div class="metric-card"><div class="metric-label">Source Market Mix Gap</div><div class="table-wrap no-inner-scroll mix-gap-table"><table><thead><tr><th>Market</th><th>Property</th><th>Destination Avg</th><th>Gap</th></tr></thead><tbody>'+marketMixRows(dest,geo,activeMonth)+'</tbody></table></div></div>';
@@ -613,7 +634,7 @@ function submitLeadForm(){
     position:(document.getElementById('leadPosition')?.value||'').trim(),
     phone:(document.getElementById('leadPhone')?.value||'').trim(),
     destination:(document.getElementById('benchmarkDestination')?.value||'').trim(),
-    month:(document.getElementById('monthFilter')?.value||'').trim(),
+    month:(getSelectedMonths().join(',')),
     userAgent:navigator.userAgent
   };
   const params=new URLSearchParams(window.location.search||'');
@@ -686,6 +707,52 @@ function formatDecimal(v,d){return Number(v||0).toLocaleString('en-US',{minimumF
 function percentDecimal(v){return formatDecimal(Number(v||0)*100,1)+'%';}
 function formatMetric(v,type){if(type==='revenue')return formatRevenue(v);if(type==='los')return formatDecimal(v,1)+' nights';if(type==='blt')return formatDecimal(v,0)+' days';return formatNumber(v);}
 function formatGap(diff,pct,type){const prefix=diff>0?'+':'';let main=type==='revenue'?prefix+formatRevenue(diff):type==='los'?prefix+formatDecimal(diff,1)+' nights':type==='blt'?prefix+formatDecimal(diff,0)+' days':prefix+formatNumber(diff);return main+(pct==null?'':' · '+prefix+formatDecimal(pct,1)+'%');}
+
+// ─── MULTI-SELECT MONTH FILTER ────────────────────────────────────────────────
+function getSelectedMonths() {
+  return Array.from(document.querySelectorAll('.month-cb:checked')).map(cb => cb.value);
+}
+
+function onMonthCheckChange() {
+  updateMonthLabel();
+  render();
+}
+
+function updateMonthLabel() {
+  const selected = getSelectedMonths();
+  const label = document.getElementById('monthFilterLabel');
+  if (!label) return;
+  if (!selected.length) label.textContent = 'All Months';
+  else if (selected.length === 1) label.textContent = selected[0];
+  else label.textContent = selected.length + ' months selected';
+}
+
+function selectAllMonths() {
+  document.querySelectorAll('.month-cb').forEach(cb => cb.checked = true);
+  updateMonthLabel();
+  render();
+}
+
+function clearAllMonths() {
+  document.querySelectorAll('.month-cb').forEach(cb => cb.checked = false);
+  updateMonthLabel();
+  render();
+}
+
+function toggleMonthDropdown() {
+  const dd = document.getElementById('monthDropdown');
+  if (!dd) return;
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+
+document.addEventListener('click', function(e) {
+  const btn = document.getElementById('monthFilterBtn');
+  const dd = document.getElementById('monthDropdown');
+  if (!dd || !btn) return;
+  if (!btn.contains(e.target) && !dd.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
 </script>
 </body>
 </html>
