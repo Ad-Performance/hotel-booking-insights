@@ -123,7 +123,7 @@
     .benchmark-result-unlock .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;}
     #dashboard,#dashboard .card,#dashboard .kpi-card,#dashboard .insight-card,#dashboard .chart-box,#dashboard .table-wrap{filter:none!important;opacity:1!important;pointer-events:auto!important;user-select:auto!important}
     @media(max-width:820px){.lead-form-grid{grid-template-columns:1fr}.lead-modal-box{padding:20px;border-radius:22px}.lead-submit-row{display:grid;grid-template-columns:1fr}.lead-submit-row .btn{width:100%}.benchmark-lock-card{display:block}.benchmark-lock-card .btn{width:100%;margin-top:16px}}
-  </style>
+  .month-cb-label{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:#344054;}.month-cb-label:hover{background:#f8fafc}.month-cb{width:15px;height:15px;accent-color:#0058ff;cursor:pointer;}</style>
 </head>
 <body>
   <div id="loading" class="loading">Loading dashboard...</div>
@@ -355,7 +355,7 @@ function setupFilters() {
   const months = unique((payload.monthly || []).map(r => r.Month)).sort((a,b)=>monthIndex(a)-monthIndex(b));
   const monthList = document.getElementById('monthCheckboxList');
   if (monthList) {
-    monthList.innerHTML = months.map(v => '<label style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:#344054;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'"><input type="checkbox" class="month-cb" value="' + escapeAttr(v) + '" onchange="onMonthCheckChange()" style="width:15px;height:15px;accent-color:#0058ff;cursor:pointer;"> ' + escapeHtml(v) + '</label>').join('');
+    monthList.innerHTML = months.map(v => '<label class="month-cb-label"><input type="checkbox" class="month-cb" value="' + escapeAttr(v) + '" onchange="onMonthCheckChange()"> ' + escapeHtml(v) + '</label>').join('');
   }
 }
 
