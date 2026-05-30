@@ -754,5 +754,98 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
+
+<!-- ═══════════════════════════════════════════════════════
+     VISITOR TRACKING SCRIPT → Google Sheets
+     ═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  const GAS_TRACK_URL = 'https://script.google.com/a/macros/media-console.com/s/AKfycbwxQbPJgEq7_3XvYCqgT6ukcbpcPPqXVmrow94_QUKkYxvb3AFs9LzSB1a3tud4M_wlrQ/exec';
+  const SESSION_KEY = 'mc_vis_session_v1';
+
+  // ── ป้องกันนับซ้ำใน session เดียวกัน ──
+  if (sessionStorage.getItem(SESSION_KEY)) return;
+  sessionStorage.setItem(SESSION_KEY, '1');
+
+  async function track() {
+    const ua = navigator.userAgent;
+    const isMobile = /Mobile|Android|iPhone|iPad/i.test(ua);
+    const isTablet = /iPad|Tablet/i.test(ua);
+    const deviceType = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
+
+    let browser = 'Unknown';
+    if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
+    else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+    else if (ua.includes('Firefox')) browser = 'Firefox';
+    else if (ua.includes('Edg')) browser = 'Edge';
+
+    let os = 'Unknown';
+    if (ua.includes('Windows')) os = 'Windows';
+    else if (ua.includes('Mac')) os = 'macOS';
+    else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+    else if (ua.includes('Android')) os = 'Android';
+    else if (ua.includes('Linux')) os = 'Linux';
+
+    const params = new URLSearchParams(window.location.search);
+
+    const referrer = document.referrer || '';
+    let referrerSource = 'Direct';
+    if (referrer.includes('google')) referrerSource = 'Google';
+    else if (referrer.includes('facebook') || referrer.includes('fb.com')) referrerSource = 'Facebook';
+    else if (referrer.includes('instagram')) referrerSource = 'Instagram';
+    else if (referrer.includes('tiktok')) referrerSource = 'TikTok';
+    else if (referrer.includes('linkedin')) referrerSource = 'LinkedIn';
+    else if (referrer.includes('twitter') || referrer.includes('x.com')) referrerSource = 'X/Twitter';
+    else if (referrer) referrerSource = referrer.split('/')[2] || 'Other';
+
+    // IP + Geo จาก ipapi.co
+    let ip = '', city = '', region = '', country = '', org = '', timezone = '', lat = '', lng = '';
+    try {
+      const resp = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) });
+      if (resp.ok) {
+        const d = await resp.json();
+        ip = d.ip || ''; city = d.city || ''; region = d.region || '';
+        country = d.country_name || ''; org = d.org || '';
+        timezone = d.timezone || '';
+        lat = d.latitude || ''; lng = d.longitude || '';
+      }
+    } catch(e) {}
+
+    // ส่งไป GAS ผ่าน JSONP (GET) — ไม่มี CORS issue
+    const data = {
+      action:          'trackVisitor',
+      timestamp_utc:   new Date().toISOString(),
+      ip, city, region, country, org, timezone,
+      latitude:        lat, longitude: lng,
+      device_type:     deviceType,
+      browser, os,
+      screen:          screen.width + 'x' + screen.height,
+      language:        navigator.language,
+      referrer_source: referrerSource,
+      referrer:        referrer || '(direct)',
+      utm_source:      params.get('utm_source')   || '',
+      utm_medium:      params.get('utm_medium')   || '',
+      utm_campaign:    params.get('utm_campaign') || '',
+      utm_term:        params.get('utm_term')     || '',
+      utm_content:     params.get('utm_content')  || '',
+    };
+
+    // JSONP call
+    const cbName = 'mcVis_' + Date.now();
+    const qs = Object.keys(data).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k])).join('&');
+    const script = document.createElement('script');
+    window[cbName] = function() { delete window[cbName]; document.body.removeChild(script); };
+    script.src = GAS_TRACK_URL + '?' + qs + '&callback=' + cbName;
+    script.onerror = function() { delete window[cbName]; try { document.body.removeChild(script); } catch(e){} };
+    document.body.appendChild(script);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', track);
+  } else {
+    track();
+  }
+})();
+</script>
 </body>
 </html>
