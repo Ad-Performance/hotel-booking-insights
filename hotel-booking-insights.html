@@ -894,15 +894,54 @@ document.addEventListener('click', function(e) {
       utm_content:     params.get('utm_content')  || '',
     };
 
-    // JSONP call
-    const cbName = 'mcVis_' + Date.now();
-    const qs = Object.keys(data).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k])).join('&');
-    const script = document.createElement('script');
-    window[cbName] = function() { delete window[cbName]; document.body.removeChild(script); };
-    script.src = GAS_TRACK_URL + '?' + qs + '&callback=' + cbName;
-    script.onerror = function() { delete window[cbName]; try { document.body.removeChild(script); } catch(e){} };
-    document.body.appendChild(script);
+    // ── JSONP call (initial page view) ──
+    function jsonpCall(d) {
+      const cb = 'mcVis_' + Date.now();
+      const qs = Object.keys(d).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(d[k])).join('&');
+      const sc = document.createElement('script');
+      window[cb] = function() { delete window[cb]; try { document.body.removeChild(sc); } catch(e){} };
+      sc.onerror = function() { delete window[cb]; try { document.body.removeChild(sc); } catch(e){} };
+      sc.src = GAS_TRACK_URL + '?' + qs + '&callback=' + cb;
+      document.body.appendChild(sc);
+    }
+
+    // บันทึก visitor data ไว้ใช้ตอน updateBehavior
+    window._mcVisitorData = data;
+    jsonpCall(data);
   }
+
+  // ── ส่ง behavior update ก่อน leave ──
+  function sendBehaviorUpdate() {
+    const d = window._mcVisitorData;
+    if (!d) return;
+    const beh = window._mcBehavior;
+    beh.timeOnPage = Math.round((Date.now() - sessionStart) / 1000);
+
+    const update = {
+      action:        'updateVisitorBehavior',
+      visitor_ip:    d.ip || '',
+      timestamp_utc: d.timestamp_utc || '',
+      time_on_page:  beh.timeOnPage,
+      scroll_depth:  beh.scrollDepth,
+      click_count:   beh.clickCount,
+      sections_seen: (beh.sectionsSeen || []).join(', '),
+    };
+
+    // ใช้ sendBeacon ถ้าทำได้ (ไม่ถูก cancel ตอนปิดหน้า)
+    const qs = Object.keys(update).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(update[k])).join('&');
+    const url = GAS_TRACK_URL + '?' + qs;
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url);
+    } else {
+      const sc = document.createElement('script');
+      sc.src = url + '&callback=mcBehCb';
+      window.mcBehCb = function() { delete window.mcBehCb; };
+      document.body.appendChild(sc);
+    }
+  }
+
+  window.addEventListener('pagehide', sendBehaviorUpdate);
+  window.addEventListener('beforeunload', sendBehaviorUpdate);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', track);
