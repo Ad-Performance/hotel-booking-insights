@@ -161,11 +161,8 @@
             <div class="filter-group"><label>Destination</label><input id="destinationFilter" list="destinationOptions" placeholder="All Destinations" oninput="scheduleRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="destinationOptions"></datalist></div>
             <div class="filter-group" style="position:relative">
   <label>Booking Month</label>
-  <div id="monthFilterBtn" onclick="toggleMonthDropdown()" style="height:44px;border:1px solid #dfe5ee;background:#fff;border-radius:14px;color:#1f2937;font-size:14px;font-weight:500;padding:0 13px;min-width:220px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;">
-    <span id="monthFilterLabel">All Months</span>
-    <span style="margin-left:8px;color:#8a96aa;font-size:11px;">▼</span>
-  </div>
-  <div id="monthDropdown" style="display:none;position:absolute;top:52px;left:0;z-index:999;background:#fff;border:1px solid #dfe5ee;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.10);padding:8px;min-width:200px;max-height:300px;overflow-y:auto;">
+  <input id="monthFilterBtn" readonly placeholder="All Months" value="" onclick="toggleMonthDropdown()" style="cursor:pointer;caret-color:transparent;" autocomplete="off">
+  <div id="monthDropdown" style="display:none;position:absolute;top:52px;left:0;z-index:999;background:#fff;border:1px solid #dfe5ee;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.10);padding:8px;min-width:220px;max-height:300px;overflow-y:auto;">
     <div style="padding:6px 8px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f2f6;">
       <span style="font-size:11px;font-weight:700;color:#7b8798;letter-spacing:.06em;text-transform:uppercase">Select Months</span>
       <div style="display:flex;gap:8px;">
@@ -720,11 +717,12 @@ function onMonthCheckChange() {
 
 function updateMonthLabel() {
   const selected = getSelectedMonths();
-  const label = document.getElementById('monthFilterLabel');
-  if (!label) return;
-  if (!selected.length) label.textContent = 'All Months';
-  else if (selected.length === 1) label.textContent = selected[0];
-  else label.textContent = selected.length + ' months selected';
+  const btn = document.getElementById('monthFilterBtn');
+  if (!btn) return;
+  if (!selected.length) btn.value = '';
+  else if (selected.length === 1) btn.value = selected[0];
+  else btn.value = selected.length + ' months selected';
+  btn.placeholder = selected.length ? '' : 'All Months';
 }
 
 function selectAllMonths() {
