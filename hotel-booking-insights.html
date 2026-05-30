@@ -424,17 +424,17 @@ function applyContent() {
   setText('coverTitle2Text', c.coverTitle2 || 'Direct Bookings.');
   setText('coverTitleBlueText', c.coverTitleBlue || 'Delivering Results.');
   setText('coverDescription', c.coverDescription || '');
-  document.getElementById('coverImage').src = c.coverImageUrl || '';
+  const coverImg = document.getElementById('coverImage'); if(coverImg) coverImg.src = c.coverImageUrl || '';
   setText('feature1Icon', c.feature1Icon || '◎'); setHtml('feature1Text', (c.feature1Text || 'Performance\nDriven').replace(/\n/g, '<br>'));
   setText('feature2Icon', c.feature2Icon || '↗'); setHtml('feature2Text', (c.feature2Text || 'Booking\nIntelligence').replace(/\n/g, '<br>'));
   setText('feature3Icon', c.feature3Icon || '♙'); setHtml('feature3Text', (c.feature3Text || 'Hospitality\nSpecialized').replace(/\n/g, '<br>'));
   setText('feature4Icon', c.feature4Icon || '✓'); setHtml('feature4Text', (c.feature4Text || 'Transparent &\nAccountable').replace(/\n/g, '<br>'));
   setHtml('testimonial1Quote', highlightPercent(c.testimonial1Quote || ''));
   setText('testimonial1Name', c.testimonial1Name || ''); setText('testimonial1Role', c.testimonial1Role || ''); setText('testimonial1Brand', c.testimonial1Brand || '');
-  document.getElementById('testimonial1Image').src = c.testimonial1ImageUrl || '';
+  const t1img = document.getElementById('testimonial1Image'); if(t1img) t1img.src = c.testimonial1ImageUrl || '';
   setHtml('testimonial2Quote', highlightPercent(c.testimonial2Quote || ''));
   setText('testimonial2Name', c.testimonial2Name || ''); setText('testimonial2Role', c.testimonial2Role || ''); setText('testimonial2Brand', c.testimonial2Brand || '');
-  document.getElementById('testimonial2Image').src = c.testimonial2ImageUrl || '';
+  const t2img = document.getElementById('testimonial2Image'); if(t2img) t2img.src = c.testimonial2ImageUrl || '';
 }
 
 // ─── FILTERS ──────────────────────────────────────────────────────────────────
