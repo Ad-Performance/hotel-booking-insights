@@ -582,10 +582,10 @@ function metricCard(label,property,benchmark,type,prevBenchmark){
 }
 function marketMixRows(dest,geo,activeMonth){
   const propTotal=geo.reduce((sum,row)=>sum+row.revenue,0),hasPropertyGeo=propTotal>0&&geo.some(row=>row.country&&row.revenue>0);
-  const destinationTopMarkets=getBenchmarkTopSourceMarkets(dest,activeMonth).slice(0,10);
-  const source=activeMonth?(payload.destinationSourceMarketAvgMixMonth||[]):(payload.destinationSourceMarketAvgMix||[]);
-  const bench=source.filter(row=>row.Destination===dest&&(!activeMonth||row.Month===activeMonth)).map(row=>({market:row['Source Market'],share:numVal(row['Avg Mix %'])}));
-  const benchShareMap={};bench.forEach(row=>{if(row.market)benchShareMap[row.market]=row.share;});
+  const allDestMarkets=getBenchmarkTopSourceMarkets(dest,activeMonth);
+  const destinationTopMarkets=allDestMarkets.slice(0,10);
+  const destTotalRevenue=allDestMarkets.reduce((sum,row)=>sum+(row.revenue||0),0);
+  const benchShareMap={};allDestMarkets.forEach(row=>{if(row.market)benchShareMap[row.market]=destTotalRevenue?row.revenue/destTotalRevenue*100:0;});
   if(!hasPropertyGeo){return destinationTopMarkets.length?destinationTopMarkets.map(row=>{const market=row.market,benchmarkShare=benchShareMap[market]||0;return'<tr><td><strong>'+escapeHtml(market)+'</strong></td><td>-</td><td>'+formatDecimal(benchmarkShare,1)+'%</td><td>-</td></tr>';}).join(''):'<tr><td colspan="4">No destination source market data</td></tr>';}
   const baseMarkets=destinationTopMarkets.map(row=>row.market).filter(Boolean);
   const additionalPropertyMarkets=geo.map(row=>row.country).filter(country=>country&&!baseMarkets.includes(country));
