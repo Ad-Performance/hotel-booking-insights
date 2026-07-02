@@ -1,12 +1,10 @@
+<!-- Lead V12 Clean: lead capture, UTM, fast submit, no export, mix gap anchored -->
 <!DOCTYPE html>
 <!-- Lead V11 UTM Fast Submit: no Page URL, captures UTM fields -->
-<!-- GitHub Pages version: google.script.run replaced with fetch() -->
 <html>
 <head>
   <base target="_top">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:title" content="MC Hospitality Intelligence — Free Hotel Booking Benchmark">
-  <meta property="og:description" content="Explore APAC hotel direct booking trends and benchmark your property against destination averages.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,6 +31,7 @@
     .metric-card.no-status .gap-line{display:none}.benchmark-revenue-line{display:none}
     @media(max-width:900px){.hover-popover{display:none!important}.future-filter-row{display:grid;grid-template-columns:1fr}.mix-grid{grid-template-columns:1fr}}
 
+
     .no-inner-scroll{max-height:none!important;overflow:visible!important;}
     .top10-table td,.top10-table th,.mix-gap-table td,.mix-gap-table th{padding-top:9px!important;padding-bottom:9px!important;font-size:13px!important;}
     .future-matrix-card{min-height:0!important;}
@@ -45,6 +44,9 @@
     .heat-cell{border-radius:8px;background-clip:padding-box;font-weight:750;color:#10213f;}
     @media(max-width:1100px){.matrix-wrap{overflow-x:auto!important;}.matrix-table{min-width:980px;}.no-inner-scroll.matrix-wrap{overflow-x:auto!important;}}
 
+  
+
+    /* ===== V13: Spreadsheet-style manual GEO paste table ===== */
     .geo-entry-wrap{border:1px solid #e7ecf4;border-radius:16px;background:#fff;overflow:hidden}
     .geo-entry-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
     .geo-entry-table th{padding:9px 10px;background:#f4f7fb;color:#7a849b;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #e7ecf4}
@@ -58,78 +60,136 @@
     .geo-mini-btn{border:1px solid #dfe5ee;background:#fff;color:#344054;border-radius:10px;height:30px;padding:0 10px;font-size:12px;font-weight:800;cursor:pointer}
     .geo-mini-btn:hover{background:#f8fafc}
 
-    .card-note,.helper,.benchmark-vs-last{display:none !important;}
-    .card-head{align-items:flex-end !important;}
-    .no-inner-scroll{max-height:none !important;overflow:visible !important;}
-    .top10-table table,.mix-gap-table table{min-width:0 !important;}
-    .top10-table td,.top10-table th,.mix-gap-table td,.mix-gap-table th{padding-top:10px !important;padding-bottom:10px !important;}
-    .metric-card.no-status .metric-head{margin-bottom:12px !important;}
-    .metric-card.no-status .metric-values{margin-bottom:0 !important;}
-    .dashboard{overflow-x:hidden;}
 
-    @media(max-width:1600px){.main{max-width:100%;padding:0 18px;}.kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.benchmark-layout{grid-template-columns:380px minmax(0,1fr);}}
-    @media(max-width:1180px){.main{padding:0 14px;}.dashboard-head{align-items:flex-start;}.filters{width:100%;}.filter-group,.filter-group input,.filter-group select{width:100%;min-width:0;}.grid-2,.behavior-grid,.benchmark-layout,.mix-grid{grid-template-columns:1fr !important;}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.form-card{max-width:none;}}
-    @media(max-width:820px){body{font-size:13px;}.topbar{height:auto;min-height:58px;padding:10px 14px;gap:10px;}.confidential{display:none;}.dashboard{padding:14px 0 40px;}.dashboard-head,.card,.kpi-card,.insight-card{border-radius:18px;}.dashboard-head,.card{padding:16px;}.dash-title{font-size:23px;}.card-title{font-size:18px;}.kpi-grid,.insights-grid,.summary-strip,.metric-grid{grid-template-columns:1fr !important;gap:10px;}.kpi-card{min-height:96px;padding:14px;}.kpi-value{font-size:24px;}.chart-box{height:220px;}.form-grid-2{grid-template-columns:1fr !important;}select,input{width:100%;min-width:0;}.table-wrap{overflow-x:auto !important;max-height:none !important;-webkit-overflow-scrolling:touch;}.top10-table table,.mix-gap-table table{min-width:680px !important;}.matrix-wrap table{min-width:980px !important;}.geo-entry-table{min-width:0 !important;}.source-tooltip,.hover-popover{display:none !important;}}
-    @media(max-width:520px){.main{padding:0 10px;}.logo-text{font-size:10px;}.dash-title{font-size:21px;}.kpi-value{font-size:22px;}.metric-values{grid-template-columns:1fr !important;}.gap-line{display:block;}.gap-value{display:block;margin-top:4px;}}
 
-    .form-card input,.form-card select,.form-card textarea{width:100% !important;min-width:0 !important;}
-    .form-grid-2{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
-    .benchmark-layout{grid-template-columns:minmax(360px,420px) minmax(0,1fr) !important;}
-    .form-card{min-width:0 !important;overflow:hidden !important;}
-    .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
-    .metric-card{min-width:0 !important;}
-    .future-geo-summary{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}
-    .future-geo-summary-card{min-height:92px;display:flex;flex-direction:column;justify-content:center;}
-    .matrix-head-actions{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;}
-    .matrix-export-btn{height:38px;border-radius:12px;border:1px solid #dfe5ee;background:#fff;color:#344054;font-size:13px;font-weight:800;padding:0 14px;cursor:pointer;}
-    .matrix-export-btn:hover{background:#f8fafc;}
-    .matrix-total-row td{background:#f8fafc!important;font-weight:800;border-top:2px solid #dbe4f0;}
-    .matrix-total-row .heat-cell{border-radius:0;background:#f8fafc!important;color:#10213f!important;}
-    .matrix-total-cell{line-height:1.25;}
-    .matrix-total-cell b{display:block;font-size:12px;}
-    .matrix-total-cell span{display:block;font-size:10px;color:#7a849b;font-weight:800;margin-top:2px;}
-    .insights-grid.client-short{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
-    .trend-good{color:#16a34a!important;}
-    .trend-bad{color:#e11d48!important;}
-    .trend-neutral{color:#667085!important;}
-    @media(max-width:1180px){.benchmark-layout{grid-template-columns:1fr !important}.future-geo-summary,.insights-grid.client-short{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
-    @media(max-width:820px){.form-grid-2,.metric-grid,.future-geo-summary,.insights-grid.client-short{grid-template-columns:1fr !important}.benchmark-layout{grid-template-columns:1fr !important}.matrix-head-actions{width:100%;justify-content:flex-start}.matrix-export-btn{width:100%;}}
+/* ===== V16 CLEAN + RESPONSIVE OVERRIDE ===== */
+.card-note,
+.helper,
+.benchmark-vs-last{
+  display:none !important;
+}
+.card-head{align-items:flex-end !important;}
+.no-inner-scroll{max-height:none !important;overflow:visible !important;}
+.top10-table table,
+.mix-gap-table table{min-width:0 !important;}
+.top10-table td,.top10-table th,
+.mix-gap-table td,.mix-gap-table th{padding-top:10px !important;padding-bottom:10px !important;}
+.metric-card.no-status .metric-head{margin-bottom:12px !important;}
+.metric-card.no-status .metric-values{margin-bottom:0 !important;}
+.dashboard{overflow-x:hidden;}
 
-    .lead-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(7,21,58,.48);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px}
-    .lead-modal.open{display:flex}
-    .lead-modal-box{width:min(620px,100%);background:#fff;border:1px solid #e4e9f2;border-radius:26px;padding:26px;box-shadow:0 28px 80px rgba(7,21,58,.26)}
-    .lead-modal-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
-    .lead-modal-title{font-size:24px;font-weight:800;letter-spacing:-.04em;color:#111827}
-    .lead-modal-sub{font-size:14px;color:#667085;line-height:1.55;margin-top:8px}
-    .lead-close{border:0;background:#f3f6fb;color:#667085;border-radius:12px;width:38px;height:38px;font-size:22px;cursor:pointer}
-    .lead-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .lead-form-grid .field.full{grid-column:1/-1}
-    .lead-submit-row{display:flex;justify-content:flex-end;gap:10px;align-items:center;margin-top:18px}
-    .lead-error{display:none;margin-top:12px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:14px;padding:11px 12px;font-size:13px;line-height:1.45}
-    .lead-error.open{display:block}
-    .lead-success{display:none;margin-top:12px;background:#ecfdf3;border:1px solid #bbf7d0;color:#166534;border-radius:14px;padding:11px 12px;font-size:13px;font-weight:700}
-    .lead-success.open{display:block}
-    .benchmark-lock-card{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:220px;background:#07153a;color:#fff;border-radius:22px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:0 18px 42px rgba(7,21,58,.16)}
-    .benchmark-lock-kicker{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9fc2ff;margin-bottom:10px}
-    .benchmark-lock-title{font-size:24px;line-height:1.15;font-weight:800;letter-spacing:-.04em;margin-bottom:8px}
-    .benchmark-lock-copy{font-size:14px;line-height:1.55;color:#d7e4ff;max-width:520px}
-    .benchmark-lock-card .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;white-space:nowrap}
-    .benchmark-result-locked{position:relative;border-radius:22px;overflow:hidden;}
-    .benchmark-result-locked .benchmark-blur-content{filter:blur(8px);opacity:.42;pointer-events:none;user-select:none;}
-    .benchmark-result-overlay{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,rgba(248,250,252,.62),rgba(248,250,252,.82));backdrop-filter:blur(2px);}
-    .benchmark-result-unlock{max-width:420px;text-align:center;background:#07153a;color:#fff;border-radius:22px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(7,21,58,.18);}
-    .benchmark-result-unlock-title{font-size:22px;line-height:1.15;font-weight:800;letter-spacing:-.035em;margin-bottom:8px;}
-    .benchmark-result-unlock-copy{font-size:14px;line-height:1.5;color:#d7e4ff;margin-bottom:16px;}
-    .benchmark-result-unlock .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;}
-    #dashboard,#dashboard .card,#dashboard .kpi-card,#dashboard .insight-card,#dashboard .chart-box,#dashboard .table-wrap{filter:none!important;opacity:1!important;pointer-events:auto!important;user-select:auto!important}
-    @media(max-width:820px){.lead-form-grid{grid-template-columns:1fr}.lead-modal-box{padding:20px;border-radius:22px}.lead-submit-row{display:grid;grid-template-columns:1fr}.lead-submit-row .btn{width:100%}.benchmark-lock-card{display:block}.benchmark-lock-card .btn{width:100%;margin-top:16px}}
-  .month-item{padding:10px 14px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1f2937;white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:12px;}.month-item:hover{background:#f8fafc;}.month-item.selected{font-weight:600;color:#0058ff;}</style>
+@media(max-width:1600px){
+  .main{max-width:100%;padding:0 18px;}
+  .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .benchmark-layout{grid-template-columns:380px minmax(0,1fr);}
+}
+@media(max-width:1180px){
+  .main{padding:0 14px;}
+  .dashboard-head{align-items:flex-start;}
+  .filters{width:100%;}
+  .filter-group,.filter-group input,.filter-group select{width:100%;min-width:0;}
+  .grid-2,.behavior-grid,.benchmark-layout,.mix-grid{grid-template-columns:1fr !important;}
+  .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .form-card{max-width:none;}
+}
+@media(max-width:820px){
+  body{font-size:13px;}
+  .topbar{height:auto;min-height:58px;padding:10px 14px;gap:10px;}
+  .confidential{display:none;}
+  .dashboard{padding:14px 0 40px;}
+  .dashboard-head,.card,.kpi-card,.insight-card{border-radius:18px;}
+  .dashboard-head,.card{padding:16px;}
+  .dash-title{font-size:23px;}
+  .card-title{font-size:18px;}
+  .kpi-grid,.insights-grid,.summary-strip,.metric-grid{grid-template-columns:1fr !important;gap:10px;}
+  .kpi-card{min-height:96px;padding:14px;}
+  .kpi-value{font-size:24px;}
+  .chart-box{height:220px;}
+  .form-grid-2{grid-template-columns:1fr !important;}
+  select,input{width:100%;min-width:0;}
+  .table-wrap{overflow-x:auto !important;max-height:none !important;-webkit-overflow-scrolling:touch;}
+  .top10-table table,.mix-gap-table table{min-width:680px !important;}
+  .matrix-wrap table{min-width:980px !important;}
+  .geo-entry-table{min-width:0 !important;}
+  .source-tooltip,.hover-popover{display:none !important;}
+}
+@media(max-width:520px){
+  .main{padding:0 10px;}
+  .logo-text{font-size:10px;}
+  .dash-title{font-size:21px;}
+  .kpi-value{font-size:22px;}
+  .metric-values{grid-template-columns:1fr !important;}
+  .gap-line{display:block;}
+  .gap-value{display:block;margin-top:4px;}
+}
+
+
+
+/* ===== V17 UX + MATRIX + BENCHMARK FIX ===== */
+.form-card input, .form-card select, .form-card textarea{width:100% !important;min-width:0 !important;}
+.form-grid-2{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+.benchmark-layout{grid-template-columns:minmax(360px,420px) minmax(0,1fr) !important;}
+.form-card{min-width:0 !important;overflow:hidden !important;}
+.metric-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+.metric-card{min-width:0 !important;}
+.future-geo-summary{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}
+.future-geo-summary-card{min-height:92px;display:flex;flex-direction:column;justify-content:center;}
+.matrix-head-actions{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;}
+.matrix-export-btn{height:38px;border-radius:12px;border:1px solid #dfe5ee;background:#fff;color:#344054;font-size:13px;font-weight:800;padding:0 14px;cursor:pointer;}
+.matrix-export-btn:hover{background:#f8fafc;}
+.matrix-total-row td{background:#f8fafc!important;font-weight:800;border-top:2px solid #dbe4f0;}
+.matrix-total-row .heat-cell{border-radius:0;background:#f8fafc!important;color:#10213f!important;}
+.matrix-total-cell{line-height:1.25;}
+.matrix-total-cell b{display:block;font-size:12px;}
+.matrix-total-cell span{display:block;font-size:10px;color:#7a849b;font-weight:800;margin-top:2px;}
+.insights-grid.client-short{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+.trend-good{color:#16a34a!important;}
+.trend-bad{color:#e11d48!important;}
+.trend-neutral{color:#667085!important;}
+@media(max-width:1180px){.benchmark-layout{grid-template-columns:1fr !important}.future-geo-summary,.insights-grid.client-short{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+@media(max-width:820px){.form-grid-2,.metric-grid,.future-geo-summary,.insights-grid.client-short{grid-template-columns:1fr !important}.benchmark-layout{grid-template-columns:1fr !important}.matrix-head-actions{width:100%;justify-content:flex-start}.matrix-export-btn{width:100%;}}
+
+
+
+/* ===== LEAD V5: lock only benchmark result, never blur dashboard sections ===== */
+.lead-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(7,21,58,.48);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px}
+.lead-modal.open{display:flex}
+.lead-modal-box{width:min(620px,100%);background:#fff;border:1px solid #e4e9f2;border-radius:26px;padding:26px;box-shadow:0 28px 80px rgba(7,21,58,.26)}
+.lead-modal-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
+.lead-modal-title{font-size:24px;font-weight:800;letter-spacing:-.04em;color:#111827}
+.lead-modal-sub{font-size:14px;color:#667085;line-height:1.55;margin-top:8px}
+.lead-close{border:0;background:#f3f6fb;color:#667085;border-radius:12px;width:38px;height:38px;font-size:22px;cursor:pointer}
+.lead-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lead-form-grid .field.full{grid-column:1/-1}
+.lead-submit-row{display:flex;justify-content:flex-end;gap:10px;align-items:center;margin-top:18px}
+.lead-error{display:none;margin-top:12px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:14px;padding:11px 12px;font-size:13px;line-height:1.45}
+.lead-error.open{display:block}
+.lead-success{display:none;margin-top:12px;background:#ecfdf3;border:1px solid #bbf7d0;color:#166534;border-radius:14px;padding:11px 12px;font-size:13px;font-weight:700}
+.lead-success.open{display:block}
+.benchmark-lock-card{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:220px;background:#07153a;color:#fff;border-radius:22px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:0 18px 42px rgba(7,21,58,.16)}
+.benchmark-lock-kicker{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9fc2ff;margin-bottom:10px}
+.benchmark-lock-title{font-size:24px;line-height:1.15;font-weight:800;letter-spacing:-.04em;margin-bottom:8px}
+.benchmark-lock-copy{font-size:14px;line-height:1.55;color:#d7e4ff;max-width:520px}
+.benchmark-lock-card .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;white-space:nowrap}
+
+.benchmark-result-locked{position:relative;border-radius:22px;overflow:hidden;}
+.benchmark-result-locked .benchmark-blur-content{filter:blur(8px);opacity:.42;pointer-events:none;user-select:none;}
+.benchmark-result-overlay{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,rgba(248,250,252,.62),rgba(248,250,252,.82));backdrop-filter:blur(2px);}
+.benchmark-result-unlock{max-width:420px;text-align:center;background:#07153a;color:#fff;border-radius:22px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(7,21,58,.18);}
+.benchmark-result-unlock-title{font-size:22px;line-height:1.15;font-weight:800;letter-spacing:-.035em;margin-bottom:8px;}
+.benchmark-result-unlock-copy{font-size:14px;line-height:1.5;color:#d7e4ff;margin-bottom:16px;}
+.benchmark-result-unlock .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;}
+/* Force all dashboard areas to stay clear/open. */
+#dashboard,#dashboard .card,#dashboard .kpi-card,#dashboard .insight-card,#dashboard .chart-box,#dashboard .table-wrap{filter:none!important;opacity:1!important;pointer-events:auto!important;user-select:auto!important}
+@media(max-width:820px){.lead-form-grid{grid-template-columns:1fr}.lead-modal-box{padding:20px;border-radius:22px}.lead-submit-row{display:grid;grid-template-columns:1fr}.lead-submit-row .btn{width:100%}.benchmark-lock-card{display:block}.benchmark-lock-card .btn{width:100%;margin-top:16px}}
+
+</style>
 </head>
 <body>
-  <div id="loading" class="loading">Loading dashboard...</div>
+  <div id="loading" class="loading">Loading client dashboard...</div>
   <div id="app" class="app">
     <header class="topbar">
-      <div class="logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG8AAABQCAYAAAAX6SsYAAAJjklEQVR42u2df4gdVxXHzzn33nnzfuzb7tt23exb2jQ/aGywgtWW9p8YpX8IFQshdWv9SUFQKkUQsVIMiFgRX21BhSgWU1DaYDEgbUGqraARLUlIaoprt6FxN41NNi/pm32/Zuae4x87s0zW/Nq31revvV94LO/umzN37mfuvefM3B8I/38hAIiI6HvvvXfaWruBmRkACJyuSCICnueB7mcmrLUQxzEssnNaCTwi6i88AABEBER0RHooN9dUDbAcvHcpPBSRFX927dqFIoKJ4+K0Ss+vX50uTk1NzThvsw/e5u7duwtRFK24wJvNJhaLRdm3b58WERKRpQwNkrOwFqR7qKkiIqpWq/0BAK6LokhWWIMxCAKZnp7GTqdz9cLCAiilBqrWISKUSqWBg5fVOiIaJ6JV3YnMDEQ0UDWPiAay5mXb3TCOY7HWrqa/ck5LP+DhYnXD9K8rShfnOTl4Dp7TWu/z9u7dq670x0ePHsWtW7cKAChXdGsA3t133217OM7WajVeSwHruxLenj17PmHtlfFjZiQiMcbQ3NzcEDODtRZ7BZh9unKlcZ67WTLwPM/b18vL0E6nA51OB3AVpWmtBRFZ8ctYBzCB12q1bI9vspV7kdpneIioHAAXKjg5eE4OnoPn5OA5OXhODp6D5+TgOTl4Dp6Tg+fk4DldVnoN5y19O4sX+C7Lvl8s7XJ2LnZeWWYDAIAvcMPLMrt4CRsXS1uel4tdx0DVvOUZX/qOiEiJMi+Dl9JgcQYTX87Of1ETYUREpVTWrgAAKKWIiChjF5LzSJqnxIYQEWqtKZPGAIBaayKi8/K2/GV2ev5leRiYmicAgEqpsyJSYmadFJ5FxCYzDyNiXSk1CwBdERm11m4konNENMvMMRHdgIgFay0opc4CgLbWDgGAEFGHiDrW2pGk4JcKXWtNAHCGiP4BAJuZeSzlopT6CzMPE9GNycvrjta6KyLD1tqQiM7GcTymtUYAOI6IxxFxi4iMJXMxYkT8KxFNKKWuj6JIELFDRE1r7dUAIMlNeQYRZxExRMT3WGuvy+ZzrcOzxhjNzI8NDw+/2mw2f8nMMDIy8nkRuanVan2diB4SkbeYeYuIrFdKbSyXy48i4kvMvKVcLh+Zm5v7ptZ6e7FY/GEcxxubzebnEBHL5fI31q9fv//IkSMvJQWIImK11iqXy/1uYmLi4Uaj8QHf90++8cYbjwEATU5OfrbZbG4iojc7nc6mTqfzHSL6180337z9wIEDfwaAsdHR0U/V6/XntdbPX3XVVT9rt9sfBIBDrVbrARGZnpiYuD8Mw/eJyEyr1fqoUuoBRHyxWCw+02g0ftTtdkPP83IjIyPfCoKgzczXi8hNInJdHMdyoVq4ZpvNOI6Hn3766V8DwAwiHnvqqad+E0XRMCJCcqdv9jzvdmbenkywbwZB8IVWq1U7ceLEtzds2PAwEUEURQwAcTI5ZAYRzczMzJ1E9FtjDIqIRUQCADsyMvK9119//dFz587V5ubmfoqIo/l8/gfz8/O3B0HwWL1ef7JUKu1n5peZuWStLa1bt+7LSql6EAQaEUFrfdwY81YYhtsajcZXiAgqlcr3T5069ZlGo/HI/Pz8k+Vy+ckoiurM7DNzCAA2+QAzR0T0XqXU7WEY3sbMFx0ntGbhIWK4Y8eOhyqVyndHR0cfnpqaepCIummL4XneW57nnVRKpWmKmRUzAzNv9jwvTJo3LSJijIFisbinXC6fy+fzw9Vq9cdEhFknSESiZLInIGIJEckYU4/jeJOIgFIKoiiqAMCCiDRnZ2c/Vq/X77v22mvvIqJ8FEVxt9u9b35+fpdSat/Y2NhORBStddNau5mZQWtd6Ha7eWbuwuL416IxRhFRIWm+tTHmrDHmJCJ2lzk2gwFPa32q1Wrd2Gq1PhwEwbaFhYUbisXiPACAMSZARF9ExrTWx5OBUNH4+PhzlUrlifHx8U8fO3bsk0QExpgGIlIURQvXXHPNC2fOnLkjjuNJZo4B4I9aawUAESLqIAh2VqvVe8rl8hOVSuWrAHAmCIL7JycnHykWiz/P5XIPEhErpW5VSp0rl8szSqkdp0+fvu2WW275k+d5hoheIKJpZt42Njb27yiK5PTp01+sVqtfK5VKv8jn818CgI2+769DxHa1Wv3b0NDQr0ql0l4AAM/zmiJSFJEx3/dPXMozxscff1x6GT02OzsL3W53VaPHDh8+DM1mc/l8N0FE1FofBQBfRDYmNfE1rXUchuENxphDvu8fJqIwjuOJdrt9pzHmFc/zDjBz1G63twLArcwMnuf9nZlHrLX5XC73ahRFtybneU0ptRCG4ftTb1AphUqp3xcKhVfa7faWMAy3E5EGgGOFQuE5a+1Qu92+RyllSqVS3ff9VzudzocAgHK53IvdbncbEb3p+/4zWuvWwsLCx5l5fTKH8eVCofBiGIbjYRjuTJr6s/l8/llE7DJzvt1u3+N53iFjzCFEjK2117fb7TuY+TyHJZ3WvBbhLTYJyYTLZL46UOZHSqmlY5KBv0BEoJRaurg4jhkRKZu/pL+0iT2FiOeNGU08TkREEJF0XCknYULaFwMRQblchuzxSimw1kLS7y16XtYCM4OIsNaalFIgIhBF0dI5jTHZPJ93Hem1XSCk6f8KSJdSAg0TZwISd1kQkThRNjQSEY7jmEUEE1E2xkptIKJK05MQjbIxVhzHFhElSafs+RLbaRwpzCzJd0luFiUiEoYhL7dhrWVrbWojneshURTZJD+IiCp7bSJC6XUM2hMWukTQThf4f1pQl7KDl+vvMwV7OdvZADsLBFdiI2WQSV+6tsu1au7Zpnsw7eTgOTl4Dp6Tg+fk4Dk5eA6ek4Pn5OA5eE4OnpOD5+TgveOlRcT2uESwWzyu3/AKhYLqdS+fQVoX+h0JLwzDu3pZOM73/Z94njdurZVe1x9TSi3uibOCBcLdak2Zsuj1wFqt9k8R2RzHcc8LhO/fvx8ajQZorQdudfehoaG+nX9pAFIvi6Xu3LlT1Wo1WslSi05vQ7O5wsVS05HFruRcqODk4Dl4TgPX563C41kSXGQWy9vp7TqtbjsaTymFIuJWyh00eABwkpm95TNYrtRjTQL7q9MJH4N0Awzq/nnp5Hm7e/fuj0RRRL7vr8hAuvlhtVrVBw8ePGSMWe92rhywPsdtO7qqsgPP8/qy4S8lG/5qh2Hwal76lEZPTU1Nu5rXn5rn5IJ0p36ECv+zJsA96O6tzPoKLztx3mll8LTW8B+Ur19SGmdtnwAAAABJRU5ErkJggg==" alt="Media Console" style="height:36px;width:auto;object-fit:contain;display:block"><div id="logoText" class="logo-text">MEDIA<br>CONSOLE</div></div>
+      <div class="logo"><div id="logoMark" class="logo-mark"><img id="logoImage" alt="Logo"></div><div id="logoText" class="logo-text">MEDIA<br>CONSOLE</div></div>
       <div class="confidential">© 2026 MEDIA CONSOLE<br>PRIVATE & CONFIDENTIAL</div>
     </header>
     <main class="main">
@@ -149,8 +209,8 @@
         <div class="testimonials">
           <div class="section-label">CLIENT TESTIMONIALS</div>
           <div class="testimonial-grid">
-            <div class="testimonial-card"><div><div class="quote-mark">"</div><div id="testimonial1Quote" class="quote"></div></div><div><div class="person"><img id="testimonial1Image"><div><div id="testimonial1Name" class="person-name"></div><div id="testimonial1Role" class="person-role"></div></div></div><div id="testimonial1Brand" class="brand"></div></div></div>
-            <div class="testimonial-card"><div><div class="quote-mark">"</div><div id="testimonial2Quote" class="quote"></div></div><div><div class="person"><img id="testimonial2Image"><div><div id="testimonial2Name" class="person-name"></div><div id="testimonial2Role" class="person-role"></div></div></div><div id="testimonial2Brand" class="brand"></div></div></div>
+            <div class="testimonial-card"><div><div class="quote-mark">“</div><div id="testimonial1Quote" class="quote"></div></div><div><div class="person"><img id="testimonial1Image"><div><div id="testimonial1Name" class="person-name"></div><div id="testimonial1Role" class="person-role"></div></div></div><div id="testimonial1Brand" class="brand"></div></div></div>
+            <div class="testimonial-card"><div><div class="quote-mark">“</div><div id="testimonial2Quote" class="quote"></div></div><div><div class="person"><img id="testimonial2Image"><div><div id="testimonial2Name" class="person-name"></div><div id="testimonial2Role" class="person-role"></div></div></div><div id="testimonial2Brand" class="brand"></div></div></div>
           </div>
         </div>
       </section>
@@ -159,13 +219,7 @@
           <div><div class="dash-title-small">HOSPITALITY COMMERCIAL INTELLIGENCE</div><div class="dash-title">Free Hotel Booking Benchmark Assessment</div></div>
           <div class="filters">
             <div class="filter-group"><label>Destination</label><input id="destinationFilter" list="destinationOptions" placeholder="All Destinations" oninput="scheduleRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="destinationOptions"></datalist></div>
-            <div class="filter-group" style="position:relative">
-  <label>Booking Month</label>
-  <input id="monthFilterBtn" readonly placeholder="All Months" value="" onclick="toggleMonthDropdown()" style="cursor:pointer;caret-color:transparent;" autocomplete="off">
-  <div id="monthDropdown" style="display:none;position:absolute;top:52px;left:0;z-index:999;background:#fff;border:1px solid #dfe5ee;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.10);padding:8px;min-width:220px;max-height:300px;overflow-y:auto;">
-    <div id="monthCheckboxList"></div>
-  </div>
-</div>
+            <div class="filter-group"><label>Booking Month</label><select id="monthFilter" onchange="render()"></select></div>
             <button class="btn" onclick="resetFilters()">Reset</button>
           </div>
         </div>
@@ -206,14 +260,14 @@
               <div class="field"><label>Benchmark Destination</label><input id="benchmarkDestination" list="destinationOptions" placeholder="Search / select destination" oninput="scheduleBenchmarkRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
               <div class="field"><label>Hotel Name</label><input id="manualHotelName" placeholder="Enter hotel name" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
               <div class="form-grid-2">
-                <div class="field"><label>Revenue</label><input id="manualRevenue" type="number" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off"></div>
-                <div class="field"><label>Bookings</label><input id="manualBookings" type="number" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off"></div>
-                <div class="field"><label>Room Nights</label><input id="manualNights" type="number" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off"></div>
-                <div class="field"><label>Average Booking Value</label><input id="manualAbv" type="number" placeholder="Auto if blank" oninput="renderManualBenchmark()" autocomplete="off"></div>
-                <div class="field"><label>AVG LOS</label><input id="manualLos" type="number" step="0.1" placeholder="Auto if blank" oninput="renderManualBenchmark()" autocomplete="off"></div>
-                <div class="field"><label>AVG BLT</label><input id="manualBlt" type="number" step="0.1" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off"></div>
+                <div class="field"><label>Revenue</label><input id="manualRevenue" type="number" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                <div class="field"><label>Bookings</label><input id="manualBookings" type="number" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                <div class="field"><label>Room Nights</label><input id="manualNights" type="number" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                <div class="field"><label>Average Booking Value</label><input id="manualAbv" type="number" placeholder="Auto if blank" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                <div class="field"><label>AVG LOS</label><input id="manualLos" type="number" step="0.1" placeholder="Auto if blank" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                <div class="field"><label>AVG BLT</label><input id="manualBlt" type="number" step="0.1" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
               </div>
-              <div class="field"><label>Top 10 Geo with Revenue</label><div class="geo-entry-wrap"><table class="geo-entry-table"><thead><tr><th class="geo-entry-rank">#</th><th>Country</th><th>Revenue</th></tr></thead><tbody id="geoTableBody"></tbody></table></div><div class="geo-entry-actions"><span></span><button type="button" class="geo-mini-btn" onclick="clearManualGeoTable()">Clear GEO</button></div></div>
+              <div class="field"><label>Top 10 Geo with Revenue</label><div class="geo-entry-wrap"><table class="geo-entry-table"><thead><tr><th class="geo-entry-rank">#</th><th>Country</th><th>Revenue</th></tr></thead><tbody><tr><td class="geo-entry-rank">1</td><td class="geo-entry-country"><input id="geoCountry0" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,0,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue0" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,0,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">2</td><td class="geo-entry-country"><input id="geoCountry1" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,1,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue1" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,1,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">3</td><td class="geo-entry-country"><input id="geoCountry2" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,2,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue2" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,2,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">4</td><td class="geo-entry-country"><input id="geoCountry3" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,3,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue3" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,3,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">5</td><td class="geo-entry-country"><input id="geoCountry4" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,4,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue4" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,4,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">6</td><td class="geo-entry-country"><input id="geoCountry5" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,5,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue5" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,5,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">7</td><td class="geo-entry-country"><input id="geoCountry6" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,6,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue6" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,6,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">8</td><td class="geo-entry-country"><input id="geoCountry7" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,7,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue7" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,7,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">9</td><td class="geo-entry-country"><input id="geoCountry8" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,8,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue8" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,8,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr><tr><td class="geo-entry-rank">10</td><td class="geo-entry-country"><input id="geoCountry9" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,9,'country')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td><td class="geo-entry-revenue"><input id="geoRevenue9" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,9,'revenue')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr></tbody></table></div><div class="geo-entry-actions"><span></span><button type="button" class="geo-mini-btn" onclick="clearManualGeoTable()">Clear GEO</button></div></div>
             </div>
             <div id="benchmarkResults"><div class="empty">Select benchmark destination and enter property performance to generate comparison.</div></div>
           </div>
@@ -221,21 +275,23 @@
       </section>
     </main>
   </div>
-
   <div id="sourceHover" class="hover-popover"><div class="hover-head"><div><div class="hover-label">Source Market</div><div id="hoverMarket" class="hover-title">-</div></div><div class="hover-badge">MARKET DETAIL</div></div><div class="hover-kpis"><div class="hover-kpi"><div class="hover-kpi-label">Revenue</div><div id="hoverRevenue" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Bookings</div><div id="hoverBookings" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Room Nights</div><div id="hoverNights" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg Booking Value</div><div id="hoverAbv" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg LOS</div><div id="hoverLos" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg BLT</div><div id="hoverBlt" class="hover-kpi-value">-</div></div></div><div class="hover-chart-card"><div class="hover-chart-title">Revenue Trend</div><div class="hover-chart-box"><canvas id="hoverRevenueTrendChart"></canvas></div></div></div>
 
   <div id="leadModal" class="lead-modal">
     <div class="lead-modal-box">
       <div class="lead-modal-head">
-        <div><div class="lead-modal-title">Unlock Property Benchmark Result</div><div class="lead-modal-sub">Submit your contact details to view the property comparison and source market mix benchmark.</div></div>
+        <div>
+          <div class="lead-modal-title">Unlock Property Benchmark Result</div>
+          <div class="lead-modal-sub">Submit your contact details to view the property comparison and source market mix benchmark.</div>
+        </div>
         <button type="button" class="lead-close" onclick="closeLeadModal()">×</button>
       </div>
       <div class="lead-form-grid">
-        <div class="field"><label>Name</label><input id="leadName" placeholder="Your name" autocomplete="off"></div>
-        <div class="field"><label>Hotel</label><input id="leadHotel" placeholder="Hotel / property name" autocomplete="off"></div>
-        <div class="field"><label>Work Email</label><input id="leadEmail" type="email" placeholder="name@hotel.com" autocomplete="off"></div>
-        <div class="field"><label>Position</label><input id="leadPosition" placeholder="Marketing / Commercial / Revenue" autocomplete="off"></div>
-        <div class="field full"><label>Phone (Optional)</label><input id="leadPhone" placeholder="Phone / WhatsApp" autocomplete="off"></div>
+        <div class="field"><label>Name</label><input id="leadName" placeholder="Your name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field"><label>Hotel</label><input id="leadHotel" placeholder="Hotel / property name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field"><label>Work Email</label><input id="leadEmail" type="email" placeholder="name@hotel.com" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field"><label>Position</label><input id="leadPosition" placeholder="Marketing / Commercial / Revenue" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field full"><label>Phone Optional</label><input id="leadPhone" placeholder="Phone / WhatsApp" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
       </div>
       <div id="leadError" class="lead-error"></div>
       <div id="leadSuccess" class="lead-success">Submitted. Benchmark result unlocked.</div>
@@ -247,115 +303,102 @@
   </div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/a/macros/media-console.com/s/AKfycbwxQbPJgEq7_3XvYCqgT6ukcbpcPPqXVmrow94_QUKkYxvb3AFs9LzSB1a3tud4M_wlrQ/exec';
-
-// ─── STATE ────────────────────────────────────────────────────────────────────
 let payload = {};
 let charts = {};
 let hoverCharts = {};
 let currentSourceRows = [];
 let currentView = null;
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
-  buildGeoTable();
-  loadViaJsonp();
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    showLoadError('google.script.run is not available. Open this from the deployed Apps Script web app URL, not as a local HTML preview.');
+    return;
+  }
+  google.script.run
+    .withSuccessHandler(function (res) {
+      try {
+        if (!res || !res.ok) {
+          showLoadError('Backend returned an error:\n' + (res && res.message ? res.message : 'Unknown error') + (res && res.stack ? '\n\n' + res.stack : ''));
+          return;
+        }
+        payload = res.payload || {};
+        applyContent();
+        setupFilters();
+        setupManualGeoPasteTable();
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        render();
+        initLeadLock();
+      } catch (err) {
+        showLoadError('Client render error:\n' + err.message + '\n\n' + (err.stack || ''));
+      }
+    })
+    .withFailureHandler(function (err) {
+      showLoadError('Apps Script call failed:\n' + (err && err.message ? err.message : String(err)));
+    })
+    .getClientPayloadDebug();
 });
 
-function loadViaJsonp() {
-  const callbackName = 'gasCallback_' + Date.now();
-  const script = document.createElement('script');
-
-  window[callbackName] = function(res) {
-    delete window[callbackName];
-    document.body.removeChild(script);
-    try {
-      if (!res || !res.ok) {
-        showLoadError('Backend error: ' + (res && res.message ? res.message : 'Unknown error'));
-        return;
-      }
-      payload = res.payload || {};
-      applyContent();
-      setupFilters();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      render();
-      initLeadLock();
-    } catch (err) {
-      showLoadError('Render error: ' + err.message);
-    }
-  };
-
-  script.onerror = function() {
-    showLoadError('Failed to load data. Please try again.');
-  };
-
-  script.src = GAS_URL + '?action=getClientPayload&callback=' + callbackName;
-  document.body.appendChild(script);
-}
-
 function showLoadError(message) {
-  document.getElementById('loading').innerHTML = '<div class="error">' + escapeHtml(message) + '</div>';
+  const loading = document.getElementById('loading');
+  loading.innerHTML = '<div class="error">' + escapeHtml(message) + '</div>';
 }
 
-// ─── BUILD GEO TABLE ──────────────────────────────────────────────────────────
-function buildGeoTable() {
-  const tbody = document.getElementById('geoTableBody');
-  if (!tbody) return;
-  let html = '';
-  for (let i = 0; i < 10; i++) {
-    html += '<tr><td class="geo-entry-rank">' + (i + 1) + '</td>' +
-      '<td class="geo-entry-country"><input id="geoCountry' + i + '" placeholder="Country" oninput="renderManualBenchmark()" onpaste="handleGeoPaste(event,' + i + ',\'country\')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>' +
-      '<td class="geo-entry-revenue"><input id="geoRevenue' + i + '" placeholder="Revenue" inputmode="decimal" oninput="formatGeoRevenueInput(this);renderManualBenchmark()" onpaste="handleGeoPaste(event,' + i + ',\'revenue\')" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td></tr>';
-  }
-  tbody.innerHTML = html;
-}
-
-// ─── CONTENT ──────────────────────────────────────────────────────────────────
 function applyContent() {
   const c = payload.content || {};
   const logoUrl = c.logoImageUrl || '';
   const logoImg = document.getElementById('logoImage');
   const logoMark = document.getElementById('logoMark');
-  if (logoUrl && logoImg) { logoImg.src = logoUrl; if(logoMark) logoMark.classList.add('has-image'); }
+  if (logoUrl) { logoImg.src = logoUrl; logoMark.classList.add('has-image'); }
   setHtml('logoText', (c.logoText || 'MEDIA\nCONSOLE').replace(/\n/g, '<br>'));
   setText('coverEyebrow', c.coverEyebrow || 'HOSPITALITY PERFORMANCE MARKETING');
   setText('coverTitle1Text', c.coverTitle1 || 'Driving More');
   setText('coverTitle2Text', c.coverTitle2 || 'Direct Bookings.');
   setText('coverTitleBlueText', c.coverTitleBlue || 'Delivering Results.');
-  setText('coverDescription', c.coverDescription || '');
-  const _ci=document.getElementById('coverImage');if(_ci)_ci.src=c.coverImageUrl||'';
+  setText('coverDescription', c.coverDescription || 'We combine media expertise, retargeting technology and booking intelligence to help hotel brands grow direct revenue profitably and sustainably.');
+  document.getElementById('coverImage').src = c.coverImageUrl || '';
   setText('feature1Icon', c.feature1Icon || '◎'); setHtml('feature1Text', (c.feature1Text || 'Performance\nDriven').replace(/\n/g, '<br>'));
   setText('feature2Icon', c.feature2Icon || '↗'); setHtml('feature2Text', (c.feature2Text || 'Booking\nIntelligence').replace(/\n/g, '<br>'));
   setText('feature3Icon', c.feature3Icon || '♙'); setHtml('feature3Text', (c.feature3Text || 'Hospitality\nSpecialized').replace(/\n/g, '<br>'));
   setText('feature4Icon', c.feature4Icon || '✓'); setHtml('feature4Text', (c.feature4Text || 'Transparent &\nAccountable').replace(/\n/g, '<br>'));
   setHtml('testimonial1Quote', highlightPercent(c.testimonial1Quote || ''));
-  setText('testimonial1Name', c.testimonial1Name || ''); setText('testimonial1Role', c.testimonial1Role || ''); setText('testimonial1Brand', c.testimonial1Brand || '');
-  const _t1=document.getElementById('testimonial1Image');if(_t1)_t1.src=c.testimonial1ImageUrl||'';
+  setText('testimonial1Name', c.testimonial1Name || '');
+  setText('testimonial1Role', c.testimonial1Role || '');
+  setText('testimonial1Brand', c.testimonial1Brand || '');
+  document.getElementById('testimonial1Image').src = c.testimonial1ImageUrl || '';
   setHtml('testimonial2Quote', highlightPercent(c.testimonial2Quote || ''));
-  setText('testimonial2Name', c.testimonial2Name || ''); setText('testimonial2Role', c.testimonial2Role || ''); setText('testimonial2Brand', c.testimonial2Brand || '');
-  const _t2=document.getElementById('testimonial2Image');if(_t2)_t2.src=c.testimonial2ImageUrl||'';
+  setText('testimonial2Name', c.testimonial2Name || '');
+  setText('testimonial2Role', c.testimonial2Role || '');
+  setText('testimonial2Brand', c.testimonial2Brand || '');
+  document.getElementById('testimonial2Image').src = c.testimonial2ImageUrl || '';
 }
 
-// ─── FILTERS ──────────────────────────────────────────────────────────────────
 function setupFilters() {
   const destinations = unique((payload.destination || []).map(r => r.Destination)).sort((a,b)=>String(a).localeCompare(String(b)));
-  document.getElementById('destinationOptions').innerHTML = destinations.map(v => '<option value="' + escapeAttr(v) + '"></option>').join('');
+  const destinationOptionsHtml = destinations.map(v => '<option value="' + escapeAttr(v) + '"></option>').join('');
+  document.getElementById('destinationOptions').innerHTML = destinationOptionsHtml;
   const months = unique((payload.monthly || []).map(r => r.Month)).sort((a,b)=>monthIndex(a)-monthIndex(b));
-  const monthList = document.getElementById('monthCheckboxList');
-  if (monthList) {
-    monthList.innerHTML = months.map(v => '<div class="month-item" data-month="' + escapeAttr(v) + '" onclick="toggleMonth(\'' + escapeJs(v) + '\')"> ' + escapeHtml(v) + '</div>').join('');
-  }
+  document.getElementById('monthFilter').innerHTML = '<option value="">All Months</option>' + months.map(v => '<option value="' + escapeAttr(v) + '">' + escapeHtml(v) + '</option>').join('');
 }
 
 let renderDebounceTimer = null;
-function scheduleRender() { clearTimeout(renderDebounceTimer); renderDebounceTimer = setTimeout(render, 250); }
-let benchmarkDebounceTimer = null;
-function scheduleBenchmarkRender() { clearTimeout(benchmarkDebounceTimer); benchmarkDebounceTimer = setTimeout(renderManualBenchmark, 250); }
-function resetFilters() { document.getElementById('destinationFilter').value = ''; clearAllMonths(); render(); }
+function scheduleRender() {
+  clearTimeout(renderDebounceTimer);
+  renderDebounceTimer = setTimeout(render, 250);
+}
 
-// ─── RENDER ───────────────────────────────────────────────────────────────────
+let benchmarkDebounceTimer = null;
+function scheduleBenchmarkRender() {
+  clearTimeout(benchmarkDebounceTimer);
+  benchmarkDebounceTimer = setTimeout(renderManualBenchmark, 250);
+}
+
+function resetFilters() {
+  document.getElementById('destinationFilter').value = '';
+  document.getElementById('monthFilter').value = '';
+  render();
+}
+
 function render() {
   const view = getFilteredView();
   currentView = view;
@@ -373,22 +416,25 @@ function render() {
 
 function getFilteredView() {
   const dest = document.getElementById('destinationFilter').value;
-  const selectedMonths = getSelectedMonths();
-  const month = selectedMonths.length === 1 ? selectedMonths[0] : '';
-  let monthlyRows = [], sourceRows = [], futureRows = [];
+  const month = document.getElementById('monthFilter').value;
+  let monthlyRows = [];
+  let sourceRows = [];
+  let futureRows = [];
+
   if (dest) {
-    monthlyRows = (payload.destinationMonth || []).filter(r => r.Destination === dest && (!selectedMonths.length || selectedMonths.includes(r.Month)));
-    sourceRows = (payload.destinationSourceMarketMonth || []).filter(r => r.Destination === dest && (!selectedMonths.length || selectedMonths.includes(r.Month))).map(toSourceRow);
+    monthlyRows = (payload.destinationMonth || []).filter(r => r.Destination === dest && (!month || r.Month === month));
+    sourceRows = (payload.destinationSourceMarketMonth || []).filter(r => r.Destination === dest && (!month || r.Month === month)).map(toSourceRow);
     futureRows = (payload.destinationFuturePipeline || []).filter(r => r.Destination === dest).map(toFutureRow);
-  } else if (selectedMonths.length) {
-    monthlyRows = (payload.monthly || []).filter(r => selectedMonths.includes(r.Month));
-    sourceRows = (payload.sourceMarketMonth || []).filter(r => selectedMonths.includes(r.Month)).map(toSourceRow);
+  } else if (month) {
+    monthlyRows = (payload.monthly || []).filter(r => r.Month === month);
+    sourceRows = (payload.sourceMarketMonth || []).filter(r => r.Month === month).map(toSourceRow);
     futureRows = (payload.futurePipeline || []).map(toFutureRow);
   } else {
     monthlyRows = (payload.monthly || []);
     sourceRows = (payload.sourceMarket || []).map(toSourceRow);
     futureRows = (payload.futurePipeline || []).map(toFutureRow);
   }
+
   sourceRows = combineSourceRows(sourceRows).sort((a,b)=>b.revenue-a.revenue);
   const totals = rowsToTotals(monthlyRows);
   return { dest, month, monthlyRows, sourceRows, futureRows, totals };
@@ -398,227 +444,374 @@ function toSourceRow(r){ return { market: r['Source Market'], revenue: numVal(r.
 function toFutureRow(r){ return { month: r['Check-in Month'], revenue: numVal(r.Revenue), nights: numVal(r['Room Nights']), bookings: numVal(r.Bookings) }; }
 function combineSourceRows(rows){
   const map = {};
-  rows.forEach(r => { const k = r.market||'Unknown'; if(!map[k]) map[k]={market:k,revenue:0,nights:0,bookings:0,bltTotal:0}; map[k].revenue+=r.revenue||0; map[k].nights+=r.nights||0; map[k].bookings+=r.bookings||0; map[k].bltTotal+=(r.blt||0)*(r.bookings||0); });
-  return Object.values(map).map(r=>({...r,abv:r.bookings?r.revenue/r.bookings:0,los:r.bookings?r.nights/r.bookings:0,blt:r.bookings?r.bltTotal/r.bookings:0}));
+  rows.forEach(r => {
+    const k = r.market || 'Unknown';
+    if(!map[k]) map[k] = {market:k,revenue:0,nights:0,bookings:0,bltTotal:0};
+    map[k].revenue += r.revenue || 0;
+    map[k].nights += r.nights || 0;
+    map[k].bookings += r.bookings || 0;
+    map[k].bltTotal += (r.blt || 0) * (r.bookings || 0);
+  });
+  return Object.values(map).map(r => ({...r, abv:r.bookings?r.revenue/r.bookings:0, los:r.bookings?r.nights/r.bookings:0, blt:r.bookings?r.bltTotal/r.bookings:0}));
 }
 function rowsToTotals(rows){
-  const revenue=sum(rows,'Revenue'),nights=sum(rows,'Room Nights'),bookings=sum(rows,'Bookings'),bltTotal=rows.reduce((s,r)=>s+numVal(r['Avg BLT'])*numVal(r.Bookings),0);
-  return {revenue,nights,bookings,abv:bookings?revenue/bookings:0,los:bookings?nights/bookings:0,blt:bookings?bltTotal/bookings:0};
+  const revenue = sum(rows, 'Revenue'), nights = sum(rows, 'Room Nights'), bookings = sum(rows, 'Bookings'), bltTotal = rows.reduce((s,r)=>s + numVal(r['Avg BLT'])*numVal(r.Bookings),0);
+  return { revenue, nights, bookings, abv: bookings ? revenue/bookings : 0, los: bookings ? nights/bookings : 0, blt: bookings ? bltTotal/bookings : 0 };
 }
-function getTotalsForMonth(dest,month){
-  if(!month) return null;
-  let rows=dest?(payload.destinationMonth||[]).filter(r=>r.Destination===dest&&r.Month===month):(payload.monthly||[]).filter(r=>r.Month===month);
-  if(!rows.length) return null;
+function getTotalsForMonth(dest, month) {
+  if (!month) return null;
+  let rows = [];
+  if (dest) rows = (payload.destinationMonth || []).filter(r => r.Destination === dest && r.Month === month);
+  else rows = (payload.monthly || []).filter(r => r.Month === month);
+  if (!rows.length) return null;
   return rowsToTotals(rows);
 }
-function getPreviousMonthLabel(label){
-  if(!label) return '';
-  const names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const parts=String(label).replace(' ','-').split('-'),month=String(parts[0]||'').slice(0,3);
-  let year=Number(parts[1]),idx=names.indexOf(month);
-  if(idx<0||!year) return '';
-  idx-=1; if(idx<0){idx=11;year-=1;}
-  return names[idx]+'-'+year;
+function getPreviousMonthLabel(label) {
+  if (!label) return '';
+  const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const parts = String(label).replace(' ', '-').split('-');
+  const month = String(parts[0] || '').slice(0,3);
+  let year = Number(parts[1]);
+  let idx = names.indexOf(month);
+  if (idx < 0 || !year) return '';
+  idx -= 1;
+  if (idx < 0) { idx = 11; year -= 1; }
+  return names[idx] + '-' + year;
 }
-function makeChangeHtml(current,previous,reverseGood){
-  current=Number(current||0);previous=Number(previous||0);
-  if(!previous||!isFinite(previous)) return '<span class="change-pill neutral">-</span>';
-  const pct=((current-previous)/Math.abs(previous))*100,arrow=pct>=0?'▲':'▼',good=reverseGood?pct<=0:pct>=0;
-  return '<span class="change-pill '+(good?'good':'bad')+'">'+arrow+' '+Math.abs(pct).toFixed(1)+'%</span>';
-}
-
-function renderKpis(view){
-  const t=view.totals||{};
-  setText('kpiRevenue',formatRevenue(t.revenue)); setText('kpiNights',formatNumber(t.nights)); setText('kpiBookings',formatNumber(t.bookings));
-  setText('kpiAbv',formatRevenue(t.abv)); setText('kpiBlt',formatDecimal(t.blt,0)); setText('kpiLos',formatDecimal(t.los,1));
-  const month=view.month||'',prevMonth=getPreviousMonthLabel(month),prevTotals=prevMonth?getTotalsForMonth(view.dest,prevMonth):null;
-  const subs=document.querySelectorAll('.kpi-sub');
-  if(!month||!prevTotals){const defaults=['Selected view','Total stay volume','Attributed bookings','Revenue / bookings','Booking window','Stay pattern'];subs.forEach((el,i)=>{el.innerHTML=defaults[i]||'Selected view';});return;}
-  const items=[{v:t.revenue,p:prevTotals.revenue,reverse:false},{v:t.nights,p:prevTotals.nights,reverse:false},{v:t.bookings,p:prevTotals.bookings,reverse:false},{v:t.abv,p:prevTotals.abv,reverse:false},{v:t.blt,p:prevTotals.blt,reverse:true},{v:t.los,p:prevTotals.los,reverse:false}];
-  subs.forEach((el,i)=>{el.innerHTML='vs last month '+makeChangeHtml(items[i].v,items[i].p,items[i].reverse);});
+function makeChangeHtml(current, previous, reverseGood) {
+  current = Number(current || 0);
+  previous = Number(previous || 0);
+  if (!previous || !isFinite(previous)) return '<span class="change-pill neutral">-</span>';
+  const pct = ((current - previous) / Math.abs(previous)) * 100;
+  const arrow = pct >= 0 ? '▲' : '▼';
+  const good = reverseGood ? pct <= 0 : pct >= 0;
+  return '<span class="change-pill ' + (good ? 'good' : 'bad') + '">' + arrow + ' ' + Math.abs(pct).toFixed(1) + '%</span>';
 }
 
-function renderInsights(view){
-  const topMarket=view.sourceRows[0];
-  setText('insightCard1Label','Top Source Market'); setText('insightTopMarket',topMarket?topMarket.market:'-'); setText('insightTopMarketDesc',topMarket?formatRevenue(topMarket.revenue)+' revenue contribution.':'-');
-  const trend=view.month?getSourceMarketTrend(view):{hasPrevious:false};
-  if(view.month&&trend.hasPrevious){
-    setText('insightCard2Label','Rising Market'); setText('insightCard3Label','Fallen Market');
-    setText('insightRisingMarket',trend.rising?trend.rising.market:'-'); setHtml('insightRisingMarketDesc',trend.rising?'<span class="trend-good">▲ '+formatRevenue(Math.abs(trend.rising.diff))+'</span> vs last month':'-');
-    setText('insightFallenMarket',trend.fallen?trend.fallen.market:'-'); setHtml('insightFallenMarketDesc',trend.fallen?'<span class="trend-bad">▼ '+formatRevenue(Math.abs(trend.fallen.diff))+'</span> vs last month':'-');
+function renderKpis(view) {
+  const t = view.totals || {};
+  setText('kpiRevenue', formatRevenue(t.revenue));
+  setText('kpiNights', formatNumber(t.nights));
+  setText('kpiBookings', formatNumber(t.bookings));
+  setText('kpiAbv', formatRevenue(t.abv));
+  setText('kpiBlt', formatDecimal(t.blt, 0));
+  setText('kpiLos', formatDecimal(t.los, 1));
+
+  const month = view.month || '';
+  const prevMonth = getPreviousMonthLabel(month);
+  const prevTotals = prevMonth ? getTotalsForMonth(view.dest, prevMonth) : null;
+  const subs = document.querySelectorAll('.kpi-sub');
+  if (!month || !prevTotals) {
+    const defaults = ['Selected view','Total stay volume','Attributed bookings','Revenue / bookings','Booking window','Stay pattern'];
+    subs.forEach((el, i) => { el.innerHTML = defaults[i] || 'Selected view'; });
     return;
   }
-  setText('insightCard2Label','Highest ABV Market'); setText('insightCard3Label','Longest Stay Market');
-  const validMarkets=(view.sourceRows||[]).filter(r=>Number(r.bookings||0)>0);
-  const highestAbv=validMarkets.slice().sort((a,b)=>Number(b.abv||0)-Number(a.abv||0))[0]||null;
-  const longestStay=validMarkets.slice().sort((a,b)=>Number(b.los||0)-Number(a.los||0))[0]||null;
-  setText('insightRisingMarket',highestAbv?highestAbv.market:'-'); setText('insightRisingMarketDesc',highestAbv?formatRevenue(highestAbv.abv)+' average booking value.':'-');
-  setText('insightFallenMarket',longestStay?longestStay.market:'-'); setText('insightFallenMarketDesc',longestStay?formatDecimal(longestStay.los,1)+' nights average length of stay.':'-');
+  const items = [
+    {v:t.revenue, p:prevTotals.revenue, type:'pct', reverse:false},
+    {v:t.nights, p:prevTotals.nights, type:'pct', reverse:false},
+    {v:t.bookings, p:prevTotals.bookings, type:'pct', reverse:false},
+    {v:t.abv, p:prevTotals.abv, type:'pct', reverse:false},
+    {v:t.blt, p:prevTotals.blt, type:'pct', reverse:true},
+    {v:t.los, p:prevTotals.los, type:'pct', reverse:false}
+  ];
+  subs.forEach((el, i) => { el.innerHTML = 'vs last month ' + makeChangeHtml(items[i].v, items[i].p, items[i].reverse); });
 }
-function getSourceMarketTrend(view){
-  const dest=view.dest;
-  let currentMonth=view.month;
-  if(!currentMonth){const monthRows=(view.monthlyRows||[]).slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));currentMonth=monthRows.length?monthRows[monthRows.length-1].Month:'';}
-  const prevMonth=getPreviousMonthLabel(currentMonth);
-  if(!currentMonth||!prevMonth) return{rising:null,fallen:null,hasPrevious:false};
-  const rows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest):(payload.sourceMarketMonth||[]);
-  const cur={},prev={};
-  rows.forEach(r=>{const market=r['Source Market']||'Unknown',revenue=numVal(r.Revenue);if(r.Month===currentMonth)cur[market]=(cur[market]||0)+revenue;if(r.Month===prevMonth)prev[market]=(prev[market]||0)+revenue;});
-  const hasPrevious=Object.keys(prev).length>0;
-  if(!hasPrevious) return{rising:null,fallen:null,currentMonth,prevMonth,hasPrevious:false};
-  const markets=unique(Object.keys(cur).concat(Object.keys(prev)));
-  const deltas=markets.map(m=>({market:m,diff:(cur[m]||0)-(prev[m]||0),current:cur[m]||0,previous:prev[m]||0}));
-  const rising=deltas.filter(x=>x.diff>0).sort((a,b)=>b.diff-a.diff)[0]||null;
-  const fallen=deltas.filter(x=>x.diff<0).sort((a,b)=>a.diff-b.diff)[0]||null;
-  return{rising,fallen,currentMonth,prevMonth,hasPrevious:true};
-}
+function renderInsights(view) {
+  const topMarket = view.sourceRows[0];
+  setText('insightCard1Label', 'Top Source Market');
+  setText('insightTopMarket', topMarket ? topMarket.market : '-');
+  setText('insightTopMarketDesc', topMarket ? formatRevenue(topMarket.revenue) + ' revenue contribution.' : '-');
 
-function renderBookingSummary(rows){
-  const wrap=document.getElementById('bookingSummary');
-  if(!rows.length){wrap.innerHTML='';return;}
-  const enriched=rows.map(r=>({month:r.Month,revenue:numVal(r.Revenue),bookings:numVal(r.Bookings),abv:numVal(r.Bookings)?numVal(r.Revenue)/numVal(r.Bookings):0}));
-  const topRevenue=enriched.slice().sort((a,b)=>b.revenue-a.revenue)[0];
-  const topBookings=enriched.slice().sort((a,b)=>b.bookings-a.bookings)[0];
-  const topAbv=enriched.slice().sort((a,b)=>b.abv-a.abv)[0];
-  wrap.innerHTML=summaryCard('Top Revenue Month',formatMonthShort(topRevenue.month)+' · '+formatRevenue(topRevenue.revenue))+summaryCard('Top Booking Month',formatMonthShort(topBookings.month)+' · '+formatNumber(topBookings.bookings)+' bookings')+summaryCard('Highest ABV Month',formatMonthShort(topAbv.month)+' · '+formatRevenue(topAbv.abv));
-}
-function summaryCard(label,value){return '<div class="summary-card"><div class="summary-label">'+escapeHtml(label)+'</div><div class="summary-value">'+escapeHtml(value)+'</div></div>';}
+  const trend = view.month ? getSourceMarketTrend(view) : {hasPrevious:false};
+  if (view.month && trend.hasPrevious) {
+    setText('insightCard2Label', 'Rising Market');
+    setText('insightCard3Label', 'Fallen Market');
+    setText('insightRisingMarket', trend.rising ? trend.rising.market : '-');
+    setHtml('insightRisingMarketDesc', trend.rising ? '<span class="trend-good">▲ ' + formatRevenue(Math.abs(trend.rising.diff)) + '</span> vs last month' : '-');
+    setText('insightFallenMarket', trend.fallen ? trend.fallen.market : '-');
+    setHtml('insightFallenMarketDesc', trend.fallen ? '<span class="trend-bad">▼ ' + formatRevenue(Math.abs(trend.fallen.diff)) + '</span> vs last month' : '-');
+    return;
+  }
 
-function renderMonthlyChart(rows){
-  const sorted=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
-  createChart('monthlyRevenueChart',{type:'line',data:{labels:sorted.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:sorted.map(r=>numVal(r.Revenue)),borderColor:'#0058ff',backgroundColor:'rgba(0,88,255,.08)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
+  setText('insightCard2Label', 'Highest ABV Market');
+  setText('insightCard3Label', 'Longest Stay Market');
+  const validMarkets = (view.sourceRows || []).filter(r => Number(r.bookings || 0) > 0);
+  const highestAbv = validMarkets.slice().sort((a, b) => Number(b.abv || 0) - Number(a.abv || 0))[0] || null;
+  const longestStay = validMarkets.slice().sort((a, b) => Number(b.los || 0) - Number(a.los || 0))[0] || null;
+
+  setText('insightRisingMarket', highestAbv ? highestAbv.market : '-');
+  setText('insightRisingMarketDesc', highestAbv ? formatRevenue(highestAbv.abv) + ' average booking value.' : '-');
+  setText('insightFallenMarket', longestStay ? longestStay.market : '-');
+  setText('insightFallenMarketDesc', longestStay ? formatDecimal(longestStay.los, 1) + ' nights average length of stay.' : '-');
 }
-function renderSourceMarketTable(rows){
-  currentSourceRows=rows;
-  const data=rows.slice().sort((a,b)=>b.revenue-a.revenue).slice(0,10);
-  const total=rows.reduce((sum,r)=>sum+r.revenue,0);
-  const max=Math.max.apply(null,data.map(r=>r.revenue).concat([1]));
-  document.getElementById('sourceMarketTable').innerHTML=data.length?data.map(r=>{const pct=total?r.revenue/total:0;return'<tr class="source-row" onmouseenter="showSourceHover(event,\''+escapeJs(r.market)+'\')" onmousemove="moveSourceHover(event)" onmouseleave="hideSourceHover()"><td><strong>'+escapeHtml(r.market)+'</strong></td><td class="money">'+formatFullCurrency(r.revenue)+'</td><td class="bar-cell"><div class="bar-inner"><div class="bar-track"><div class="bar" style="width:'+(r.revenue/max*100)+'%"></div></div><div>'+percentDecimal(pct)+'</div></div></td><td>'+formatNumber(r.nights)+'</td><td>'+formatNumber(r.bookings)+'</td></tr>';}).join(''):'<tr><td colspan="5">No source market data</td></tr>';
+function getSourceMarketTrend(view) {
+  const dest = view.dest;
+  let currentMonth = view.month;
+  if (!currentMonth) {
+    const monthRows = (view.monthlyRows || []).slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
+    currentMonth = monthRows.length ? monthRows[monthRows.length - 1].Month : '';
+  }
+  const prevMonth = getPreviousMonthLabel(currentMonth);
+  if (!currentMonth || !prevMonth) return {rising:null, fallen:null, hasPrevious:false};
+
+  const rows = dest ? (payload.destinationSourceMarketMonth || []).filter(r => r.Destination === dest) : (payload.sourceMarketMonth || []);
+  const cur = {};
+  const prev = {};
+  rows.forEach(r => {
+    const market = r['Source Market'] || 'Unknown';
+    const revenue = numVal(r.Revenue);
+    if (r.Month === currentMonth) cur[market] = (cur[market] || 0) + revenue;
+    if (r.Month === prevMonth) prev[market] = (prev[market] || 0) + revenue;
+  });
+
+  const hasPrevious = Object.keys(prev).length > 0;
+  if (!hasPrevious) return {rising:null, fallen:null, currentMonth, prevMonth, hasPrevious:false};
+
+  const markets = unique(Object.keys(cur).concat(Object.keys(prev)));
+  const deltas = markets.map(m => ({market:m, diff:(cur[m] || 0) - (prev[m] || 0), current:cur[m] || 0, previous:prev[m] || 0}));
+  const rising = deltas.filter(x => x.diff > 0).sort((a,b)=>b.diff-a.diff)[0] || null;
+  const fallen = deltas.filter(x => x.diff < 0).sort((a,b)=>a.diff-b.diff)[0] || null;
+  return {rising, fallen, currentMonth, prevMonth, hasPrevious:true};
 }
-function showSourceHover(event,market){
-  const r=currentSourceRows.find(x=>x.market===market); if(!r) return;
-  setText('hoverMarket',r.market); setText('hoverRevenue',formatRevenue(r.revenue)); setText('hoverBookings',formatNumber(r.bookings)); setText('hoverNights',formatNumber(r.nights)); setText('hoverAbv',formatRevenue(r.abv)); setText('hoverLos',formatDecimal(r.los,1)+' nights'); setText('hoverBlt',formatDecimal(r.blt,0)+' days');
-  renderSourceHoverTrend(r.market); document.getElementById('sourceHover').classList.add('open'); moveSourceHover(event);
+function renderBookingSummary(rows) {
+  const wrap = document.getElementById('bookingSummary');
+  if (!rows.length) { wrap.innerHTML = ''; return; }
+  const enriched = rows.map(r => ({month:r.Month, revenue:numVal(r.Revenue), bookings:numVal(r.Bookings), abv:numVal(r.Bookings)?numVal(r.Revenue)/numVal(r.Bookings):0}));
+  const topRevenue = enriched.slice().sort((a,b)=>b.revenue-a.revenue)[0];
+  const topBookings = enriched.slice().sort((a,b)=>b.bookings-a.bookings)[0];
+  const topAbv = enriched.slice().sort((a,b)=>b.abv-a.abv)[0];
+  wrap.innerHTML = summaryCard('Top Revenue Month', formatMonthShort(topRevenue.month) + ' · ' + formatRevenue(topRevenue.revenue)) + summaryCard('Top Booking Month', formatMonthShort(topBookings.month) + ' · ' + formatNumber(topBookings.bookings) + ' bookings') + summaryCard('Highest ABV Month', formatMonthShort(topAbv.month) + ' · ' + formatRevenue(topAbv.abv));
 }
-function moveSourceHover(event){const pop=document.getElementById('sourceHover');let x=event.clientX+22,y=event.clientY+18;const rect=pop.getBoundingClientRect();if(x+rect.width>window.innerWidth-18)x=event.clientX-rect.width-22;if(y+rect.height>window.innerHeight-18)y=window.innerHeight-rect.height-18;pop.style.left=x+'px';pop.style.top=Math.max(18,y)+'px';}
-function hideSourceHover(){const pop=document.getElementById('sourceHover');if(pop)pop.classList.remove('open');}
+function summaryCard(label,value){ return '<div class="summary-card"><div class="summary-label">'+escapeHtml(label)+'</div><div class="summary-value">'+escapeHtml(value)+'</div></div>'; }
+function renderMonthlyChart(rows) {
+  const sorted = rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
+  createChart('monthlyRevenueChart', {
+    type: 'line',
+    data: { labels: sorted.map(r => formatMonthShort(r.Month)), datasets: [{ label: 'Revenue', data: sorted.map(r => numVal(r.Revenue)), borderColor: '#0058ff', backgroundColor: 'rgba(0,88,255,.08)', fill: true, tension: .36, pointRadius: 3, borderWidth: 2.3 }] },
+    options: chartOptions(v => formatRevenue(v), 'Revenue')
+  });
+}
+function renderSourceMarketTable(rows) {
+  currentSourceRows = rows;
+  const data = rows.slice().sort((a, b) => b.revenue - a.revenue).slice(0, 10);
+  const total = rows.reduce((sum,r)=>sum+r.revenue,0);
+  const max = Math.max.apply(null, data.map(r => r.revenue).concat([1]));
+  document.getElementById('sourceMarketTable').innerHTML = data.length ? data.map((r) => {
+    const pct = total ? r.revenue / total : 0;
+    return '<tr class="source-row" onmouseenter="showSourceHover(event,\''+escapeJs(r.market)+'\')" onmousemove="moveSourceHover(event)" onmouseleave="hideSourceHover()"><td><strong>' + escapeHtml(r.market) + '</strong></td><td class="money">' + formatFullCurrency(r.revenue) + '</td><td class="bar-cell"><div class="bar-inner"><div class="bar-track"><div class="bar" style="width:' + (r.revenue / max * 100) + '%"></div></div><div>' + percentDecimal(pct) + '</div></div></td><td>' + formatNumber(r.nights) + '</td><td>' + formatNumber(r.bookings) + '</td></tr>';
+  }).join('') : '<tr><td colspan="5">No source market data</td></tr>';
+}
+function showSourceHover(event, market){
+  const r = currentSourceRows.find(x => x.market === market);
+  if(!r) return;
+  setText('hoverMarket', r.market);
+  setText('hoverRevenue', formatRevenue(r.revenue));
+  setText('hoverBookings', formatNumber(r.bookings));
+  setText('hoverNights', formatNumber(r.nights));
+  setText('hoverAbv', formatRevenue(r.abv));
+  setText('hoverLos', formatDecimal(r.los,1) + ' nights');
+  setText('hoverBlt', formatDecimal(r.blt,0) + ' days');
+  renderSourceHoverTrend(r.market);
+  document.getElementById('sourceHover').classList.add('open');
+  moveSourceHover(event);
+}
+function moveSourceHover(event){
+  const pop=document.getElementById('sourceHover');
+  let x=event.clientX+22,y=event.clientY+18;
+  const rect=pop.getBoundingClientRect();
+  if(x+rect.width>window.innerWidth-18)x=event.clientX-rect.width-22;
+  if(y+rect.height>window.innerHeight-18)y=window.innerHeight-rect.height-18;
+  pop.style.left=x+'px';pop.style.top=Math.max(18,y)+'px';
+}
+function hideSourceHover(){const pop=document.getElementById('sourceHover'); if(pop) pop.classList.remove('open');}
 function renderSourceHoverTrend(market){
-  const view=currentView||getFilteredView(),dest=view.dest,selectedMonth=view.month;
-  let trendRows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest&&r['Source Market']===market):(payload.sourceMarketMonth||[]).filter(r=>r['Source Market']===market);
-  if(selectedMonth) trendRows=trendRows.filter(r=>r.Month===selectedMonth);
-  trendRows=trendRows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
-  createHoverChart('hoverRevenueTrendChart',{type:'line',data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#7a4cff',backgroundColor:'rgba(122,76,255,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',callbacks:{label:function(c){return'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86'}},y:{grid:{color:'#e7e1fb'},ticks:{color:'#374151',callback:function(v){return formatRevenue(v)}}}}}});
+  const view = currentView || getFilteredView();
+  const dest = view.dest;
+  const selectedMonth = view.month;
+  let trendRows = dest ? (payload.destinationSourceMarketMonth || []).filter(r => r.Destination === dest && r['Source Market'] === market) : (payload.sourceMarketMonth || []).filter(r => r['Source Market'] === market);
+  if(selectedMonth) trendRows = trendRows.filter(r => r.Month === selectedMonth);
+  trendRows = trendRows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
+  createHoverChart('hoverRevenueTrendChart', { type:'line', data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#7a4cff',backgroundColor:'rgba(122,76,255,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',callbacks:{label:function(c){return 'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86'}},y:{grid:{color:'#e7e1fb'},ticks:{color:'#374151',callback:function(v){return formatRevenue(v)}}}}} });
 }
-function createHoverChart(id,config){const ctx=document.getElementById(id);if(!ctx||typeof Chart==='undefined')return;if(hoverCharts[id])hoverCharts[id].destroy();hoverCharts[id]=new Chart(ctx,config);}
-
-function renderFutureCharts(rows){
-  const sorted=rows.slice().sort((a,b)=>checkInMonthIndex(a.month)-checkInMonthIndex(b.month));
-  createChart('futureRevenueChart',{type:'line',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Revenue',data:sorted.map(r=>r.revenue),borderColor:'#0058ff',backgroundColor:'rgba(0,88,255,.08)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
-  createChart('roomNightsChart',{type:'bar',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Room Nights',data:sorted.map(r=>r.nights),backgroundColor:'rgba(245,179,38,.55)',borderColor:'rgba(245,179,38,.85)',borderWidth:1,borderRadius:10,maxBarThickness:28}]},options:chartOptions(v=>formatNumber(v),'Room Nights')});
-}
-function getBehaviorRows(view,type){
-  const dest=view.dest,month=view.month;
-  const source=type==='blt'?(dest?(payload.destinationBltDistribution||[]):(payload.bltDistribution||[])):(dest?(payload.destinationLosRevenueDistribution||[]):(payload.losRevenueDistribution||[]));
-  const selMonths=getSelectedMonths();
-  return source.filter(r=>(!dest||r.Destination===dest)&&(!selMonths.length||selMonths.includes(r.Month)));
-}
-function renderBehaviorCharts(view){
-  const bltOrder=['0-3 Days','4-7 Days','8-14 Days','15-30 Days','30-60 Days','60+ Days'];
-  const bltRows=getBehaviorRows(view,'blt'),bltTotal=Math.max(bltRows.reduce((s,r)=>s+numVal(r.Bookings),0),1);
-  const bltValues=bltOrder.map(k=>bltRows.filter(r=>{const b=String(r['BLT Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['BLT Bucket']===k;}).reduce((s,r)=>s+numVal(r.Bookings),0)/bltTotal*100);
-  createChart('bltDistributionChart',{type:'bar',data:{labels:bltOrder,datasets:[{label:'% of Bookings',data:bltValues,backgroundColor:'rgba(0,88,255,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatDecimal(v,0)+'%','% of Bookings')});
-  const losOrder=['1 Night','2 Nights','3-4 Nights','5-6 Nights','7+ Nights'];
-  const losRows=getBehaviorRows(view,'los');
-  const losValues=losOrder.map(k=>losRows.filter(r=>{const b=String(r['LOS Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['LOS Bucket']===k;}).reduce((s,r)=>s+numVal(r.Revenue),0));
-  createChart('losDistributionChart',{type:'bar',data:{labels:losOrder,datasets:[{label:'Revenue',data:losValues,backgroundColor:'rgba(0,88,255,.50)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatRevenue(v),'Revenue')});
+function createHoverChart(id, config) { const ctx = document.getElementById(id); if (!ctx || typeof Chart === 'undefined') return; if (hoverCharts[id]) hoverCharts[id].destroy(); hoverCharts[id] = new Chart(ctx, config); }
+function renderFutureCharts(rows) {
+  const sorted = rows.slice().sort((a,b)=>checkInMonthIndex(a.month)-checkInMonthIndex(b.month));
+  createChart('futureRevenueChart', {
+    type: 'line',
+    data: { labels: sorted.map(r => r.month), datasets: [{ label: 'Revenue', data: sorted.map(r => r.revenue), borderColor: '#0058ff', backgroundColor: 'rgba(0,88,255,.08)', fill: true, tension: .36, pointRadius: 3, borderWidth: 2.3 }] },
+    options: chartOptions(v => formatRevenue(v), 'Revenue')
+  });
+  createChart('roomNightsChart', {
+    type: 'bar',
+    data: { labels: sorted.map(r => r.month), datasets: [{ label: 'Room Nights', data: sorted.map(r => r.nights), backgroundColor: 'rgba(245,179,38,.55)', borderColor: 'rgba(245,179,38,.85)', borderWidth: 1, borderRadius: 10, maxBarThickness: 28 }] },
+    options: chartOptions(v => formatNumber(v), 'Room Nights')
+  });
 }
 
-let lastFutureMatrixFullRows=[];
-function renderFutureGeoTable(view){
-  const dest=view.dest,months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  let raw=dest?(payload.destinationFutureSourceMarket||[]).filter(r=>r.Destination===dest):(payload.futureSourceMarket||[]);
-  const byMarket={};
-  raw.forEach(r=>{const market=r['Source Market']||'Unknown',month=String(r['Check-in Month']||'').slice(0,3);if(!months.includes(month))return;if(!byMarket[market])byMarket[market]={market,totalRevenue:0,totalNights:0,totalBookings:0,months:{}};if(!byMarket[market].months[month])byMarket[market].months[month]={revenue:0,nights:0,bookings:0};const revenue=numVal(r.Revenue),nights=numVal(r['Room Nights']),bookings=numVal(r.Bookings);byMarket[market].months[month].revenue+=revenue;byMarket[market].months[month].nights+=nights;byMarket[market].months[month].bookings+=bookings;byMarket[market].totalRevenue+=revenue;byMarket[market].totalNights+=nights;byMarket[market].totalBookings+=bookings;});
-  const allRows=Object.values(byMarket).sort((a,b)=>b.totalRevenue-a.totalRevenue);
-  lastFutureMatrixFullRows=allRows;
-  const topRows=allRows.slice(0,10);
-  const totalRevenue=topRows.reduce((sum,r)=>sum+r.totalRevenue,0),totalNights=topRows.reduce((sum,r)=>sum+r.totalNights,0),totalBookings=topRows.reduce((sum,r)=>sum+r.totalBookings,0);
-  const maxCellRevenue=Math.max.apply(null,topRows.flatMap(r=>months.map(m=>(r.months[m]||{}).revenue||0)).concat([1]));
-  const summary=document.getElementById('futureGeoSummary'),tbody=document.getElementById('futureGeoTableBody');
-  if(summary)summary.innerHTML='<div class="future-geo-summary-card"><div class="future-geo-label">Matrix Period</div><div class="future-geo-value">Jan – Dec</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Top 10 Pipeline Revenue</div><div class="future-geo-value">'+formatRevenue(totalRevenue)+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Room Nights</div><div class="future-geo-value">'+formatNumber(totalNights)+' RN</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Bookings</div><div class="future-geo-value">'+formatNumber(totalBookings)+'</div></div>';
-  if(!tbody)return;
-  if(!topRows.length){tbody.innerHTML='<tr><td colspan="14">No future pipeline data available.</td></tr>';return;}
-  const monthTotals={};months.forEach(m=>{monthTotals[m]=topRows.reduce((sum,r)=>sum+(((r.months[m]||{}).revenue)||0),0);});
-  const bodyHtml=topRows.map(r=>{const monthCells=months.map(m=>{const revenue=(r.months[m]||{}).revenue||0,intensity=Math.max(0,Math.min(1,revenue/maxCellRevenue)),alpha=revenue?(0.10+intensity*0.72):0,textColor=intensity>0.58?'#ffffff':'#10213f',bg=revenue?'background:rgba(0,88,255,'+alpha.toFixed(2)+');color:'+textColor+';':'';return'<td class="heat-cell" style="'+bg+'">'+(revenue?formatCompact(revenue):'–')+'</td>';}).join('');return'<tr><td class="market-col"><strong>'+escapeHtml(r.market)+'</strong></td>'+monthCells+'<td class="money total-col"><strong>'+formatRevenue(r.totalRevenue)+'</strong></td></tr>';}).join('');
-  const totalRow='<tr class="matrix-total-row"><td class="market-col"><strong>Grand Total</strong></td>'+months.map(m=>{const revenue=monthTotals[m]||0,share=totalRevenue?revenue/totalRevenue*100:0;return'<td class="heat-cell"><div class="matrix-total-cell"><b>'+(revenue?formatCompact(revenue):'–')+'</b><span>'+(revenue?formatDecimal(share,1)+'%':'')+'</span></div></td>';}).join('')+'<td class="money total-col"><div class="matrix-total-cell"><b>'+formatRevenue(totalRevenue)+'</b><span>100%</span></div></td></tr>';
-  tbody.innerHTML=bodyHtml+totalRow;
+function getBehaviorRows(view, type) {
+  const dest = view.dest;
+  const month = view.month;
+  const source = type === 'blt'
+    ? (dest ? (payload.destinationBltDistribution || []) : (payload.bltDistribution || []))
+    : (dest ? (payload.destinationLosRevenueDistribution || []) : (payload.losRevenueDistribution || []));
+  return source.filter(r => (!dest || r.Destination === dest) && (!month || r.Month === month));
+}
+function renderBehaviorCharts(view) {
+  const bltOrder = ['0–3 Days','4–7 Days','8–14 Days','15–30 Days','30–60 Days','60+ Days'];
+  const bltRows = getBehaviorRows(view, 'blt');
+  const bltTotal = Math.max(bltRows.reduce((s,r)=>s+numVal(r.Bookings),0),1);
+  const bltValues = bltOrder.map(k => bltRows.filter(r => r['BLT Bucket'] === k).reduce((s,r)=>s+numVal(r.Bookings),0) / bltTotal * 100);
+  createChart('bltDistributionChart', {
+    type: 'bar',
+    data: { labels: bltOrder, datasets: [{ label: '% of Bookings', data: bltValues, backgroundColor: 'rgba(0,88,255,.55)', borderRadius: 9, maxBarThickness: 22 }] },
+    options: horizontalChartOptions(v => formatDecimal(v,0)+'%', '% of Bookings')
+  });
+  const losOrder = ['1 Night','2 Nights','3–4 Nights','5–6 Nights','7+ Nights'];
+  const losRows = getBehaviorRows(view, 'los');
+  const losValues = losOrder.map(k => losRows.filter(r => r['LOS Bucket'] === k).reduce((s,r)=>s+numVal(r.Revenue),0));
+  createChart('losDistributionChart', {
+    type: 'bar',
+    data: { labels: losOrder, datasets: [{ label: 'Revenue', data: losValues, backgroundColor: 'rgba(0,88,255,.50)', borderRadius: 9, maxBarThickness: 22 }] },
+    options: horizontalChartOptions(v => formatRevenue(v), 'Revenue')
+  });
+}
+let lastFutureMatrixFullRows = [];
+function renderFutureGeoTable(view) {
+  const dest = view.dest;
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let raw = dest ? (payload.destinationFutureSourceMarket || []).filter(r => r.Destination === dest) : (payload.futureSourceMarket || []);
+  const byMarket = {};
+  raw.forEach(r => {
+    const market = r['Source Market'] || 'Unknown';
+    const month = String(r['Check-in Month'] || '').slice(0,3);
+    if (!months.includes(month)) return;
+    if (!byMarket[market]) byMarket[market] = { market, totalRevenue:0, totalNights:0, totalBookings:0, months:{} };
+    if (!byMarket[market].months[month]) byMarket[market].months[month] = { revenue:0, nights:0, bookings:0 };
+    const revenue = numVal(r.Revenue);
+    const nights = numVal(r['Room Nights']);
+    const bookings = numVal(r.Bookings);
+    byMarket[market].months[month].revenue += revenue;
+    byMarket[market].months[month].nights += nights;
+    byMarket[market].months[month].bookings += bookings;
+    byMarket[market].totalRevenue += revenue;
+    byMarket[market].totalNights += nights;
+    byMarket[market].totalBookings += bookings;
+  });
+
+  const allRows = Object.values(byMarket).sort((a,b)=>b.totalRevenue-a.totalRevenue);
+  lastFutureMatrixFullRows = allRows;
+  const topRows = allRows.slice(0,10);
+  const totalRevenue = topRows.reduce((sum,r)=>sum+r.totalRevenue,0);
+  const totalNights = topRows.reduce((sum,r)=>sum+r.totalNights,0);
+  const totalBookings = topRows.reduce((sum,r)=>sum+r.totalBookings,0);
+  const activeMonths = months.filter(m => topRows.some(r => ((r.months[m] || {}).revenue || 0) > 0));
+  const maxCellRevenue = Math.max.apply(null, topRows.flatMap(r => months.map(m => (r.months[m] || {}).revenue || 0)).concat([1]));
+  const summary = document.getElementById('futureGeoSummary');
+  const tbody = document.getElementById('futureGeoTableBody');
+  if(summary) summary.innerHTML = '<div class="future-geo-summary-card"><div class="future-geo-label">Matrix Period</div><div class="future-geo-value">Jan – Dec</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Top 10 Pipeline Revenue</div><div class="future-geo-value">'+formatRevenue(totalRevenue)+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Room Nights</div><div class="future-geo-value">'+formatNumber(totalNights)+' RN</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Bookings</div><div class="future-geo-value">'+formatNumber(totalBookings)+'</div></div>';
+  if(!tbody) return;
+  if(!topRows.length){
+    tbody.innerHTML = '<tr><td colspan="14">No future pipeline source market data available for the selected destination.</td></tr>';
+    return;
+  }
+  const monthTotals = {};
+  months.forEach(m => { monthTotals[m] = topRows.reduce((sum,r)=>sum+(((r.months[m] || {}).revenue) || 0),0); });
+  const bodyHtml = topRows.map(r => {
+    const monthCells = months.map(m => {
+      const revenue = (r.months[m] || {}).revenue || 0;
+      const intensity = Math.max(0, Math.min(1, revenue / maxCellRevenue));
+      const alpha = revenue ? (0.10 + intensity * 0.72) : 0;
+      const textColor = intensity > 0.58 ? '#ffffff' : '#10213f';
+      const bg = revenue ? 'background:rgba(0,88,255,'+alpha.toFixed(2)+');color:'+textColor+';' : '';
+      return '<td class="heat-cell" style="'+bg+'">'+(revenue ? formatCompact(revenue) : '–')+'</td>';
+    }).join('');
+    return '<tr><td class="market-col"><strong>'+escapeHtml(r.market)+'</strong></td>'+monthCells+'<td class="money total-col"><strong>'+formatRevenue(r.totalRevenue)+'</strong></td></tr>';
+  }).join('');
+  const totalRow = '<tr class="matrix-total-row"><td class="market-col"><strong>Grand Total</strong></td>' + months.map(m => {
+    const revenue = monthTotals[m] || 0;
+    const share = totalRevenue ? revenue / totalRevenue * 100 : 0;
+    return '<td class="heat-cell"><div class="matrix-total-cell"><b>'+(revenue ? formatCompact(revenue) : '–')+'</b><span>'+(revenue ? formatDecimal(share,1)+'%' : '')+'</span></div></td>';
+  }).join('') + '<td class="money total-col"><div class="matrix-total-cell"><b>'+formatRevenue(totalRevenue)+'</b><span>100%</span></div></td></tr>';
+  tbody.innerHTML = bodyHtml + totalRow;
+}
+function exportFutureMatrixFull() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const rows = (lastFutureMatrixFullRows || []).slice().sort((a,b)=>b.totalRevenue-a.totalRevenue);
+  if (!rows.length) { alert('No future pipeline data to export.'); return; }
+  const dest = (currentView && currentView.dest) ? currentView.dest : 'All Destinations';
+  const header = ['Source Market'].concat(months).concat(['Total Revenue','Room Nights','Bookings']);
+  const csvRows = [header];
+  const monthTotals = {};
+  months.forEach(m => monthTotals[m] = 0);
+  let grandRevenue = 0, grandNights = 0, grandBookings = 0;
+  rows.forEach(r => {
+    const line = [r.market];
+    months.forEach(m => {
+      const revenue = ((r.months[m] || {}).revenue) || 0;
+      monthTotals[m] += revenue;
+      line.push(revenue);
+    });
+    grandRevenue += r.totalRevenue;
+    grandNights += r.totalNights;
+    grandBookings += r.totalBookings;
+    line.push(r.totalRevenue, r.totalNights, r.totalBookings);
+    csvRows.push(line);
+  });
+  csvRows.push(['Grand Total'].concat(months.map(m => monthTotals[m] || 0)).concat([grandRevenue, grandNights, grandBookings]));
+  csvRows.push(['% of Total'].concat(months.map(m => grandRevenue ? ((monthTotals[m] || 0) / grandRevenue * 100).toFixed(1)+'%' : '0.0%')).concat(['100%','','']));
+  const csv = csvRows.map(row => row.map(csvCell).join(',')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const fileDest = String(dest).replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'') || 'All_Destinations';
+  a.href = url;
+  a.download = 'Future_Pipeline_Matrix_' + fileDest + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function csvCell(value) {
+  const s = value === null || value === undefined ? '' : String(value);
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+}
+function inFutureMonthRange(month, startMonth, endMonth){ const idx = checkInMonthIndex(month); if(startMonth && idx < checkInMonthIndex(startMonth)) return false; if(endMonth && idx > checkInMonthIndex(endMonth)) return false; return true; }
+function formatFutureRange(startMonth, endMonth){ if(startMonth && endMonth) return startMonth + ' – ' + endMonth; if(startMonth) return startMonth + ' onward'; if(endMonth) return 'Until ' + endMonth; return 'All pipeline months'; }
+function horizontalChartOptions(xCb, label) {
+  return { responsive: true, maintainAspectRatio: false, indexAxis:'y', plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111827', titleColor: '#fff', bodyColor: '#e5edff', padding: 12, cornerRadius: 12, displayColors: false, callbacks: { label: function (c) { return label + ': ' + (label === 'Revenue' ? formatRevenue(c.raw) : formatDecimal(c.raw,1)+'%'); } } } }, scales: { x: { beginAtZero:true, grid: { color: 'rgba(16,33,63,.05)' }, border: { display: false }, ticks: { color: '#66748d', callback: xCb } }, y: { grid: { display:false }, border: { display:false }, ticks:{ color:'#66748d' } } } };
 }
 
-// ─── BENCHMARK ────────────────────────────────────────────────────────────────
-function renderManualBenchmark(){
-  const dest=document.getElementById('benchmarkDestination').value,box=document.getElementById('benchmarkResults');
-  const revenue=inputNum('manualRevenue'),bookings=inputNum('manualBookings'),nights=inputNum('manualNights');
-  if(!dest||(!revenue&&!bookings&&!nights)){box.innerHTML='<div class="empty">Select benchmark destination and enter property performance to generate comparison.</div>';return;}
-  const resultHtml=buildBenchmarkResultHtml();
-  box.innerHTML=isLeadUnlocked()?resultHtml:lockedBenchmarkResultHtml(resultHtml);
-}
-function lockedBenchmarkResultHtml(resultHtml){return'<div class="benchmark-result-locked"><div class="benchmark-blur-content">'+resultHtml+'</div><div class="benchmark-result-overlay"><div class="benchmark-result-unlock"><div class="benchmark-result-unlock-title">Unlock Benchmark Result</div><div class="benchmark-result-unlock-copy">Submit your contact details to view the full property comparison and source market mix benchmark.</div><button type="button" class="btn primary" onclick="openLeadModal()">Unlock Benchmark</button></div></div></div>';}
-function buildBenchmarkResultHtml(){
-  const dest=document.getElementById('benchmarkDestination').value,hotel=(document.getElementById('manualHotelName').value||'Selected Property').trim();
-  const revenue=inputNum('manualRevenue'),bookings=inputNum('manualBookings'),nights=inputNum('manualNights');
-  const abv=inputNum('manualAbv')||(bookings?revenue/bookings:0),los=inputNum('manualLos')||(bookings?nights/bookings:0),blt=inputNum('manualBlt');
-  const geo=parseManualGeoTable(),_selM=getSelectedMonths(),activeMonth=_selM.length===1?_selM[0]:'';
-  const d=getBenchmarkDestinationSummary(dest,activeMonth);
-  const bench={revenue:numVal(d.Revenue),bookings:numVal(d.Bookings),nights:numVal(d['Room Nights']),abv:numVal(d['Avg Booking Value']),los:numVal(d['Avg LOS']),blt:numVal(d['Avg BLT'])};
-  return'<div class="metric-grid">'+metricCard('Revenue',revenue,bench.revenue,'revenue',null)+metricCard('Bookings',bookings,bench.bookings,'number',null)+metricCard('Room Nights',nights,bench.nights,'number',null)+metricCard('Avg Booking Value',abv,bench.abv,'revenue',null)+metricCard('Avg LOS',los,bench.los,'los',null)+metricCard('Avg BLT',blt,bench.blt,'blt',null)+'</div><div class="metric-card"><div class="metric-label">Source Market Mix Gap</div><div class="table-wrap no-inner-scroll mix-gap-table"><table><thead><tr><th>Market</th><th>Property</th><th>Destination Avg</th><th>Gap</th></tr></thead><tbody>'+marketMixRows(dest,geo,activeMonth)+'</tbody></table></div></div>';
-}
-function metricCard(label,property,benchmark,type,prevBenchmark){
-  const diff=property-benchmark,pct=benchmark?diff/Math.abs(benchmark)*100:null,cls=Math.abs(diff)<0.0001?'neutral':(diff>=0?'good':'bad');
-  const status=cls==='good'?'Above avg':cls==='bad'?'Below avg':'In line';
-  const isNeutralBehavior=type==='los'||type==='blt';
-  const statusHtml=isNeutralBehavior?'':'<div class="status '+cls+'">'+status+'</div>';
-  const gapHtml=isNeutralBehavior?'':'<div class="gap-line"><span>Gap</span><span class="gap-value '+cls+'">'+formatGap(diff,pct,type)+'</span></div>';
-  return'<div class="metric-card '+(isNeutralBehavior?'no-status':'')+'"><div class="metric-head"><div class="metric-label">'+escapeHtml(label)+'</div>'+statusHtml+'</div><div class="metric-values"><div class="metric-value-box"><div class="metric-value-label">Property</div><div class="metric-value-number">'+formatMetric(property,type)+'</div></div><div class="metric-value-box"><div class="metric-value-label">Destination Avg</div><div class="metric-value-number">'+formatMetric(benchmark,type)+'</div></div></div>'+gapHtml+'</div>';
-}
-function marketMixRows(dest,geo,activeMonth){
-  const propTotal=geo.reduce((sum,row)=>sum+row.revenue,0),hasPropertyGeo=propTotal>0&&geo.some(row=>row.country&&row.revenue>0);
-  const destinationTopMarkets=getBenchmarkTopSourceMarkets(dest,activeMonth).slice(0,10);
-  const source=activeMonth?(payload.destinationSourceMarketAvgMixMonth||[]):(payload.destinationSourceMarketAvgMix||[]);
-  const bench=source.filter(row=>row.Destination===dest&&(!activeMonth||row.Month===activeMonth)).map(row=>({market:row['Source Market'],share:numVal(row['Avg Mix %'])}));
-  const benchShareMap={};bench.forEach(row=>{if(row.market)benchShareMap[row.market]=row.share;});
-  if(!hasPropertyGeo){return destinationTopMarkets.length?destinationTopMarkets.map(row=>{const market=row.market,benchmarkShare=benchShareMap[market]||0;return'<tr><td><strong>'+escapeHtml(market)+'</strong></td><td>-</td><td>'+formatDecimal(benchmarkShare,1)+'%</td><td>-</td></tr>';}).join(''):'<tr><td colspan="4">No destination source market data</td></tr>';}
-  const baseMarkets=destinationTopMarkets.map(row=>row.market).filter(Boolean);
-  const additionalPropertyMarkets=geo.map(row=>row.country).filter(country=>country&&!baseMarkets.includes(country));
-  const markets=unique(baseMarkets.concat(additionalPropertyMarkets));
-  const rows=markets.map(market=>{const propertyRevenue=(geo.find(g=>g.country===market)||{}).revenue||0,propertyShare=propTotal?propertyRevenue/propTotal*100:0,benchmarkShare=benchShareMap[market]||0;return{market,pShare:propertyShare,bShare:benchmarkShare,gap:propertyShare-benchmarkShare};});
-  return rows.length?rows.map(r=>'<tr><td><strong>'+escapeHtml(r.market)+'</strong></td><td>'+formatDecimal(r.pShare,1)+'%</td><td>'+formatDecimal(r.bShare,1)+'%</td><td>'+(r.gap>=0?'+':'')+formatDecimal(r.gap,1)+' pts</td></tr>').join(''):'<tr><td colspan="4">Add Top 10 Geo with Revenue to calculate mix gap.</td></tr>';
-}
-function getBenchmarkTopSourceMarkets(dest,activeMonth){
-  let sourceRows=[];
-  if(dest)sourceRows=(payload.destinationSourceMarketMonth||[]).filter(row=>row.Destination===dest&&(!activeMonth||row.Month===activeMonth)).map(toSourceRow);
-  else if(activeMonth)sourceRows=(payload.sourceMarketMonth||[]).filter(row=>row.Month===activeMonth).map(toSourceRow);
-  else sourceRows=(payload.sourceMarket||[]).map(toSourceRow);
-  return combineSourceRows(sourceRows).sort((a,b)=>b.revenue-a.revenue);
-}
-function getBenchmarkDestinationSummary(dest,activeMonth){
-  const row=activeMonth?((payload.destinationMonth||[]).find(r=>r.Destination===dest&&r.Month===activeMonth)||{}):((payload.destination||[]).find(r=>r.Destination===dest)||{});
-  const hotelCount=Math.max(1,numVal(row['Hotel Count'])),totalRevenue=numVal(row.Revenue),totalBookings=numVal(row.Bookings),totalNights=numVal(row['Room Nights']);
-  return{Revenue:totalRevenue/hotelCount,Bookings:totalBookings/hotelCount,'Room Nights':totalNights/hotelCount,'Avg Booking Value':totalBookings?totalRevenue/totalBookings:0,'Avg LOS':totalBookings?totalNights/totalBookings:0,'Avg BLT':numVal(row['Avg BLT']),'Hotel Count':hotelCount};
-}
 
-// ─── LEAD GATE ────────────────────────────────────────────────────────────────
-function isLeadUnlocked(){ return localStorage.getItem('mcLeadUnlocked')==='1'; }
-function initLeadLock(){ if(typeof renderManualBenchmark==='function') renderManualBenchmark(); }
-function openLeadModal(){ const modal=document.getElementById('leadModal');if(modal)modal.classList.add('open');const leadHotel=document.getElementById('leadHotel'),manualHotel=document.getElementById('manualHotelName');if(leadHotel&&manualHotel&&manualHotel.value&&!leadHotel.value)leadHotel.value=manualHotel.value; }
-function closeLeadModal(){ const modal=document.getElementById('leadModal');if(modal)modal.classList.remove('open'); }
-function clearLeadMessages(){ const err=document.getElementById('leadError'),success=document.getElementById('leadSuccess');if(err){err.textContent='';err.classList.remove('open');}if(success)success.classList.remove('open'); }
-function showLeadError(msg){ const e=document.getElementById('leadError');if(e){e.textContent=msg;e.classList.add('open');} }
-
+function isLeadUnlocked(){
+  return localStorage.getItem('mcLeadUnlocked') === '1';
+}
+function initLeadLock(){
+  if (typeof renderManualBenchmark === 'function') renderManualBenchmark();
+}
+function openLeadModal(){
+  const modal=document.getElementById('leadModal');
+  if(modal) modal.classList.add('open');
+  const leadHotel=document.getElementById('leadHotel');
+  const manualHotel=document.getElementById('manualHotelName');
+  if(leadHotel && manualHotel && manualHotel.value && !leadHotel.value) leadHotel.value=manualHotel.value;
+}
+function closeLeadModal(){
+  const modal=document.getElementById('leadModal');
+  if(modal) modal.classList.remove('open');
+}
+function clearLeadMessages(){
+  const err=document.getElementById('leadError');
+  const success=document.getElementById('leadSuccess');
+  if(err){err.textContent='';err.classList.remove('open');}
+  if(success) success.classList.remove('open');
+}
+function showLeadError(msg){
+  const e=document.getElementById('leadError');
+  if(e){e.textContent=msg;e.classList.add('open');}
+}
 function submitLeadForm(){
   clearLeadMessages();
   const btn=document.getElementById('leadSubmitBtn');
-
-  // ── Contact info ──
   const lead={
     name:(document.getElementById('leadName')?.value||'').trim(),
     hotel:(document.getElementById('leadHotel')?.value||document.getElementById('manualHotelName')?.value||'').trim(),
@@ -626,329 +819,398 @@ function submitLeadForm(){
     position:(document.getElementById('leadPosition')?.value||'').trim(),
     phone:(document.getElementById('leadPhone')?.value||'').trim(),
     destination:(document.getElementById('benchmarkDestination')?.value||'').trim(),
-    month:(getSelectedMonths().join(',')),
+    month:(document.getElementById('monthFilter')?.value||'').trim(),
     userAgent:navigator.userAgent
   };
 
-  // ── Benchmark form data ──
-  lead.property_revenue   = inputNum('manualRevenue')   || '';
-  lead.property_bookings  = inputNum('manualBookings')  || '';
-  lead.property_nights    = inputNum('manualNights')    || '';
-  lead.property_abv       = inputNum('manualAbv')       || '';
-  lead.property_los       = inputNum('manualLos')       || '';
-  lead.property_blt       = inputNum('manualBlt')       || '';
-
-  // ── Top 10 Geo ──
-  const geoData = parseManualGeoTable();
-  lead.top_geo_json = geoData.length ? JSON.stringify(geoData) : '';
-
-  // ── Behavior data ──
-  const beh = window._mcBehavior || {};
-  lead.time_on_page   = beh.timeOnPage   || 0;
-  lead.scroll_depth   = beh.scrollDepth  || 0;
-  lead.click_count    = beh.clickCount   || 0;
-  lead.sections_seen  = (beh.sectionsSeen || []).join(', ');
-
-  // ── UTM ──
-  const params=new URLSearchParams(window.location.search||'');
-  lead.utm_source   = params.get('utm_source')   || '';
-  lead.utm_medium   = params.get('utm_medium')   || '';
+  const params = new URLSearchParams(window.location.search || '');
+  lead.utm_source = params.get('utm_source') || '';
+  lead.utm_medium = params.get('utm_medium') || '';
   lead.utm_campaign = params.get('utm_campaign') || '';
-  lead.utm_content  = params.get('utm_content')  || '';
-  lead.utm_term     = params.get('utm_term')     || '';
-
+  lead.utm_content = params.get('utm_content') || '';
+  lead.utm_term = params.get('utm_term') || '';
   if(!lead.name){showLeadError('Please enter your name.');return;}
   if(!lead.hotel){showLeadError('Please enter your hotel name.');return;}
   if(!lead.email){showLeadError('Please enter your work email.');return;}
-  if(btn){btn.disabled=true;btn.textContent='Submitting...';}
 
-  // ── ส่งผ่าน JSONP (GET) — ไม่มี CORS issue ──
-  lead.action = 'submitBenchmarkLead';
-  const cbName = 'mcLead_' + Date.now();
-  const qs = Object.keys(lead).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(lead[k])).join('&');
-  const script = document.createElement('script');
-  window[cbName] = function() {
-    delete window[cbName];
-    try { document.body.removeChild(script); } catch(e) {}
-    localStorage.setItem('mcLeadUnlocked','1');
-    const s=document.getElementById('leadSuccess');if(s)s.classList.add('open');
+  let finished=false;
+  let timeoutId=null;
+  if(btn){btn.disabled=true;btn.textContent='Unlocking...';}
+
+  timeoutId=setTimeout(function(){
+    if(finished) return;
+    finished=true;
     if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
-    setTimeout(function(){closeLeadModal();renderManualBenchmark();},350);
-  };
-  script.onerror = function() {
-    delete window[cbName];
-    try { document.body.removeChild(script); } catch(e) {}
-    localStorage.setItem('mcLeadUnlocked','1');
-    if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
-    setTimeout(function(){closeLeadModal();renderManualBenchmark();},350);
-  };
-  script.src = GAS_URL + '?' + qs + '&callback=' + cbName;
-  document.body.appendChild(script);
+    showLeadError('Submitting is taking too long. Please try again.');
+  },15000);
+
+  google.script.run
+    .withSuccessHandler(function(res){
+      if(finished) return;
+      finished=true;
+      if(timeoutId) clearTimeout(timeoutId);
+      localStorage.setItem('mcLeadUnlocked','1');
+      const s=document.getElementById('leadSuccess');
+      if(s) s.classList.add('open');
+      if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
+      setTimeout(function(){closeLeadModal();renderManualBenchmark();},350);
+    })
+    .withFailureHandler(function(err){
+      if(finished) return;
+      finished=true;
+      if(timeoutId) clearTimeout(timeoutId);
+      if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
+      showLeadError(err && err.message ? err.message : String(err));
+    })
+    .submitBenchmarkLead(lead);
+}
+function benchmarkLockCardHtml(){
+  return '<div class="benchmark-lock-card"><div><div class="benchmark-lock-kicker">Property Benchmark</div><div class="benchmark-lock-title">Unlock destination benchmark result</div><div class="benchmark-lock-copy">Submit your contact details to view the property comparison and source market mix gap.</div></div><button type="button" class="btn primary" onclick="openLeadModal()">Unlock Benchmark</button></div>';
 }
 
-// ─── GEO TABLE ────────────────────────────────────────────────────────────────
-function parseManualGeoTable(){const out=[];for(let i=0;i<10;i++){const countryEl=document.getElementById('geoCountry'+i),revenueEl=document.getElementById('geoRevenue'+i);if(!countryEl||!revenueEl)continue;const country=String(countryEl.value||'').trim(),revenue=parseMoney(revenueEl.value);if(country||revenue)out.push({country:country||'Unknown',revenue});}return out.filter(x=>x.country&&x.revenue>0);}
-function parseMoney(v){return Number(String(v||'').replace(/,/g,'').replace(/[^0-9.\-]/g,'').trim())||0;}
-function formatGeoRevenueInput(el){if(!el)return;el.value=String(el.value||'').replace(/[^0-9.,\-]/g,'');}
-function clearManualGeoTable(){for(let i=0;i<10;i++){const c=document.getElementById('geoCountry'+i),r=document.getElementById('geoRevenue'+i);if(c)c.value='';if(r)r.value='';}renderManualBenchmark();}
-function handleGeoPaste(event,startRow,targetCol){const text=(event.clipboardData||window.clipboardData).getData('text');if(!text)return;const parsed=parseClipboardTable(text,targetCol);if(!parsed.length)return;event.preventDefault();fillGeoTableFromPaste(parsed,startRow,targetCol);renderManualBenchmark();}
-function parseClipboardTable(text,targetCol){return String(text||'').replace(/\r/g,'').split('\n').map(line=>line.trim()).filter(Boolean).map(line=>{if(line.includes('\t'))return line.split('\t').map(p=>String(p||'').trim()).filter(Boolean).slice(0,2);if(targetCol==='revenue')return[line];const looksLikeCommaMoney=/^[$฿€£]?\s*-?\d{1,3}(,\d{3})+(\.\d+)?\s*$/.test(line);if(looksLikeCommaMoney)return[line];const parts=line.split(',').map(p=>String(p||'').trim()).filter(Boolean);return parts.length>1?parts.slice(0,2):[line];});}
-function fillGeoTableFromPaste(rows,startRow,targetCol){let rIndex=Math.max(0,Number(startRow||0));rows.forEach(parts=>{if(rIndex>9)return;const countryEl=document.getElementById('geoCountry'+rIndex),revenueEl=document.getElementById('geoRevenue'+rIndex);if(!countryEl||!revenueEl)return;if(parts.length>=2){const first=parts[0],second=parts.slice(1).join(' ');if(targetCol==='country'){countryEl.value=first;revenueEl.value=cleanMoneyText(second);}else{countryEl.value=first;revenueEl.value=cleanMoneyText(second);}}else{if(targetCol==='country')countryEl.value=parts[0]||'';if(targetCol==='revenue')revenueEl.value=cleanMoneyText(parts[0]||'');}rIndex++;});}
-function cleanMoneyText(v){const n=parseMoney(v);return n?String(Math.round(n*100)/100):'';}
+function renderManualBenchmark() {
+  const dest = document.getElementById('benchmarkDestination').value;
+  const box = document.getElementById('benchmarkResults');
+  const revenue = inputNum('manualRevenue');
+  const bookings = inputNum('manualBookings');
+  const nights = inputNum('manualNights');
+  if (!dest || (!revenue && !bookings && !nights)) {
+    box.innerHTML = '<div class="empty">Select benchmark destination and enter property performance to generate comparison.</div>';
+    return;
+  }
+  const resultHtml = buildBenchmarkResultHtml();
+  box.innerHTML = isLeadUnlocked() ? resultHtml : lockedBenchmarkResultHtml(resultHtml);
+}
+function lockedBenchmarkResultHtml(resultHtml){
+  return '<div class="benchmark-result-locked"><div class="benchmark-blur-content">' + resultHtml + '</div><div class="benchmark-result-overlay"><div class="benchmark-result-unlock"><div class="benchmark-result-unlock-title">Unlock Benchmark Result</div><div class="benchmark-result-unlock-copy">Submit your contact details to view the full property comparison and source market mix benchmark.</div><button type="button" class="btn primary" onclick="openLeadModal()">Unlock Benchmark</button></div></div></div>';
+}
+function buildBenchmarkResultHtml() {
+  const dest = document.getElementById('benchmarkDestination').value;
+  const hotel = (document.getElementById('manualHotelName').value || 'Selected Property').trim();
+  const revenue = inputNum('manualRevenue');
+  const bookings = inputNum('manualBookings');
+  const nights = inputNum('manualNights');
+  const abv = inputNum('manualAbv') || (bookings ? revenue / bookings : 0);
+  const los = inputNum('manualLos') || (bookings ? nights / bookings : 0);
+  const blt = inputNum('manualBlt');
+  const geo = parseManualGeoTable();
+  const activeMonth = document.getElementById('monthFilter') ? document.getElementById('monthFilter').value : '';
+  const d = getBenchmarkDestinationSummary(dest, activeMonth);
+  const bench = { revenue: numVal(d.Revenue), bookings: numVal(d.Bookings), nights: numVal(d['Room Nights']), abv: numVal(d['Avg Booking Value']), los: numVal(d['Avg LOS']), blt: numVal(d['Avg BLT']) };
+  return '<div class="metric-grid">' +
+    metricCard('Revenue', revenue, bench.revenue, 'revenue', null) +
+    metricCard('Bookings', bookings, bench.bookings, 'number', null) +
+    metricCard('Room Nights', nights, bench.nights, 'number', null) +
+    metricCard('Avg Booking Value', abv, bench.abv, 'revenue', null) +
+    metricCard('Avg LOS', los, bench.los, 'los', null) +
+    metricCard('Avg BLT', blt, bench.blt, 'blt', null) +
+    '</div><div class="metric-card"><div class="metric-label">Source Market Mix Gap</div><div class="table-wrap no-inner-scroll mix-gap-table"><table><thead><tr><th>Market</th><th>Property</th><th>Destination Avg</th><th>Gap</th></tr></thead><tbody>' + marketMixRows(dest, geo, activeMonth) + '</tbody></table></div></div>';
+}
+function metricCard(label, property, benchmark, type, prevBenchmark) {
+  const diff = property - benchmark;
+  const pct = benchmark ? diff / Math.abs(benchmark) * 100 : null;
+  const cls = Math.abs(diff) < 0.0001 ? 'neutral' : (diff >= 0 ? 'good' : 'bad');
+  const status = cls === 'good' ? 'Above avg' : cls === 'bad' ? 'Below avg' : 'In line';
+  const isNeutralBehavior = type === 'los' || type === 'blt';
+  const statusHtml = isNeutralBehavior ? '' : '<div class="status ' + cls + '">' + status + '</div>';
+  const gapHtml = isNeutralBehavior ? '' : '<div class="gap-line"><span>Gap</span><span class="gap-value ' + cls + '">' + formatGap(diff, pct, type) + '</span></div>';
+  const vsLast = ''; // V16: benchmark cards do not show vs last month because property figures are manually entered for the selected period only.
+  return '<div class="metric-card '+(isNeutralBehavior?'no-status':'')+'"><div class="metric-head"><div class="metric-label">' + escapeHtml(label) + '</div>' + statusHtml + '</div><div class="metric-values"><div class="metric-value-box"><div class="metric-value-label">Property</div><div class="metric-value-number">' + formatMetric(property, type) + '</div></div><div class="metric-value-box"><div class="metric-value-label">Destination Avg</div><div class="metric-value-number">' + formatMetric(benchmark, type) + '</div>' + vsLast + '</div></div>' + gapHtml + '</div>';
+}
+function marketMixRows(dest, geo, activeMonth) {
+  const propTotal = geo.reduce((sum, row) => sum + row.revenue, 0);
+  const hasPropertyGeo = propTotal > 0 && geo.some(row => row.country && row.revenue > 0);
 
-// ─── CHART HELPERS ────────────────────────────────────────────────────────────
-function createChart(id,config){const ctx=document.getElementById(id);if(!ctx||typeof Chart==='undefined')return;if(charts[id])charts[id].destroy();charts[id]=new Chart(ctx,config);}
-function chartOptions(yCb,label){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#111827',titleColor:'#fff',bodyColor:'#e5edff',padding:12,cornerRadius:12,displayColors:false,callbacks:{label:function(c){return label+': '+(label==='Revenue'?formatRevenue(c.raw):formatNumber(c.raw))}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{color:'#66748d'}},y:{grid:{color:'rgba(16,33,63,.05)'},border:{display:false},ticks:{color:'#66748d',callback:yCb}}}};}
-function horizontalChartOptions(xCb,label){return{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{backgroundColor:'#111827',titleColor:'#fff',bodyColor:'#e5edff',padding:12,cornerRadius:12,displayColors:false,callbacks:{label:function(c){return label+': '+(label==='Revenue'?formatRevenue(c.raw):formatDecimal(c.raw,1)+'%')}}}},scales:{x:{beginAtZero:true,grid:{color:'rgba(16,33,63,.05)'},border:{display:false},ticks:{color:'#66748f',callback:xCb}},y:{grid:{display:false},border:{display:false},ticks:{color:'#66748d'}}}};}
+  // Use exactly the same data logic as "Top 10 Revenue Contribution by Source Market".
+  // This keeps Destination Avg % consistent with the % Share shown in the Top 10 table.
+  const allBenchmarkMarkets = getBenchmarkTopSourceMarkets(dest, activeMonth);
+  const benchmarkTotalRevenue = allBenchmarkMarkets.reduce((sum, row) => sum + (row.revenue || 0), 0);
+  const destinationTopMarkets = allBenchmarkMarkets.slice(0, 10);
 
-// ─── UTILS ────────────────────────────────────────────────────────────────────
-function inputNum(id){return Number(document.getElementById(id)?.value||0)||0;}
-function numVal(v){return Number(String(v||0).replace(/,/g,'').replace(/[^0-9.\-]/g,''))||0;}
-function sum(rows,key){return rows.reduce((s,r)=>s+numVal(r[key]),0);}
-function unique(arr){return Array.from(new Set(arr.filter(Boolean)));}
-function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v||'';}
-function setHtml(id,v){const e=document.getElementById(id);if(e)e.innerHTML=v||'';}
-function escapeHtml(v){return String(v==null?'':v).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
-function escapeAttr(v){return escapeHtml(v).replace(/'/g,'&#39;');}
-function escapeJs(v){return String(v==null?'':v).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' ');}
-function highlightPercent(t){return escapeHtml(t).replace(/(20–30% better returns|20-30% better returns|[0-9]+%)/gi,'<b>$1</b>');}
-const monthOrder={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-function monthIndex(label){if(!label)return 999999;const p=String(label).replace(' ','-').split('-'),m=p[0].slice(0,3),y=Number(p[1])||9999;return y*12+(monthOrder[m]??99);}
-function checkInMonthIndex(label){return monthOrder[String(label||'').slice(0,3)]??99;}
-function formatMonthShort(label){return label?String(label).replace(' ','-').split('-')[0]+(String(label).includes('-')?' '+String(label).split('-')[1]:''):'';}
-function formatRevenue(v){return'$'+formatCompact(Number(v||0));}
-function formatFullCurrency(v){return'$'+Math.round(Number(v||0)).toLocaleString('en-US');}
-function formatCompact(v){v=Number(v||0);const sign=v<0?'-':'';v=Math.abs(v);if(v>=1000000000)return sign+(v/1000000000).toFixed(1)+'B';if(v>=1000000)return sign+(v/1000000).toFixed(1)+'M';if(v>=1000)return sign+(v/1000).toFixed(1)+'K';return sign+Math.round(v).toLocaleString('en-US');}
-function formatNumber(v){return Math.round(Number(v||0)).toLocaleString('en-US');}
-function formatDecimal(v,d){return Number(v||0).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
-function percentDecimal(v){return formatDecimal(Number(v||0)*100,1)+'%';}
-function formatMetric(v,type){if(type==='revenue')return formatRevenue(v);if(type==='los')return formatDecimal(v,1)+' nights';if(type==='blt')return formatDecimal(v,0)+' days';return formatNumber(v);}
-function formatGap(diff,pct,type){const prefix=diff>0?'+':'';let main=type==='revenue'?prefix+formatRevenue(diff):type==='los'?prefix+formatDecimal(diff,1)+' nights':type==='blt'?prefix+formatDecimal(diff,0)+' days':prefix+formatNumber(diff);return main+(pct==null?'':' · '+prefix+formatDecimal(pct,1)+'%');}
+  const benchShareMap = {};
+  allBenchmarkMarkets.forEach(row => {
+    if (row.market) benchShareMap[row.market] = benchmarkTotalRevenue ? (row.revenue / benchmarkTotalRevenue * 100) : 0;
+  });
 
-// ─── MULTI-SELECT MONTH FILTER ────────────────────────────────────────────────
-let _selectedMonths = [];
+  // Before property GEO input: show exactly the same Top 10 markets and % Share as
+  // Top 10 Revenue Contribution by Source Market, but do not calculate property/gap yet.
+  if (!hasPropertyGeo) {
+    return destinationTopMarkets.length
+      ? destinationTopMarkets.map(row => {
+          const market = row.market;
+          const benchmarkShare = benchShareMap[market] || 0;
+          return '<tr><td><strong>' + escapeHtml(market) + '</strong></td><td>-</td><td>' + formatDecimal(benchmarkShare, 1) + '%</td><td>-</td></tr>';
+        }).join('')
+      : '<tr><td colspan="4">No destination source market data</td></tr>';
+  }
 
-function getSelectedMonths() { return _selectedMonths.slice(); }
+  // After property GEO input: keep the destination Top 10 markets as the main benchmark list,
+  // then append any additional property markets that are not in the destination Top 10.
+  const baseMarkets = destinationTopMarkets.map(row => row.market).filter(Boolean);
+  const additionalPropertyMarkets = geo
+    .map(row => row.country)
+    .filter(country => country && !baseMarkets.includes(country));
+  const markets = unique(baseMarkets.concat(additionalPropertyMarkets));
 
-function toggleMonth(v) {
-  const idx = _selectedMonths.indexOf(v);
-  if (idx >= 0) _selectedMonths.splice(idx, 1);
-  else _selectedMonths.push(v);
-  updateMonthUI();
-  render();
+  const rows = markets.map(market => {
+    const propertyRevenue = (geo.find(g => g.country === market) || {}).revenue || 0;
+    const propertyShare = propTotal ? propertyRevenue / propTotal * 100 : 0;
+    const benchmarkShare = benchShareMap[market] || 0;
+    return {
+      market,
+      pShare: propertyShare,
+      bShare: benchmarkShare,
+      gap: propertyShare - benchmarkShare,
+      isExtraPropertyMarket: !baseMarkets.includes(market)
+    };
+  });
+
+  return rows.length
+    ? rows.map(r => '<tr><td><strong>' + escapeHtml(r.market) + '</strong></td><td>' + formatDecimal(r.pShare, 1) + '%</td><td>' + formatDecimal(r.bShare, 1) + '%</td><td>' + (r.gap >= 0 ? '+' : '') + formatDecimal(r.gap, 1) + ' pts</td></tr>').join('')
+    : '<tr><td colspan="4">Add Top 10 Geo with Revenue to calculate mix gap.</td></tr>';
 }
 
-function updateMonthUI() {
-  document.querySelectorAll('.month-item').forEach(el => {
-    const m = el.getAttribute('data-month');
-    if (_selectedMonths.includes(m)) {
-      el.classList.add('selected');
-      el.innerHTML = escapeHtml(m) + ' <span style="font-size:13px;">✓</span>';
-    } else {
-      el.classList.remove('selected');
-      el.innerHTML = escapeHtml(m);
+function getBenchmarkTopSourceMarkets(dest, activeMonth) {
+  let sourceRows = [];
+
+  if (dest) {
+    sourceRows = (payload.destinationSourceMarketMonth || [])
+      .filter(row => row.Destination === dest && (!activeMonth || row.Month === activeMonth))
+      .map(toSourceRow);
+  } else if (activeMonth) {
+    sourceRows = (payload.sourceMarketMonth || [])
+      .filter(row => row.Month === activeMonth)
+      .map(toSourceRow);
+  } else {
+    sourceRows = (payload.sourceMarket || [])
+      .map(toSourceRow);
+  }
+
+  return combineSourceRows(sourceRows).sort((a, b) => b.revenue - a.revenue);
+}
+
+
+function getBenchmarkDestinationSummary(dest, activeMonth) {
+  const row = activeMonth
+    ? ((payload.destinationMonth || []).find(r => r.Destination === dest && r.Month === activeMonth) || {})
+    : ((payload.destination || []).find(r => r.Destination === dest) || {});
+
+  const hotelCount = Math.max(1, numVal(row['Hotel Count']));
+  const totalRevenue = numVal(row.Revenue);
+  const totalBookings = numVal(row.Bookings);
+  const totalNights = numVal(row['Room Nights']);
+
+  return {
+    Revenue: totalRevenue / hotelCount,
+    Bookings: totalBookings / hotelCount,
+    'Room Nights': totalNights / hotelCount,
+    'Avg Booking Value': totalBookings ? totalRevenue / totalBookings : 0,
+    'Avg LOS': totalBookings ? totalNights / totalBookings : 0,
+    'Avg BLT': numVal(row['Avg BLT']),
+    'Hotel Count': hotelCount,
+    'Destination Total Revenue': totalRevenue,
+    'Destination Total Bookings': totalBookings,
+    'Destination Total Room Nights': totalNights
+  };
+}
+
+function createBenchmarkRevenueLineChart(id, hotel, dest, propertyRevenue, activeMonth) {
+  const rows = (payload.destinationMonth || [])
+    .filter(r => r.Destination === dest && (!activeMonth || r.Month === activeMonth))
+    .slice()
+    .sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
+
+  if (!rows.length) return;
+
+  const labels = rows.map(r => r.Month);
+  const propertyMonthly = labels.length ? propertyRevenue / labels.length : 0;
+  const propertyVals = labels.map(() => propertyMonthly);
+  const destinationVals = rows.map(r => numVal(r.Revenue));
+
+  createChart(id, {
+    type: 'line',
+    data: {
+      labels: labels.map(formatMonthShort),
+      datasets: [
+        {
+          label: hotel || 'Property Revenue',
+          data: propertyVals,
+          borderColor: '#0058ff',
+          backgroundColor: 'rgba(0,88,255,.08)',
+          fill: false,
+          tension: .35,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          borderWidth: 2.4
+        },
+        {
+          label: dest + ' Destination Revenue',
+          data: destinationVals,
+          borderColor: '#7a4cff',
+          backgroundColor: 'rgba(122,76,255,.08)',
+          fill: false,
+          tension: .35,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          borderWidth: 2.4,
+          borderDash: [6,5]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { boxWidth: 24, font: { family: 'Inter', size: 12, weight: '600' } } },
+        tooltip: {
+          backgroundColor: '#111827',
+          titleColor: '#fff',
+          bodyColor: '#e5edff',
+          padding: 12,
+          cornerRadius: 12,
+          displayColors: true,
+          callbacks: {
+            label: function(c) { return c.dataset.label + ': ' + formatRevenue(c.raw); }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, border: { display: false }, ticks: { color: '#66748d' } },
+        y: { beginAtZero: true, grid: { color: 'rgba(16,33,63,.05)' }, border: { display: false }, ticks: { color: '#66748d', callback: function(v){ return formatRevenue(v); } } }
+      }
     }
   });
-  const btn = document.getElementById('monthFilterBtn');
-  if (!btn) return;
-  if (!_selectedMonths.length) { btn.value = ''; btn.placeholder = 'All Months'; }
-  else if (_selectedMonths.length === 1) { btn.value = _selectedMonths[0]; btn.placeholder = ''; }
-  else { btn.value = _selectedMonths.length + ' months selected'; btn.placeholder = ''; }
 }
 
-function selectAllMonths() {
-  _selectedMonths = Array.from(document.querySelectorAll('.month-item')).map(el => el.getAttribute('data-month'));
-  updateMonthUI(); render();
+function createBenchmarkMiniChart(id, hotel, dest, propertyVal, benchVal, type) {
+  createChart(id, {
+    type: 'bar',
+    data: { labels: ['Property', 'Destination'], datasets: [{ label: 'Value', data: [propertyVal, benchVal], backgroundColor: ['rgba(0,88,255,.62)', 'rgba(122,76,255,.50)'], borderRadius: 9, maxBarThickness: 46 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (c) { return (c.dataIndex === 0 ? hotel : dest) + ': ' + formatMetric(c.raw, type); } } } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: 'rgba(16,33,63,.06)' }, ticks: { callback: function (v) { return type === 'revenue' ? formatCompact(v) : formatNumber(v); } } } } }
+  });
 }
-
-function clearAllMonths() {
-  _selectedMonths = [];
-  updateMonthUI(); render();
-}
-
-function toggleMonthDropdown() {
-  const dd = document.getElementById('monthDropdown');
-  if (!dd) return;
-  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
-}
-
-document.addEventListener('click', function(e) {
-  const btn = document.getElementById('monthFilterBtn');
-  const dd = document.getElementById('monthDropdown');
-  if (!dd || !btn) return;
-  if (!btn.contains(e.target) && !dd.contains(e.target)) {
-    dd.style.display = 'none';
+function createChart(id, config) { const ctx = document.getElementById(id); if (!ctx || typeof Chart === 'undefined') return; if (charts[id]) charts[id].destroy(); charts[id] = new Chart(ctx, config); }
+function chartOptions(yCb, label) { return { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111827', titleColor: '#fff', bodyColor: '#e5edff', padding: 12, cornerRadius: 12, displayColors: false, callbacks: { label: function (c) { return label + ': ' + (label === 'Revenue' ? formatRevenue(c.raw) : formatNumber(c.raw)); } } } }, scales: { x: { grid: { display: false }, border: { display: false }, ticks: { color: '#66748d' } }, y: { grid: { color: 'rgba(16,33,63,.05)' }, border: { display: false }, ticks: { color: '#66748d', callback: yCb } } } }; }
+function setupManualGeoPasteTable() {
+  // Fixed 10-row input table. Users can paste either Country only, Revenue only, or two columns from Excel.
+  for (let i = 0; i < 10; i++) {
+    const c = document.getElementById('geoCountry' + i);
+    const r = document.getElementById('geoRevenue' + i);
+    if (c) c.autocomplete = 'off';
+    if (r) r.autocomplete = 'off';
   }
-});
-</script>
+}
+function parseManualGeoTable() {
+  const out = [];
+  for (let i = 0; i < 10; i++) {
+    const countryEl = document.getElementById('geoCountry' + i);
+    const revenueEl = document.getElementById('geoRevenue' + i);
+    if (!countryEl || !revenueEl) continue;
+    const country = String(countryEl.value || '').trim();
+    const revenue = parseMoney(revenueEl.value);
+    if (country || revenue) out.push({ country: country || 'Unknown', revenue: revenue });
+  }
+  return out.filter(x => x.country && x.revenue > 0);
+}
+function parseMoney(v) {
+  return Number(String(v || '').replace(/,/g, '').replace(/[^0-9.\-]/g, '').trim()) || 0;
+}
+function formatGeoRevenueInput(el) {
+  // Keep user typing natural; format only if it already looks like a completed number with commas.
+  if (!el) return;
+  el.value = String(el.value || '').replace(/[^0-9.,\-]/g, '');
+}
+function clearManualGeoTable() {
+  for (let i = 0; i < 10; i++) {
+    const c = document.getElementById('geoCountry' + i);
+    const r = document.getElementById('geoRevenue' + i);
+    if (c) c.value = '';
+    if (r) r.value = '';
+  }
+  renderManualBenchmark();
+}
+function handleGeoPaste(event, startRow, targetCol) {
+  const text = (event.clipboardData || window.clipboardData).getData('text');
+  if (!text) return;
+  const parsed = parseClipboardTable(text, targetCol);
+  if (!parsed.length) return;
+  event.preventDefault();
+  fillGeoTableFromPaste(parsed, startRow, targetCol);
+  renderManualBenchmark();
+}
+function parseClipboardTable(text, targetCol) {
+  return String(text || '')
+    .replace(/\r/g, '')
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      // Excel / Google Sheets usually separates columns with tabs.
+      // Important: when pasting a revenue-only column, values like 338,452 must stay as one number.
+      if (line.includes('\t')) return line.split('\t').map(p => String(p || '').trim()).filter(Boolean).slice(0, 2);
+      if (targetCol === 'revenue') return [line];
 
-<!-- ═══════════════════════════════════════════════════════
-     VISITOR TRACKING SCRIPT → Google Sheets
-     ═══════════════════════════════════════════════════════ -->
-<script>
-(function() {
-  const GAS_TRACK_URL = 'https://script.google.com/a/macros/media-console.com/s/AKfycbwxQbPJgEq7_3XvYCqgT6ukcbpcPPqXVmrow94_QUKkYxvb3AFs9LzSB1a3tud4M_wlrQ/exec';
-  const SESSION_KEY = 'mc_vis_session_v1';
-
-  if (sessionStorage.getItem(SESSION_KEY)) return;
-  sessionStorage.setItem(SESSION_KEY, '1');
-
-  // ── Behavior state (shared กับ submitLeadForm) ──
-  window._mcBehavior = { timeOnPage: 0, scrollDepth: 0, clickCount: 0, sectionsSeen: [] };
-  const sessionStart = Date.now();
-
-  window.addEventListener('scroll', function() {
-    const pct = Math.round((window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight)) * 100);
-    if (pct > window._mcBehavior.scrollDepth) window._mcBehavior.scrollDepth = Math.min(100, pct);
-  }, { passive: true });
-
-  document.addEventListener('click', function() { window._mcBehavior.clickCount++; });
-
-  setInterval(function() {
-    window._mcBehavior.timeOnPage = Math.round((Date.now() - sessionStart) / 1000);
-  }, 5000);
-
-  function observeSections() {
-    const sections = [
-      { id: 'app',              label: 'Hero' },
-      { sel: '.testimonials',   label: 'Testimonials' },
-      { sel: '.kpi-grid',       label: 'KPI Dashboard' },
-      { sel: '.behavior-grid',  label: 'Behavior Charts' },
-      { id: 'propertyBenchmark',label: 'Benchmark Tool' },
-    ];
-    const obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          const lbl = e.target.getAttribute('data-mc-lbl');
-          if (lbl && !window._mcBehavior.sectionsSeen.includes(lbl)) window._mcBehavior.sectionsSeen.push(lbl);
-        }
-      });
-    }, { threshold: 0.3 });
-    sections.forEach(function(s) {
-      const el = s.id ? document.getElementById(s.id) : document.querySelector(s.sel);
-      if (el) { el.setAttribute('data-mc-lbl', s.label); obs.observe(el); }
+      // Allow comma-separated Country,Revenue when pasted into Country column.
+      // But keep comma-formatted money like 338,452 as one value.
+      const looksLikeCommaMoney = /^[$฿€£]?\s*-?\d{1,3}(,\d{3})+(\.\d+)?\s*$/.test(line);
+      if (looksLikeCommaMoney) return [line];
+      const parts = line.split(',').map(p => String(p || '').trim()).filter(Boolean);
+      return parts.length > 1 ? parts.slice(0, 2) : [line];
     });
-  }
+}
+function fillGeoTableFromPaste(rows, startRow, targetCol) {
+  let rIndex = Math.max(0, Number(startRow || 0));
+  rows.forEach(parts => {
+    if (rIndex > 9) return;
+    const countryEl = document.getElementById('geoCountry' + rIndex);
+    const revenueEl = document.getElementById('geoRevenue' + rIndex);
+    if (!countryEl || !revenueEl) return;
 
-  async function track() {
-    observeSections();
-    const ua = navigator.userAgent;
-    const isMobile = /Mobile|Android|iPhone|iPad/i.test(ua);
-    const isTablet = /iPad|Tablet/i.test(ua);
-    const deviceType = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
-
-    let browser = 'Unknown';
-    if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
-    else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
-    else if (ua.includes('Firefox')) browser = 'Firefox';
-    else if (ua.includes('Edg')) browser = 'Edge';
-
-    let os = 'Unknown';
-    if (ua.includes('Windows')) os = 'Windows';
-    else if (ua.includes('Mac')) os = 'macOS';
-    else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
-    else if (ua.includes('Android')) os = 'Android';
-    else if (ua.includes('Linux')) os = 'Linux';
-
-    const params = new URLSearchParams(window.location.search);
-
-    const referrer = document.referrer || '';
-    let referrerSource = 'Direct';
-    if (referrer.includes('google')) referrerSource = 'Google';
-    else if (referrer.includes('facebook') || referrer.includes('fb.com')) referrerSource = 'Facebook';
-    else if (referrer.includes('instagram')) referrerSource = 'Instagram';
-    else if (referrer.includes('tiktok')) referrerSource = 'TikTok';
-    else if (referrer.includes('linkedin')) referrerSource = 'LinkedIn';
-    else if (referrer.includes('twitter') || referrer.includes('x.com')) referrerSource = 'X/Twitter';
-    else if (referrer) referrerSource = referrer.split('/')[2] || 'Other';
-
-    // IP + Geo จาก ipapi.co
-    let ip = '', city = '', region = '', country = '', org = '', timezone = '', lat = '', lng = '';
-    try {
-      const resp = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) });
-      if (resp.ok) {
-        const d = await resp.json();
-        ip = d.ip || ''; city = d.city || ''; region = d.region || '';
-        country = d.country_name || ''; org = d.org || '';
-        timezone = d.timezone || '';
-        lat = d.latitude || ''; lng = d.longitude || '';
+    if (parts.length >= 2) {
+      const first = parts[0];
+      const second = parts.slice(1).join(' ');
+      if (targetCol === 'country') {
+        countryEl.value = first;
+        revenueEl.value = cleanMoneyText(second);
+      } else {
+        // If user pastes two columns into Revenue, assume copied Country + Revenue and still fill both.
+        countryEl.value = first;
+        revenueEl.value = cleanMoneyText(second);
       }
-    } catch(e) {}
-
-    // ส่งไป GAS ผ่าน JSONP (GET) — ไม่มี CORS issue
-    const data = {
-      action:          'trackVisitor',
-      timestamp_utc:   new Date().toISOString(),
-      ip, city, region, country, org, timezone,
-      latitude:        lat, longitude: lng,
-      device_type:     deviceType,
-      browser, os,
-      screen:          screen.width + 'x' + screen.height,
-      language:        navigator.language,
-      referrer_source: referrerSource,
-      referrer:        referrer || '(direct)',
-      utm_source:      params.get('utm_source')   || '',
-      utm_medium:      params.get('utm_medium')   || '',
-      utm_campaign:    params.get('utm_campaign') || '',
-      utm_term:        params.get('utm_term')     || '',
-      utm_content:     params.get('utm_content')  || '',
-    };
-
-    // ── JSONP call (initial page view) ──
-    function jsonpCall(d) {
-      const cb = 'mcVis_' + Date.now();
-      const qs = Object.keys(d).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(d[k])).join('&');
-      const sc = document.createElement('script');
-      window[cb] = function() { delete window[cb]; try { document.body.removeChild(sc); } catch(e){} };
-      sc.onerror = function() { delete window[cb]; try { document.body.removeChild(sc); } catch(e){} };
-      sc.src = GAS_TRACK_URL + '?' + qs + '&callback=' + cb;
-      document.body.appendChild(sc);
-    }
-
-    // บันทึก visitor data ไว้ใช้ตอน updateBehavior
-    window._mcVisitorData = data;
-    jsonpCall(data);
-  }
-
-  // ── ส่ง behavior update ก่อน leave ──
-  function sendBehaviorUpdate() {
-    const d = window._mcVisitorData;
-    if (!d) return;
-    const beh = window._mcBehavior;
-    beh.timeOnPage = Math.round((Date.now() - sessionStart) / 1000);
-
-    const update = {
-      action:        'updateVisitorBehavior',
-      visitor_ip:    d.ip || '',
-      timestamp_utc: d.timestamp_utc || '',
-      time_on_page:  beh.timeOnPage,
-      scroll_depth:  beh.scrollDepth,
-      click_count:   beh.clickCount,
-      sections_seen: (beh.sectionsSeen || []).join(', '),
-    };
-
-    // ใช้ sendBeacon ถ้าทำได้ (ไม่ถูก cancel ตอนปิดหน้า)
-    const qs = Object.keys(update).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(update[k])).join('&');
-    const url = GAS_TRACK_URL + '?' + qs;
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(url);
     } else {
-      const sc = document.createElement('script');
-      sc.src = url + '&callback=mcBehCb';
-      window.mcBehCb = function() { delete window.mcBehCb; };
-      document.body.appendChild(sc);
+      if (targetCol === 'country') countryEl.value = parts[0] || '';
+      if (targetCol === 'revenue') revenueEl.value = cleanMoneyText(parts[0] || '');
     }
-  }
-
-  window.addEventListener('pagehide', sendBehaviorUpdate);
-  window.addEventListener('beforeunload', sendBehaviorUpdate);
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', track);
-  } else {
-    track();
-  }
-})();
+    rIndex++;
+  });
+}
+function cleanMoneyText(v) {
+  const n = parseMoney(v);
+  return n ? String(Math.round(n * 100) / 100) : '';
+}
+function inputNum(id) { return Number(document.getElementById(id).value || 0) || 0; }
+function numVal(v) { return Number(String(v || 0).replace(/,/g, '').replace(/[^0-9.\-]/g, '')) || 0; }
+function sum(rows, key) { return rows.reduce((s, r) => s + numVal(r[key]), 0); }
+function unique(arr) { return Array.from(new Set(arr.filter(Boolean))); }
+function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v || ''; }
+function setHtml(id, v) { const e = document.getElementById(id); if (e) e.innerHTML = v || ''; }
+function escapeHtml(v) { return String(v == null ? '' : v).replace(/[&<>\"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m])); }
+function escapeAttr(v) { return escapeHtml(v).replace(/'/g, '&#39;'); }
+function escapeJs(v) { return String(v == null ? '' : v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, ' '); }
+function highlightPercent(t) { return escapeHtml(t).replace(/(20–30% better returns|20-30% better returns|[0-9]+%)/gi, '<b>$1</b>'); }
+const monthOrder = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+function monthIndex(label) { if (!label) return 999999; const p = String(label).replace(' ', '-').split('-'), m = p[0].slice(0, 3), y = Number(p[1]) || 9999; return y * 12 + (monthOrder[m] ?? 99); }
+function checkInMonthIndex(label) { return monthOrder[String(label || '').slice(0,3)] ?? 99; }
+function formatMonthShort(label) { return label ? String(label).replace(' ', '-').split('-')[0] + (String(label).includes('-') ? ' ' + String(label).split('-')[1] : '') : ''; }
+function formatRevenue(v) { return '$' + formatCompact(Number(v || 0)); }
+function formatFullCurrency(v) { return '$' + Math.round(Number(v || 0)).toLocaleString('en-US'); }
+function formatCompact(v) { v = Number(v || 0); const sign = v < 0 ? '-' : ''; v = Math.abs(v); if (v >= 1000000000) return sign + (v / 1000000000).toFixed(1) + 'B'; if (v >= 1000000) return sign + (v / 1000000).toFixed(1) + 'M'; if (v >= 1000) return sign + (v / 1000).toFixed(1) + 'K'; return sign + Math.round(v).toLocaleString('en-US'); }
+function formatNumber(v) { return Math.round(Number(v || 0)).toLocaleString('en-US'); }
+function formatDecimal(v, d) { return Number(v || 0).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function percentDecimal(v) { return formatDecimal(Number(v || 0) * 100, 1) + '%'; }
+function formatMetric(v, type) { if (type === 'revenue') return formatRevenue(v); if (type === 'los') return formatDecimal(v, 1) + ' nights'; if (type === 'blt') return formatDecimal(v, 0) + ' days'; return formatNumber(v); }
+function formatGap(diff, pct, type) { const prefix = diff > 0 ? '+' : ''; let main = type === 'revenue' ? prefix + formatRevenue(diff) : type === 'los' ? prefix + formatDecimal(diff,1) + ' nights' : type === 'blt' ? prefix + formatDecimal(diff,0) + ' days' : prefix + formatNumber(diff); return main + (pct == null ? '' : ' · ' + prefix + formatDecimal(pct,1) + '%'); }
 </script>
 </body>
 </html>
