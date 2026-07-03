@@ -149,35 +149,27 @@
   #dashboard .card,#dashboard .kpi-card,#dashboard .insight-card{border-radius:6px}
   #dashboard .card-kicker{color:var(--pbi-blue);font-weight:800;letter-spacing:.08em}
   #dashboard .card-title{color:var(--pbi-text);font-size:16px;letter-spacing:-.01em;margin-top:4px}
-  #dashboard .kpi-card{position:relative;padding:18px}
-  #dashboard .kpi-label{color:var(--pbi-text-sub);font-weight:700}
+  #dashboard .kpi-card{position:relative;padding:16px 18px;min-height:96px}
+  #dashboard .kpi-label{color:var(--pbi-text-sub);font-weight:700;margin-bottom:0}
   #dashboard .kpi-value{color:var(--pbi-text);font-weight:700;letter-spacing:-.02em}
-  .kpi-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:12px}
-  .kpi-icon svg{width:17px;height:17px}
-  .kpi-icon.kpi-icon-blue{background:#E8ECFF;color:var(--pbi-blue)}
-  .kpi-icon.kpi-icon-teal{background:#E4F5F4;color:var(--pbi-teal)}
-  .kpi-icon.kpi-icon-orange{background:#FDECE3;color:var(--pbi-orange)}
-  .kpi-icon.kpi-icon-violet{background:#F0EAFB;color:var(--pbi-violet)}
-  .kpi-icon.kpi-icon-pink{background:#FCE8F3;color:var(--pbi-pink)}
-  .kpi-icon.kpi-icon-green{background:#E7F7EC;color:var(--pbi-green)}
+  .kpi-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 28px}
+  .kpi-icon svg{width:14px;height:14px}
+  .kpi-icon.kpi-icon-blue,.kpi-icon.kpi-icon-teal,.kpi-icon.kpi-icon-orange,.kpi-icon.kpi-icon-violet,.kpi-icon.kpi-icon-pink,.kpi-icon.kpi-icon-green{background:#E8ECFF;color:var(--pbi-blue)}
+  .kpi-head-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
   #dashboard .insight-label{color:var(--pbi-text-sub)}
   #dashboard .insight-value{color:var(--pbi-text)}
   #dashboard th{background:#FAFAFA;color:var(--pbi-text-sub);border-bottom:1px solid var(--pbi-border)}
   #dashboard td{color:var(--pbi-text);border-bottom:1px solid #F0F0F0}
   #dashboard .bar{background:linear-gradient(90deg,var(--pbi-blue),#59B6FF)}
 
-  .bi-shell{display:flex;gap:16px;align-items:flex-start;margin-top:18px}
-  .bi-sidebar{width:222px;flex:0 0 222px;background:var(--pbi-panel);border:1px solid var(--pbi-border);border-radius:6px;padding:14px 0;position:sticky;top:80px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
-  .bi-sidebar-title{color:var(--pbi-text-sub);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:0 18px 10px}
-  .bi-nav-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-left:3px solid transparent;color:var(--pbi-text-sub);font-size:13px;font-weight:600;font-family:inherit;padding:11px 18px;cursor:pointer}
-  .bi-nav-item:hover{background:#EEF1FF;color:var(--pbi-blue)}
-  .bi-nav-item.active{background:var(--pbi-blue);border-left-color:var(--pbi-blue);color:#fff;font-weight:700}
-  .bi-nav-icon{width:18px;text-align:center;font-size:15px;color:var(--pbi-blue)}
-  .bi-nav-item.active .bi-nav-icon{color:#fff}
-  .bi-content{flex:1;min-width:0}
+  .bi-tabs{display:flex;gap:28px;border-bottom:2px solid var(--pbi-border);margin:0 0 20px;padding:0 2px;overflow-x:auto}
+  .bi-tab{background:transparent;border:0;padding:12px 2px;font-size:14px;font-weight:700;color:var(--pbi-text-sub);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;font-family:inherit}
+  .bi-tab:hover{color:var(--pbi-blue)}
+  .bi-tab.active{color:var(--pbi-blue);border-bottom-color:var(--pbi-blue)}
+  .bi-content{width:100%}
   .bi-page{display:none}
   .bi-page.active{display:block}
-  @media(max-width:900px){.bi-shell{display:block}.bi-sidebar{width:100%;flex:none;position:static;display:flex;overflow-x:auto;padding:8px;gap:4px}.bi-nav-item{border-left:0;border-bottom:3px solid transparent;white-space:nowrap;padding:10px 14px}.bi-nav-item.active{border-bottom-color:var(--pbi-blue)}.bi-sidebar-title{display:none}}
+  @media(max-width:900px){.bi-tabs{gap:18px}}
   .matrix-hint{font-size:12px;color:var(--pbi-text-sub);font-weight:600;white-space:nowrap;align-self:flex-end;padding-bottom:2px}
   .month-th{cursor:pointer;user-select:none;transition:background .12s,color .12s}
   .month-th:hover{background:#E8ECFF!important;color:var(--pbi-blue)!important}
@@ -238,10 +230,13 @@
   <div id="app" class="app">
     <header class="topbar">
       <div class="logo"><img src="data:image/png;base64,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" alt="Media Console" style="height:36px;width:auto;object-fit:contain;display:block"><div id="logoText" class="logo-text">MEDIA<br>CONSOLE</div></div>
-      <div class="confidential">© 2026 MEDIA CONSOLE<br>PRIVATE & CONFIDENTIAL</div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <button type="button" id="coverToggleBtn" class="btn" onclick="toggleCoverSection()">Hide Cover</button>
+        <div class="confidential">© 2026 MEDIA CONSOLE<br>PRIVATE &amp; CONFIDENTIAL</div>
+      </div>
     </header>
     <main class="main">
-      <section class="hero">
+      <section class="hero" id="coverSection">
         <div class="hero-left">
           <div class="eyebrow" id="coverEyebrow"></div>
           <h1><span id="coverTitle1Text"></span><br><span id="coverTitle2Text"></span><br><span id="coverTitleBlueText" class="blue"></span></h1>
@@ -282,21 +277,19 @@
           </div>
         </div>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div><div class="kpi-label">Total Revenue</div><div class="kpi-value" id="kpiRevenue">-</div><div class="kpi-sub">Selected view</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"></path><path d="M2 8h18a2 2 0 0 1 2 2v10"></path><path d="M2 17h20"></path><path d="M6 8v9"></path></svg></div><div class="kpi-label">Room Nights</div><div class="kpi-value" id="kpiNights">-</div><div class="kpi-sub">Total stay volume</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div><div class="kpi-label">Bookings</div><div class="kpi-value" id="kpiBookings">-</div><div class="kpi-sub">Attributed bookings</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div><div class="kpi-label">Avg. Booking Value</div><div class="kpi-value" id="kpiAbv">-</div><div class="kpi-sub">Revenue / bookings</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="kpi-label">Avg. Lead Time</div><div class="kpi-value"><span id="kpiBlt">-</span><small>days</small></div><div class="kpi-sub">Booking window</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div><div class="kpi-label">Avg. Length of Stay</div><div class="kpi-value"><span id="kpiLos">-</span><small>nights</small></div><div class="kpi-sub">Stay pattern</div></div>
+          <div class="kpi-card"><div class="kpi-head-row"><div class="kpi-label">Total Revenue</div><div class="kpi-icon kpi-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div></div><div class="kpi-value" id="kpiRevenue">-</div><div class="kpi-sub">Selected view</div></div>
+          <div class="kpi-card"><div class="kpi-head-row"><div class="kpi-label">Room Nights</div><div class="kpi-icon kpi-icon-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"></path><path d="M2 8h18a2 2 0 0 1 2 2v10"></path><path d="M2 17h20"></path><path d="M6 8v9"></path></svg></div></div><div class="kpi-value" id="kpiNights">-</div><div class="kpi-sub">Total stay volume</div></div>
+          <div class="kpi-card"><div class="kpi-head-row"><div class="kpi-label">Bookings</div><div class="kpi-icon kpi-icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div></div><div class="kpi-value" id="kpiBookings">-</div><div class="kpi-sub">Attributed bookings</div></div>
+          <div class="kpi-card"><div class="kpi-head-row"><div class="kpi-label">Avg. Booking Value</div><div class="kpi-icon kpi-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div></div><div class="kpi-value" id="kpiAbv">-</div><div class="kpi-sub">Revenue / bookings</div></div>
+          <div class="kpi-card"><div class="kpi-head-row"><div class="kpi-label">Avg. Lead Time</div><div class="kpi-icon kpi-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div></div><div class="kpi-value"><span id="kpiBlt">-</span><small>days</small></div><div class="kpi-sub">Booking window</div></div>
+          <div class="kpi-card"><div class="kpi-head-row"><div class="kpi-label">Avg. Length of Stay</div><div class="kpi-icon kpi-icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div></div><div class="kpi-value"><span id="kpiLos">-</span><small>nights</small></div><div class="kpi-sub">Stay pattern</div></div>
         </div>
-        <div class="bi-shell">
-          <nav class="bi-sidebar">
-            <div class="bi-sidebar-title">Report Pages</div>
-            <button type="button" class="bi-nav-item active" data-page="overview" onclick="switchBiPage('overview')"><span class="bi-nav-icon">&#8226;</span>Overview</button>
-            <button type="button" class="bi-nav-item" data-page="pipeline" onclick="switchBiPage('pipeline')"><span class="bi-nav-icon">&#8226;</span>Future Pipeline</button>
-            <button type="button" class="bi-nav-item" data-page="benchmark" onclick="switchBiPage('benchmark')"><span class="bi-nav-icon">&#8226;</span>Property Benchmark</button>
-          </nav>
-          <div class="bi-content">
+        <div class="bi-tabs">
+          <button type="button" class="bi-tab active" data-page="overview" onclick="switchBiPage('overview')">Overview</button>
+          <button type="button" class="bi-tab" data-page="pipeline" onclick="switchBiPage('pipeline')">Future Pipeline</button>
+          <button type="button" class="bi-tab" data-page="benchmark" onclick="switchBiPage('benchmark')">Property Benchmark</button>
+        </div>
+        <div class="bi-content">
             <div class="bi-page active" data-page="overview">
               <div class="grid-2">
                 <div class="card"><div class="card-head chart-pair-head"><div><div class="card-kicker">Booking Performance</div><div class="card-title">Revenue by Booking Month</div></div></div><div class="chart-box"><canvas id="monthlyRevenueChart"></canvas></div><div id="bookingSummary" class="summary-strip booking-summary-bottom"></div><div class="insight-callout" id="revenueInsight"></div></div>
@@ -363,7 +356,6 @@
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </section>
     </main>
@@ -410,6 +402,21 @@ document.addEventListener('DOMContentLoaded', function () {
   loadViaJsonp();
 });
 
+function toggleCoverSection(){
+  const el=document.getElementById('coverSection'),btn=document.getElementById('coverToggleBtn');
+  if(!el)return;
+  const hidden=el.style.display!=='none';
+  el.style.display=hidden?'none':'';
+  if(btn)btn.textContent=hidden?'Show Cover':'Hide Cover';
+  try{localStorage.setItem('mc_cover_hidden',hidden?'1':'0');}catch(e){}
+}
+function initCoverVisibility(){
+  let hidden=false;
+  try{hidden=localStorage.getItem('mc_cover_hidden')==='1';}catch(e){}
+  const el=document.getElementById('coverSection'),btn=document.getElementById('coverToggleBtn');
+  if(el)el.style.display=hidden?'none':'';
+  if(btn)btn.textContent=hidden?'Show Cover':'Hide Cover';
+}
 function loadViaJsonp() {
   const callbackName = 'gasCallback_' + Date.now();
   const script = document.createElement('script');
@@ -425,6 +432,7 @@ function loadViaJsonp() {
       payload = res.payload || {};
       applyContent();
       setupFilters();
+      initCoverVisibility();
       document.getElementById('loading').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       render();
@@ -1202,7 +1210,7 @@ function switchBiPage(pageName) {
   document.querySelectorAll('.bi-page').forEach(function(p) {
     p.classList.toggle('active', p.getAttribute('data-page') === pageName);
   });
-  document.querySelectorAll('.bi-nav-item').forEach(function(b) {
+  document.querySelectorAll('.bi-tab').forEach(function(b) {
     b.classList.toggle('active', b.getAttribute('data-page') === pageName);
   });
   // Chart.js gives hidden canvases zero width; resize once their page is visible again.
