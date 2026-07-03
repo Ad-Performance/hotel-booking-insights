@@ -149,6 +149,7 @@
   #dashboard .kpi-label{color:var(--pbi-text-sub);font-weight:700}
   #dashboard .kpi-value{color:var(--pbi-text);font-weight:700;letter-spacing:-.02em}
   .kpi-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:12px}
+  .kpi-icon svg{width:17px;height:17px}
   .kpi-icon.kpi-icon-blue{background:#EAF4FF;color:var(--pbi-blue)}
   .kpi-icon.kpi-icon-teal{background:#E4F5F4;color:var(--pbi-teal)}
   .kpi-icon.kpi-icon-orange{background:#FDECE3;color:var(--pbi-orange)}
@@ -273,12 +274,12 @@
           </div>
         </div>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-blue">$</div><div class="kpi-label">Total Revenue</div><div class="kpi-value" id="kpiRevenue">-</div><div class="kpi-sub">Selected view</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-teal">🛏</div><div class="kpi-label">Room Nights</div><div class="kpi-value" id="kpiNights">-</div><div class="kpi-sub">Total stay volume</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-orange">📅</div><div class="kpi-label">Bookings</div><div class="kpi-value" id="kpiBookings">-</div><div class="kpi-sub">Attributed bookings</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-violet">🏷</div><div class="kpi-label">Avg. Booking Value</div><div class="kpi-value" id="kpiAbv">-</div><div class="kpi-sub">Revenue / bookings</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-pink">⏱</div><div class="kpi-label">Avg. Lead Time</div><div class="kpi-value"><span id="kpiBlt">-</span><small>days</small></div><div class="kpi-sub">Booking window</div></div>
-          <div class="kpi-card"><div class="kpi-icon kpi-icon-green">🌙</div><div class="kpi-label">Avg. Length of Stay</div><div class="kpi-value"><span id="kpiLos">-</span><small>nights</small></div><div class="kpi-sub">Stay pattern</div></div>
+          <div class="kpi-card"><div class="kpi-icon kpi-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div><div class="kpi-label">Total Revenue</div><div class="kpi-value" id="kpiRevenue">-</div><div class="kpi-sub">Selected view</div></div>
+          <div class="kpi-card"><div class="kpi-icon kpi-icon-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"></path><path d="M2 8h18a2 2 0 0 1 2 2v10"></path><path d="M2 17h20"></path><path d="M6 8v9"></path></svg></div><div class="kpi-label">Room Nights</div><div class="kpi-value" id="kpiNights">-</div><div class="kpi-sub">Total stay volume</div></div>
+          <div class="kpi-card"><div class="kpi-icon kpi-icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div><div class="kpi-label">Bookings</div><div class="kpi-value" id="kpiBookings">-</div><div class="kpi-sub">Attributed bookings</div></div>
+          <div class="kpi-card"><div class="kpi-icon kpi-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div><div class="kpi-label">Avg. Booking Value</div><div class="kpi-value" id="kpiAbv">-</div><div class="kpi-sub">Revenue / bookings</div></div>
+          <div class="kpi-card"><div class="kpi-icon kpi-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="kpi-label">Avg. Lead Time</div><div class="kpi-value"><span id="kpiBlt">-</span><small>days</small></div><div class="kpi-sub">Booking window</div></div>
+          <div class="kpi-card"><div class="kpi-icon kpi-icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div><div class="kpi-label">Avg. Length of Stay</div><div class="kpi-value"><span id="kpiLos">-</span><small>nights</small></div><div class="kpi-sub">Stay pattern</div></div>
         </div>
         <div class="bi-shell">
           <nav class="bi-sidebar">
