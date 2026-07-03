@@ -141,6 +141,10 @@
   #dashboard .btn.primary{background:var(--pbi-blue)}
   #dashboard .status.good{background:#E6F7EE;color:#0F7B3E}
   #dashboard .status.bad{background:#FDEEEF;color:#C4314B}
+  .mix-over{color:#0F7B3E;font-weight:800}
+  .mix-under{color:#C4314B;font-weight:800}
+  #sourceHover .hover-title{font-size:19px}
+  #sourceHover .hover-kpi-value{font-size:16px}
   #dashboard .card,#dashboard .kpi-card,#dashboard .insight-card,#dashboard .metric-card,#dashboard .form-card,#dashboard .summary-card,#dashboard .mini-chart{background:var(--pbi-panel);border:1px solid var(--pbi-border);border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
   #dashboard .card,#dashboard .kpi-card,#dashboard .insight-card{border-radius:6px}
   #dashboard .card-kicker{color:var(--pbi-blue);font-weight:800;letter-spacing:.08em}
@@ -193,6 +197,9 @@
   .chv-value{color:var(--pbi-text);font-weight:700;font-size:11px;text-align:right;white-space:nowrap}
   .chv-empty{font-size:12px;color:var(--pbi-text-sub)}
   .chart-empty-msg{height:250px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--pbi-text-sub);font-size:13px;border:1px dashed var(--pbi-border);border-radius:8px;padding:20px;background:#FAFAFA}
+  .insight-callout{display:none;align-items:flex-start;gap:10px;background:#F5F7FF;border:1px solid #E4E7F1;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px;line-height:1.55;color:#3A3F55}
+  .insight-callout svg{flex:0 0 16px;width:16px;height:16px;color:var(--pbi-blue);margin-top:2px}
+  .insight-callout b{color:#111827;font-weight:700}
   .top10-table table{table-layout:fixed}
   .top10-table th:nth-child(1),.top10-table td:nth-child(1){width:24%}
   .top10-table th:nth-child(2),.top10-table td:nth-child(2){width:16%}
@@ -257,7 +264,7 @@
       </section>
       <section id="dashboard" class="dashboard">
         <div class="dashboard-head">
-          <div><div class="dash-title-small">HOSPITALITY COMMERCIAL INTELLIGENCE</div><div class="dash-title">Free Hotel Booking Benchmark Assessment</div></div>
+          <div><div class="dash-title-small">HOSPITALITY INTELLIGENCE</div><div class="dash-title">Hotel Booking Performance Dashboard</div></div>
           <div class="filters">
             <div class="filter-group"><label>Destination</label><input id="destinationFilter" list="destinationOptions" placeholder="All Destinations" oninput="scheduleRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="destinationOptions"></datalist></div>
             <div class="filter-group" style="position:relative">
@@ -292,7 +299,7 @@
           <div class="bi-content">
             <div class="bi-page active" data-page="overview">
               <div class="grid-2">
-                <div class="card"><div class="card-head chart-pair-head"><div><div class="card-kicker">Booking Performance</div><div class="card-title">Revenue by Booking Month</div></div></div><div class="chart-box"><canvas id="monthlyRevenueChart"></canvas></div><div id="bookingSummary" class="summary-strip booking-summary-bottom"></div></div>
+                <div class="card"><div class="card-head chart-pair-head"><div><div class="card-kicker">Booking Performance</div><div class="card-title">Revenue by Booking Month</div></div></div><div class="chart-box"><canvas id="monthlyRevenueChart"></canvas></div><div id="bookingSummary" class="summary-strip booking-summary-bottom"></div><div class="insight-callout" id="revenueInsight"></div></div>
                 <div class="card">
                   <div class="card-head chart-pair-head">
                     <div><div class="card-kicker">Booking Performance</div><div class="card-title">Revenue by Booking Month — By Country</div></div>
@@ -301,11 +308,12 @@
                   <div class="chart-box" id="countryMonthlyChartBox"><canvas id="countryMonthlyRevenueChart"></canvas></div>
                   <div id="countryMonthlySummary" class="summary-strip booking-summary-bottom"></div>
                   <div id="countryMonthlyEmpty" class="chart-empty-msg" style="display:none">Type or select a country above to see its monthly revenue trend.</div>
+                  <div class="insight-callout" id="countryRevenueInsight"></div>
                 </div>
               </div>
               <div class="behavior-grid">
-                <div class="card"><div class="card-head"><div><div class="card-kicker">Booking Behavior</div><div class="card-title">Booking Lead Time Distribution</div></div></div><div class="chart-box"><canvas id="bltDistributionChart"></canvas></div></div>
-                <div class="card"><div class="card-head"><div><div class="card-kicker">Stay Pattern</div><div class="card-title">Revenue by Length of Stay</div></div></div><div class="chart-box"><canvas id="losDistributionChart"></canvas></div></div>
+                <div class="card"><div class="card-head"><div><div class="card-kicker">Booking Behavior</div><div class="card-title">Booking Lead Time Distribution</div></div></div><div class="chart-box"><canvas id="bltDistributionChart"></canvas></div><div class="insight-callout" id="bltInsight"></div></div>
+                <div class="card"><div class="card-head"><div><div class="card-kicker">Stay Pattern</div><div class="card-title">Revenue by Length of Stay</div></div></div><div class="chart-box"><canvas id="losDistributionChart"></canvas></div><div class="insight-callout" id="losInsight"></div></div>
               </div>
               <div class="card">
                 <div class="card-head chart-pair-head">
@@ -316,12 +324,17 @@
                   </div>
                 </div>
                 <div class="table-wrap no-inner-scroll behavior-source-table"><table><thead><tr><th class="sortable-th" data-sort="market" onclick="sortBehaviorTable('market')">Source Market</th><th class="money sortable-th" data-sort="bookings" onclick="sortBehaviorTable('bookings')">Bookings</th><th class="money sortable-th" data-sort="revenue" onclick="sortBehaviorTable('revenue')">Revenue</th><th class="money sortable-th" data-sort="abv" onclick="sortBehaviorTable('abv')">Avg. Booking Value</th><th class="money sortable-th" data-sort="nights" onclick="sortBehaviorTable('nights')">Room Nights</th><th class="money sortable-th" data-sort="los" onclick="sortBehaviorTable('los')">Avg. Length of Stay</th><th class="money sortable-th" data-sort="blt" onclick="sortBehaviorTable('blt')">Avg. Lead Time</th></tr></thead><tbody id="behaviorSourceTable"></tbody></table></div>
+                <div class="insight-callout" id="marketConcentrationInsight"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><div class="card-kicker">Correlation Analysis</div><div class="card-title">Lead Time vs Revenue by Source Market</div></div></div>
+                <div class="chart-box"><canvas id="leadTimeRevenueScatterChart"></canvas></div>
               </div>
             </div>
             <div class="bi-page" data-page="pipeline">
               <div class="grid-2">
-                <div class="card"><div class="card-head"><div><div class="card-kicker">Revenue Contribution</div><div class="card-title">Revenue by Check-in Month</div></div></div><div class="chart-box"><canvas id="futureRevenueChart"></canvas></div></div>
-                <div class="card"><div class="card-head"><div><div class="card-kicker">Room Night Contribution</div><div class="card-title">Room Nights by Check-in Month</div></div></div><div class="chart-box"><canvas id="roomNightsChart"></canvas></div></div>
+                <div class="card"><div class="card-head"><div><div class="card-kicker">Revenue Contribution</div><div class="card-title">Revenue by Check-in Month</div></div></div><div class="chart-box"><canvas id="futureRevenueChart"></canvas></div><div class="insight-callout" id="pipelineInsight"></div></div>
+                <div class="card"><div class="card-head"><div><div class="card-kicker">Room Night Contribution</div><div class="card-title">Room Nights by Check-in Month</div></div></div><div class="chart-box"><canvas id="roomNightsChart"></canvas></div><div class="insight-callout" id="roomNightsInsight"></div></div>
               </div>
               <div class="card future-matrix-card">
                 <div class="card-head chart-pair-head"><div><div class="card-kicker">Future Pipeline Planning</div><div class="card-title">Source Market Monthly Matrix — All Markets</div></div><a href="javascript:void(0)" class="view-all-link" id="matrixViewAllBtn" onclick="toggleMatrixViewAll()">View All <span>&rarr;</span></a></div>
@@ -356,7 +369,7 @@
     </main>
   </div>
 
-  <div id="sourceHover" class="hover-popover"><div class="hover-head"><div><div class="hover-label">Source Market</div><div id="hoverMarket" class="hover-title">-</div></div><div class="hover-badge">MARKET DETAIL</div></div><div class="hover-kpis"><div class="hover-kpi"><div class="hover-kpi-label">Revenue</div><div id="hoverRevenue" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Bookings</div><div id="hoverBookings" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Room Nights</div><div id="hoverNights" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg. Booking Value</div><div id="hoverAbv" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg. Length of Stay</div><div id="hoverLos" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg. Lead Time</div><div id="hoverBlt" class="hover-kpi-value">-</div></div></div><div class="hover-chart-card"><div class="hover-chart-title">Revenue Trend</div><div class="hover-chart-box"><canvas id="hoverRevenueTrendChart"></canvas></div></div></div>
+  <div id="sourceHover" class="hover-popover"><div class="hover-head"><div><div class="hover-label">Source Market</div><div id="hoverMarket" class="hover-title">-</div></div><div class="hover-badge">MARKET DETAIL</div></div><div class="hover-kpis"><div class="hover-kpi"><div class="hover-kpi-label">Revenue</div><div id="hoverRevenue" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Bookings</div><div id="hoverBookings" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Room Nights</div><div id="hoverNights" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg. Booking Value</div><div id="hoverAbv" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg. Length of Stay</div><div id="hoverLos" class="hover-kpi-value">-</div></div><div class="hover-kpi"><div class="hover-kpi-label">Avg. Lead Time</div><div id="hoverBlt" class="hover-kpi-value">-</div></div></div><div class="hover-chart-card"><div class="hover-chart-title">Booking Revenue Trend</div><div class="hover-chart-box"><canvas id="hoverRevenueTrendChart"></canvas></div></div></div>
 
   <div id="leadModal" class="lead-modal">
     <div class="lead-modal-box">
@@ -504,8 +517,13 @@ function render() {
   renderKpis(view);
   renderBookingSummary(view.monthlyRows);
   renderMonthlyChart(view.monthlyRows);
+  setInsightCallout('revenueInsight', computeRevenueInsight(view.monthlyRows));
   renderBehaviorSourceTable(view.sourceRows);
+  setInsightCallout('marketConcentrationInsight', computeMarketConcentrationInsight(view.sourceRows));
+  renderCorrelationChart(view.sourceRows);
   renderFutureCharts(view.futureRows);
+  setInsightCallout('pipelineInsight', computePipelineInsight(view.futureRows));
+  setInsightCallout('roomNightsInsight', computeRoomNightsInsight(view.futureRows));
   renderBehaviorCharts(view);
   renderFutureGeoTable(view);
   renderManualBenchmark();
@@ -626,6 +644,84 @@ function renderBookingSummary(rows,targetWrap){
 }
 function summaryCard(label,value){return '<div class="summary-card"><div class="summary-label">'+escapeHtml(label)+'</div><div class="summary-value">'+escapeHtml(value)+'</div></div>';}
 
+// ─── INSIGHT CALLOUTS ───────────────────────────────────────────────────────
+function setInsightCallout(id,html){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(!html){el.innerHTML='';el.style.display='none';return;}
+  el.style.display='flex';
+  el.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg><div>'+html+'</div>';
+}
+function computeRevenueInsight(rows){
+  if(!rows||!rows.length)return'';
+  const sorted=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
+  const top=sorted.slice().sort((a,b)=>numVal(b.Revenue)-numVal(a.Revenue))[0];
+  let text='<b>'+formatMonthShort(top.Month)+'</b> was the strongest month at <b>'+formatRevenue(numVal(top.Revenue))+'</b>.';
+  if(sorted.length>1){
+    let maxChange=null;
+    for(let i=1;i<sorted.length;i++){
+      const prev=numVal(sorted[i-1].Revenue),curr=numVal(sorted[i].Revenue);
+      if(!prev)continue;
+      const pct=(curr-prev)/Math.abs(prev)*100;
+      if(maxChange===null||Math.abs(pct)>Math.abs(maxChange.pct))maxChange={pct:pct,month:sorted[i].Month};
+    }
+    if(maxChange)text+=' The sharpest swing was in <b>'+formatMonthShort(maxChange.month)+'</b> ('+(maxChange.pct>=0?'+':'')+maxChange.pct.toFixed(0)+'% vs the prior month).';
+  }
+  return text;
+}
+function computePipelineInsight(rows){
+  if(!rows||!rows.length)return'';
+  const total=rows.reduce((s,r)=>s+r.revenue,0);
+  if(!total)return'';
+  const top=rows.slice().sort((a,b)=>b.revenue-a.revenue)[0],share=top.revenue/total*100;
+  return'<b>'+top.month+'</b> is the single largest booking window ahead, carrying <b>'+share.toFixed(0)+'%</b> of total future pipeline revenue ('+formatRevenue(top.revenue)+' of '+formatRevenue(total)+').';
+}
+function computeMarketConcentrationInsight(rows){
+  if(!rows||!rows.length)return'';
+  const total=rows.reduce((s,r)=>s+r.revenue,0);
+  if(!total)return'';
+  const sorted=rows.slice().sort((a,b)=>b.revenue-a.revenue),top=sorted[0],share=top.revenue/total*100;
+  const level=share>=30?'highly concentrated in a single market':share>=15?'moderately concentrated':'well diversified across markets';
+  return marketLabelHtml(top.market)+' is the top contributor at <b>'+share.toFixed(0)+'%</b> of total revenue across <b>'+sorted.length+'</b> markets — the portfolio is '+level+'.';
+}
+function pearsonCorrelation(xs,ys){
+  const n=xs.length;
+  if(n<3)return null;
+  const meanX=xs.reduce((a,b)=>a+b,0)/n,meanY=ys.reduce((a,b)=>a+b,0)/n;
+  let num=0,denX=0,denY=0;
+  for(let i=0;i<n;i++){const dx=xs[i]-meanX,dy=ys[i]-meanY;num+=dx*dy;denX+=dx*dx;denY+=dy*dy;}
+  if(denX===0||denY===0)return null;
+  return num/Math.sqrt(denX*denY);
+}
+function describeCorrelation(r){
+  if(r==null)return'Not enough source markets with lead time and revenue data to determine a correlation.';
+  const abs=Math.abs(r),strength=abs>=0.7?'strong':abs>=0.4?'moderate':abs>=0.2?'weak':'negligible';
+  if(strength==='negligible')return'No clear relationship between booking lead time and revenue across markets (r = '+r.toFixed(2)+').';
+  const direction=r>=0?'positive':'negative';
+  return'There is a <b>'+strength+' '+direction+'</b> correlation (r = '+r.toFixed(2)+') between booking lead time and revenue — markets with '+(r>=0?'longer lead times tend to generate more revenue':'shorter lead times tend to generate more revenue')+'.';
+}
+function renderCorrelationChart(rows){
+  const valid=(rows||[]).filter(r=>r.blt>0&&r.revenue>0);
+  if(!valid.length){
+    if(charts['leadTimeRevenueScatterChart']){charts['leadTimeRevenueScatterChart'].destroy();delete charts['leadTimeRevenueScatterChart'];}
+    return;
+  }
+  const maxBookings=Math.max.apply(null,valid.map(r=>r.bookings).concat([1]));
+  const data=valid.map(r=>({x:r.blt,y:r.revenue,r:6+Math.sqrt((r.bookings||0)/maxBookings)*18,market:r.market}));
+  createChart('leadTimeRevenueScatterChart',{
+    type:'bubble',
+    data:{datasets:[{label:'Source Markets',data:data,backgroundColor:'rgba(61,90,254,.42)',borderColor:'rgba(61,90,254,.85)',borderWidth:1.5}]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111827',titleColor:'#fff',bodyColor:'#e5edff',padding:12,cornerRadius:12,displayColors:false,
+        callbacks:{title:function(items){return marketLabelText(items[0].raw.market);},label:function(context){const d=context.raw;return['Avg. Lead Time: '+formatDecimal(d.x,0)+' days','Revenue: '+formatRevenue(d.y)];}}}},
+      scales:{
+        x:{title:{display:true,text:'Avg. Lead Time (days)',color:'#605E5C',font:{size:11,weight:'700'}},grid:{color:'#F0F0F0'},ticks:{color:'#646f86'}},
+        y:{title:{display:true,text:'Revenue',color:'#605E5C',font:{size:11,weight:'700'}},grid:{color:'#F0F0F0'},ticks:{color:'#374151',callback:function(v){return formatRevenue(v);}}}
+      }
+    }
+  });
+}
 function renderMonthlyChart(rows){
   const sorted=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
   createChart('monthlyRevenueChart',{type:'line',data:{labels:sorted.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:sorted.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
@@ -634,14 +730,15 @@ function renderCountryMonthlyChart(){
   const input=document.getElementById('countryMonthlyFilter'),box=document.getElementById('countryMonthlyChartBox'),empty=document.getElementById('countryMonthlyEmpty'),summaryWrap=document.getElementById('countryMonthlySummary');
   if(!input||!box||!empty)return;
   const market=input.value.trim();
-  if(!market){box.style.display='none';empty.style.display='flex';empty.textContent='Type or select a country above to see its monthly revenue trend.';if(summaryWrap)summaryWrap.innerHTML='';if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
+  if(!market){box.style.display='none';empty.style.display='flex';empty.textContent='Type or select a country above to see its monthly revenue trend.';if(summaryWrap)summaryWrap.innerHTML='';setInsightCallout('countryRevenueInsight','');if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
   const view=currentView||getFilteredView(),dest=view.dest;
   let rows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest&&r['Source Market']===market):(payload.sourceMarketMonth||[]).filter(r=>r['Source Market']===market);
   rows=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
-  if(!rows.length){box.style.display='none';empty.style.display='flex';empty.textContent='No data found for "'+market+'".';if(summaryWrap)summaryWrap.innerHTML='';if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
+  if(!rows.length){box.style.display='none';empty.style.display='flex';empty.textContent='No data found for "'+market+'".';if(summaryWrap)summaryWrap.innerHTML='';setInsightCallout('countryRevenueInsight','');if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
   box.style.display='block';empty.style.display='none';
   createChart('countryMonthlyRevenueChart',{type:'line',data:{labels:rows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:rows.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
   if(summaryWrap)renderBookingSummary(rows,summaryWrap);
+  setInsightCallout('countryRevenueInsight',computeRevenueInsight(rows));
 }
 let behaviorSortField='revenue',behaviorSortDir='desc';
 let behaviorCountryQuery='',behaviorShowAll=false,behaviorTableDebounceTimer=null;
@@ -697,7 +794,7 @@ function renderSourceHoverTrend(market){
   let trendRows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest&&r['Source Market']===market):(payload.sourceMarketMonth||[]).filter(r=>r['Source Market']===market);
   if(selectedMonth) trendRows=trendRows.filter(r=>r.Month===selectedMonth);
   trendRows=trendRows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
-  createHoverChart('hoverRevenueTrendChart',{type:'line',data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',callbacks:{label:function(c){return'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86'}},y:{grid:{color:'#e3eefd'},ticks:{color:'#374151',callback:function(v){return formatRevenue(v)}}}}}});
+  createHoverChart('hoverRevenueTrendChart',{type:'line',data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',displayColors:false,padding:6,cornerRadius:8,titleFont:{size:11,weight:'700'},bodyFont:{size:11},callbacks:{label:function(c){return'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86',font:{size:10}}},y:{grid:{color:'#e3eefd'},ticks:{color:'#374151',font:{size:10},callback:function(v){return formatRevenue(v)}}}}}});
 }
 function createHoverChart(id,config){const ctx=document.getElementById(id);if(!ctx||typeof Chart==='undefined')return;if(hoverCharts[id])hoverCharts[id].destroy();hoverCharts[id]=new Chart(ctx,config);}
 
@@ -749,15 +846,37 @@ function getBehaviorRows(view,type){
   const selMonths=getSelectedMonths();
   return source.filter(r=>(!dest||r.Destination===dest)&&(!selMonths.length||selMonths.includes(r.Month)));
 }
+function computeBltInsight(order,values){
+  const total=values.reduce((a,b)=>a+b,0);
+  if(!total)return'';
+  let maxIdx=0;values.forEach((v,i)=>{if(v>values[maxIdx])maxIdx=i;});
+  return'<b>'+order[maxIdx]+'</b> is the most common booking window, accounting for <b>'+values[maxIdx].toFixed(0)+'%</b> of all bookings.';
+}
+function computeLosInsight(order,values){
+  const total=values.reduce((a,b)=>a+b,0);
+  if(!total)return'';
+  let maxIdx=0;values.forEach((v,i)=>{if(v>values[maxIdx])maxIdx=i;});
+  const share=values[maxIdx]/total*100;
+  return'<b>'+order[maxIdx]+'</b> generates the most revenue at <b>'+formatRevenue(values[maxIdx])+'</b>, representing <b>'+share.toFixed(0)+'%</b> of total revenue across stay lengths.';
+}
+function computeRoomNightsInsight(rows){
+  if(!rows||!rows.length)return'';
+  const total=rows.reduce((s,r)=>s+r.nights,0);
+  if(!total)return'';
+  const top=rows.slice().sort((a,b)=>b.nights-a.nights)[0],share=top.nights/total*100;
+  return'<b>'+top.month+'</b> carries the most room nights ahead at <b>'+formatNumber(top.nights)+'</b> ('+share.toFixed(0)+'% of total future room nights).';
+}
 function renderBehaviorCharts(view){
   const bltOrder=['0-3 Days','4-7 Days','8-14 Days','15-30 Days','30-60 Days','60+ Days'];
   const bltRows=getBehaviorRows(view,'blt'),bltTotal=Math.max(bltRows.reduce((s,r)=>s+numVal(r.Bookings),0),1);
   const bltValues=bltOrder.map(k=>bltRows.filter(r=>{const b=String(r['BLT Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['BLT Bucket']===k;}).reduce((s,r)=>s+numVal(r.Bookings),0)/bltTotal*100);
   createChart('bltDistributionChart',{type:'bar',data:{labels:bltOrder,datasets:[{label:'% of Bookings',data:bltValues,backgroundColor:'rgba(61,90,254,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatDecimal(v,0)+'%','% of Bookings')});
+  setInsightCallout('bltInsight',computeBltInsight(bltOrder,bltValues));
   const losOrder=['1 Night','2 Nights','3-4 Nights','5-6 Nights','7+ Nights'];
   const losRows=getBehaviorRows(view,'los');
   const losValues=losOrder.map(k=>losRows.filter(r=>{const b=String(r['LOS Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['LOS Bucket']===k;}).reduce((s,r)=>s+numVal(r.Revenue),0));
   createChart('losDistributionChart',{type:'bar',data:{labels:losOrder,datasets:[{label:'Revenue',data:losValues,backgroundColor:'rgba(61,90,254,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatRevenue(v),'Revenue')});
+  setInsightCallout('losInsight',computeLosInsight(losOrder,losValues));
 }
 
 let lastFutureMatrixFullRows=[];
@@ -829,7 +948,8 @@ function buildBenchmarkResultHtml(){
   const geo=parseManualGeoTable(),_selM=getSelectedMonths(),activeMonth=_selM.length===1?_selM[0]:'';
   const d=getBenchmarkDestinationSummary(dest,activeMonth);
   const bench={revenue:numVal(d.Revenue),bookings:numVal(d.Bookings),nights:numVal(d['Room Nights']),abv:numVal(d['Avg Booking Value']),los:numVal(d['Avg LOS']),blt:numVal(d['Avg BLT'])};
-  return'<div class="metric-grid">'+metricCard('Revenue',revenue,bench.revenue,'revenue',null)+metricCard('Bookings',bookings,bench.bookings,'number',null)+metricCard('Room Nights',nights,bench.nights,'number',null)+metricCard('Avg. Booking Value',abv,bench.abv,'revenue',null)+metricCard('Avg. Length of Stay',los,bench.los,'los',null)+metricCard('Avg. Lead Time',blt,bench.blt,'blt',null)+'</div><div class="metric-card"><div class="metric-label">Source Market Mix</div><div class="table-wrap no-inner-scroll mix-gap-table"><table><thead><tr><th>Market</th><th>Property</th><th>Destination Avg</th></tr></thead><tbody>'+marketMixRows(dest,geo,activeMonth)+'</tbody></table></div></div>';
+  const mixData=getMarketMixData(dest,geo,activeMonth);
+  return'<div class="metric-grid">'+metricCard('Revenue',revenue,bench.revenue,'revenue',null)+metricCard('Bookings',bookings,bench.bookings,'number',null)+metricCard('Room Nights',nights,bench.nights,'number',null)+metricCard('Avg. Booking Value',abv,bench.abv,'revenue',null)+metricCard('Avg. Length of Stay',los,bench.los,'los',null)+metricCard('Avg. Lead Time',blt,bench.blt,'blt',null)+'</div><div class="metric-card"><div class="metric-label">Source Market Mix</div><div class="table-wrap no-inner-scroll mix-gap-table"><table><thead><tr><th>Market</th><th>Property</th><th>Destination Avg</th></tr></thead><tbody>'+marketMixRows(mixData)+'</tbody></table></div>'+marketMixInsightBlockHtml(mixData)+'</div>';
 }
 function metricCard(label,property,benchmark,type,prevBenchmark){
   const diff=property-benchmark,pct=benchmark?diff/Math.abs(benchmark)*100:null,cls=Math.abs(diff)<0.0001?'neutral':(diff>=0?'good':'bad');
@@ -839,18 +959,49 @@ function metricCard(label,property,benchmark,type,prevBenchmark){
   const gapHtml=isNeutralBehavior?'':'<div class="gap-line"><span>Gap</span><span class="gap-value '+cls+'">'+formatGap(diff,pct,type)+'</span></div>';
   return'<div class="metric-card '+(isNeutralBehavior?'no-status':'')+'"><div class="metric-head"><div class="metric-label">'+escapeHtml(label)+'</div>'+statusHtml+'</div><div class="metric-values"><div class="metric-value-box"><div class="metric-value-label">Property</div><div class="metric-value-number">'+formatMetric(property,type)+'</div></div><div class="metric-value-box"><div class="metric-value-label">Destination Avg</div><div class="metric-value-number">'+formatMetric(benchmark,type)+'</div></div></div>'+gapHtml+'</div>';
 }
-function marketMixRows(dest,geo,activeMonth){
+function getMarketMixData(dest,geo,activeMonth){
   const propTotal=geo.reduce((sum,row)=>sum+row.revenue,0),hasPropertyGeo=propTotal>0&&geo.some(row=>row.country&&row.revenue>0);
   const allDestMarkets=getBenchmarkTopSourceMarkets(dest,activeMonth);
   const destinationTopMarkets=allDestMarkets.slice(0,10);
   const destTotalRevenue=allDestMarkets.reduce((sum,row)=>sum+(row.revenue||0),0);
   const benchShareMap={};allDestMarkets.forEach(row=>{if(row.market)benchShareMap[row.market]=destTotalRevenue?row.revenue/destTotalRevenue*100:0;});
-  if(!hasPropertyGeo){return destinationTopMarkets.length?destinationTopMarkets.map(row=>{const market=row.market,benchmarkShare=benchShareMap[market]||0;return'<tr><td><strong>'+marketLabelHtml(market)+'</strong></td><td>-</td><td>'+formatDecimal(benchmarkShare,1)+'%</td></tr>';}).join(''):'<tr><td colspan="3">No destination source market data</td></tr>';}
+  if(!hasPropertyGeo){
+    return destinationTopMarkets.map(row=>({market:row.market,pShare:0,bShare:benchShareMap[row.market]||0,gap:0,hasProperty:false}));
+  }
   const baseMarkets=destinationTopMarkets.map(row=>row.market).filter(Boolean);
   const additionalPropertyMarkets=geo.map(row=>row.country).filter(country=>country&&!baseMarkets.includes(country));
   const markets=unique(baseMarkets.concat(additionalPropertyMarkets));
-  const rows=markets.map(market=>{const propertyRevenue=(geo.find(g=>g.country===market)||{}).revenue||0,propertyShare=propTotal?propertyRevenue/propTotal*100:0,benchmarkShare=benchShareMap[market]||0;return{market,pShare:propertyShare,bShare:benchmarkShare};});
-  return rows.length?rows.map(r=>'<tr><td><strong>'+marketLabelHtml(r.market)+'</strong></td><td>'+formatDecimal(r.pShare,1)+'%</td><td>'+formatDecimal(r.bShare,1)+'%</td></tr>').join(''):'<tr><td colspan="3">Add Top 10 Geo with Revenue to calculate mix gap.</td></tr>';
+  return markets.map(market=>{
+    const propertyRevenue=(geo.find(g=>g.country===market)||{}).revenue||0,propertyShare=propTotal?propertyRevenue/propTotal*100:0,benchmarkShare=benchShareMap[market]||0;
+    return{market,pShare:propertyShare,bShare:benchmarkShare,gap:propertyShare-benchmarkShare,hasProperty:true};
+  });
+}
+function marketMixRows(data){
+  if(!data.length)return'<tr><td colspan="3">Add Top 10 Geo with Revenue to calculate mix gap.</td></tr>';
+  return data.map(r=>{
+    const cls=!r.hasProperty?'':(r.gap>3?'mix-over':(r.gap<-3?'mix-under':''));
+    const pCell=!r.hasProperty?'-':(cls?'<span class="'+cls+'">'+formatDecimal(r.pShare,1)+'%</span>':formatDecimal(r.pShare,1)+'%');
+    return'<tr><td><strong>'+marketLabelHtml(r.market)+'</strong></td><td>'+pCell+'</td><td>'+formatDecimal(r.bShare,1)+'%</td></tr>';
+  }).join('');
+}
+function computeMarketMixInsightText(data){
+  const meaningful=data.filter(r=>r.hasProperty&&(r.bShare>=2||r.pShare>=2));
+  if(!meaningful.length)return'';
+  const overIndexed=meaningful.slice().sort((a,b)=>b.gap-a.gap)[0];
+  const underIndexed=meaningful.slice().sort((a,b)=>a.gap-b.gap)[0];
+  let text='';
+  if(overIndexed&&overIndexed.gap>3){
+    text+=marketLabelHtml(overIndexed.market)+' is over-indexed at <b>'+formatDecimal(overIndexed.pShare,1)+'%</b> of your bookings vs <b>'+formatDecimal(overIndexed.bShare,1)+'%</b> destination average — a heavy reliance on this single market.';
+  }
+  if(underIndexed&&underIndexed.gap<-3&&(!overIndexed||underIndexed.market!==overIndexed.market)){
+    text+=(text?' ':'')+marketLabelHtml(underIndexed.market)+' represents <b>'+formatDecimal(underIndexed.bShare,1)+'%</b> of destination demand but only <b>'+formatDecimal(underIndexed.pShare,1)+'%</b> of yours — a potential white-space opportunity.';
+  }
+  return text||'Your source market mix is broadly in line with the destination average across top markets.';
+}
+function marketMixInsightBlockHtml(data){
+  const text=computeMarketMixInsightText(data);
+  if(!text)return'';
+  return'<div class="insight-callout" style="display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg><div>'+text+'</div></div>';
 }
 function getBenchmarkTopSourceMarkets(dest,activeMonth){
   let sourceRows=[];
