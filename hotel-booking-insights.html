@@ -127,9 +127,9 @@
 
   /* ================= POWER BI REPORT THEME ================= */
   :root{
-    --pbi-yellow:#F2C811; --pbi-bg:#F3F2F1; --pbi-panel:#FFFFFF; --pbi-border:#E1DFDD;
+    --pbi-yellow:#F2C811; --pbi-bg:#F4F5FA; --pbi-panel:#FFFFFF; --pbi-border:#E4E7F1;
     --pbi-sidebar:#252423; --pbi-sidebar-hover:#333130; --pbi-sidebar-text:#D6D5D4; --pbi-sidebar-text-dim:#8A8886;
-    --pbi-blue:#118DFF; --pbi-darkblue:#12239E; --pbi-orange:#E66C37; --pbi-purple:#6B007B; --pbi-pink:#E044A7; --pbi-violet:#744EC2; --pbi-teal:#197278; --pbi-green:#1AAB40; --pbi-red:#D64550; --pbi-gold:#D9B300;
+    --pbi-blue:#3D5AFE; --pbi-darkblue:#12239E; --pbi-orange:#E66C37; --pbi-purple:#6B007B; --pbi-pink:#E044A7; --pbi-violet:#744EC2; --pbi-teal:#197278; --pbi-green:#1AAB40; --pbi-red:#D64550; --pbi-gold:#D9B300;
     --pbi-text:#252423; --pbi-text-sub:#605E5C;
   }
   #dashboard{background:var(--pbi-bg);border-radius:12px;padding:20px 20px 40px;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif}
@@ -150,7 +150,7 @@
   #dashboard .kpi-value{color:var(--pbi-text);font-weight:700;letter-spacing:-.02em}
   .kpi-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:12px}
   .kpi-icon svg{width:17px;height:17px}
-  .kpi-icon.kpi-icon-blue{background:#EAF4FF;color:var(--pbi-blue)}
+  .kpi-icon.kpi-icon-blue{background:#E8ECFF;color:var(--pbi-blue)}
   .kpi-icon.kpi-icon-teal{background:#E4F5F4;color:var(--pbi-teal)}
   .kpi-icon.kpi-icon-orange{background:#FDECE3;color:var(--pbi-orange)}
   .kpi-icon.kpi-icon-violet{background:#F0EAFB;color:var(--pbi-violet)}
@@ -166,16 +166,17 @@
   .bi-sidebar{width:222px;flex:0 0 222px;background:var(--pbi-panel);border:1px solid var(--pbi-border);border-radius:6px;padding:14px 0;position:sticky;top:80px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
   .bi-sidebar-title{color:var(--pbi-text-sub);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:0 18px 10px}
   .bi-nav-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-left:3px solid transparent;color:var(--pbi-text-sub);font-size:13px;font-weight:600;font-family:inherit;padding:11px 18px;cursor:pointer}
-  .bi-nav-item:hover{background:#F5F8FF;color:var(--pbi-blue)}
-  .bi-nav-item.active{background:#EAF4FF;border-left-color:var(--pbi-blue);color:var(--pbi-blue);font-weight:700}
+  .bi-nav-item:hover{background:#EEF1FF;color:var(--pbi-blue)}
+  .bi-nav-item.active{background:var(--pbi-blue);border-left-color:var(--pbi-blue);color:#fff;font-weight:700}
   .bi-nav-icon{width:18px;text-align:center;font-size:15px;color:var(--pbi-blue)}
+  .bi-nav-item.active .bi-nav-icon{color:#fff}
   .bi-content{flex:1;min-width:0}
   .bi-page{display:none}
   .bi-page.active{display:block}
   @media(max-width:900px){.bi-shell{display:block}.bi-sidebar{width:100%;flex:none;position:static;display:flex;overflow-x:auto;padding:8px;gap:4px}.bi-nav-item{border-left:0;border-bottom:3px solid transparent;white-space:nowrap;padding:10px 14px}.bi-nav-item.active{border-bottom-color:var(--pbi-blue)}.bi-sidebar-title{display:none}}
   .matrix-hint{font-size:12px;color:var(--pbi-text-sub);font-weight:600;white-space:nowrap;align-self:flex-end;padding-bottom:2px}
   .month-th{cursor:pointer;user-select:none;transition:background .12s,color .12s}
-  .month-th:hover{background:#EAF4FF!important;color:var(--pbi-blue)!important}
+  .month-th:hover{background:#E8ECFF!important;color:var(--pbi-blue)!important}
   .month-th.month-th-active{background:var(--pbi-yellow)!important;color:#1F1F1F!important}
   .matrix-col-dim{opacity:.32}
   @media(max-width:900px){.matrix-hint{display:none}}
@@ -200,14 +201,14 @@
   .top10-table th:nth-child(5),.top10-table td:nth-child(5){width:13%}
   .top10-table td:nth-child(1){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .behavior-source-table table{table-layout:fixed}
-  .behavior-source-table th{white-space:normal;line-height:1.3;vertical-align:bottom}
+  .behavior-source-table th{white-space:nowrap;line-height:1.3}
   .behavior-source-table td{white-space:nowrap}
-  .behavior-source-table th:nth-child(1),.behavior-source-table td:nth-child(1){width:26%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .behavior-source-table th:nth-child(2),.behavior-source-table td:nth-child(2){width:13%}
-  .behavior-source-table th:nth-child(3),.behavior-source-table td:nth-child(3){width:11%}
-  .behavior-source-table th:nth-child(4),.behavior-source-table td:nth-child(4){width:12%}
-  .behavior-source-table th:nth-child(5),.behavior-source-table td:nth-child(5){width:14%}
-  .behavior-source-table th:nth-child(6),.behavior-source-table td:nth-child(6){width:12%}
+  .behavior-source-table th:nth-child(1),.behavior-source-table td:nth-child(1){width:18%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .behavior-source-table th:nth-child(2),.behavior-source-table td:nth-child(2){width:11%}
+  .behavior-source-table th:nth-child(3),.behavior-source-table td:nth-child(3){width:13%}
+  .behavior-source-table th:nth-child(4),.behavior-source-table td:nth-child(4){width:17%}
+  .behavior-source-table th:nth-child(5),.behavior-source-table td:nth-child(5){width:12%}
+  .behavior-source-table th:nth-child(6),.behavior-source-table td:nth-child(6){width:17%}
   .behavior-source-table th:nth-child(7),.behavior-source-table td:nth-child(7){width:12%}
   @media(max-width:900px){.behavior-source-table table{table-layout:auto;min-width:760px}.behavior-source-table th{white-space:nowrap}}
   .sortable-th{cursor:pointer;user-select:none;position:relative}
@@ -308,7 +309,7 @@
               </div>
               <div class="card">
                 <div class="card-head chart-pair-head">
-                  <div><div class="card-title">Source Market Detail — All Markets</div></div>
+                  <div><div class="card-kicker">Booking Detail</div><div class="card-title">Source Market Detail — All Markets</div></div>
                   <div style="display:flex;align-items:center;gap:16px">
                     <div class="mini-filter"><span>Country</span><input id="behaviorCountryFilter" list="sourceMarketOptions" placeholder="Search country" oninput="scheduleBehaviorTableRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
                     <a href="javascript:void(0)" class="view-all-link" id="behaviorViewAllBtn" onclick="toggleBehaviorViewAll()">View All <span>&rarr;</span></a>
@@ -627,7 +628,7 @@ function summaryCard(label,value){return '<div class="summary-card"><div class="
 
 function renderMonthlyChart(rows){
   const sorted=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
-  createChart('monthlyRevenueChart',{type:'line',data:{labels:sorted.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:sorted.map(r=>numVal(r.Revenue)),borderColor:'#118DFF',backgroundColor:'rgba(17,141,255,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
+  createChart('monthlyRevenueChart',{type:'line',data:{labels:sorted.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:sorted.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
 }
 function renderCountryMonthlyChart(){
   const input=document.getElementById('countryMonthlyFilter'),box=document.getElementById('countryMonthlyChartBox'),empty=document.getElementById('countryMonthlyEmpty'),summaryWrap=document.getElementById('countryMonthlySummary');
@@ -639,7 +640,7 @@ function renderCountryMonthlyChart(){
   rows=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
   if(!rows.length){box.style.display='none';empty.style.display='flex';empty.textContent='No data found for "'+market+'".';if(summaryWrap)summaryWrap.innerHTML='';if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
   box.style.display='block';empty.style.display='none';
-  createChart('countryMonthlyRevenueChart',{type:'line',data:{labels:rows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:rows.map(r=>numVal(r.Revenue)),borderColor:'#118DFF',backgroundColor:'rgba(17,141,255,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
+  createChart('countryMonthlyRevenueChart',{type:'line',data:{labels:rows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:rows.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
   if(summaryWrap)renderBookingSummary(rows,summaryWrap);
 }
 let behaviorSortField='revenue',behaviorSortDir='desc';
@@ -696,7 +697,7 @@ function renderSourceHoverTrend(market){
   let trendRows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest&&r['Source Market']===market):(payload.sourceMarketMonth||[]).filter(r=>r['Source Market']===market);
   if(selectedMonth) trendRows=trendRows.filter(r=>r.Month===selectedMonth);
   trendRows=trendRows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
-  createHoverChart('hoverRevenueTrendChart',{type:'line',data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#118DFF',backgroundColor:'rgba(17,141,255,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',callbacks:{label:function(c){return'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86'}},y:{grid:{color:'#e3eefd'},ticks:{color:'#374151',callback:function(v){return formatRevenue(v)}}}}}});
+  createHoverChart('hoverRevenueTrendChart',{type:'line',data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',callbacks:{label:function(c){return'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86'}},y:{grid:{color:'#e3eefd'},ticks:{color:'#374151',callback:function(v){return formatRevenue(v)}}}}}});
 }
 function createHoverChart(id,config){const ctx=document.getElementById(id);if(!ctx||typeof Chart==='undefined')return;if(hoverCharts[id])hoverCharts[id].destroy();hoverCharts[id]=new Chart(ctx,config);}
 
@@ -737,10 +738,10 @@ function renderFutureCharts(rows){
   const sorted=rows.slice().sort((a,b)=>checkInMonthIndex(a.month)-checkInMonthIndex(b.month));
   const revenueOptions=chartOptions(v=>formatRevenue(v),'Revenue');
   revenueOptions.plugins.tooltip={enabled:false,external:function(context){externalFutureTooltip(context,'revenue',formatRevenue,'Revenue by Country');}};
-  createChart('futureRevenueChart',{type:'line',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Revenue',data:sorted.map(r=>r.revenue),borderColor:'#118DFF',backgroundColor:'rgba(17,141,255,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:revenueOptions});
+  createChart('futureRevenueChart',{type:'line',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Revenue',data:sorted.map(r=>r.revenue),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:revenueOptions});
   const nightsOptions=chartOptions(v=>formatNumber(v),'Room Nights');
   nightsOptions.plugins.tooltip={enabled:false,external:function(context){externalFutureTooltip(context,'nights',formatNumber,'Room Nights by Country');}};
-  createChart('roomNightsChart',{type:'bar',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Room Nights',data:sorted.map(r=>r.nights),backgroundColor:'rgba(17,141,255,.55)',borderColor:'rgba(17,141,255,.85)',borderWidth:1,borderRadius:10,maxBarThickness:28}]},options:nightsOptions});
+  createChart('roomNightsChart',{type:'bar',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Room Nights',data:sorted.map(r=>r.nights),backgroundColor:'rgba(61,90,254,.55)',borderColor:'rgba(61,90,254,.85)',borderWidth:1,borderRadius:10,maxBarThickness:28}]},options:nightsOptions});
 }
 function getBehaviorRows(view,type){
   const dest=view.dest,month=view.month;
@@ -752,11 +753,11 @@ function renderBehaviorCharts(view){
   const bltOrder=['0-3 Days','4-7 Days','8-14 Days','15-30 Days','30-60 Days','60+ Days'];
   const bltRows=getBehaviorRows(view,'blt'),bltTotal=Math.max(bltRows.reduce((s,r)=>s+numVal(r.Bookings),0),1);
   const bltValues=bltOrder.map(k=>bltRows.filter(r=>{const b=String(r['BLT Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['BLT Bucket']===k;}).reduce((s,r)=>s+numVal(r.Bookings),0)/bltTotal*100);
-  createChart('bltDistributionChart',{type:'bar',data:{labels:bltOrder,datasets:[{label:'% of Bookings',data:bltValues,backgroundColor:'rgba(17,141,255,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatDecimal(v,0)+'%','% of Bookings')});
+  createChart('bltDistributionChart',{type:'bar',data:{labels:bltOrder,datasets:[{label:'% of Bookings',data:bltValues,backgroundColor:'rgba(61,90,254,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatDecimal(v,0)+'%','% of Bookings')});
   const losOrder=['1 Night','2 Nights','3-4 Nights','5-6 Nights','7+ Nights'];
   const losRows=getBehaviorRows(view,'los');
   const losValues=losOrder.map(k=>losRows.filter(r=>{const b=String(r['LOS Bucket']||'').replace(/\u2013/g,'-').replace(/\u2014/g,'-');const kn=k.replace(/\u2013/g,'-').replace(/\u2014/g,'-');return b===kn||b===k||r['LOS Bucket']===k;}).reduce((s,r)=>s+numVal(r.Revenue),0));
-  createChart('losDistributionChart',{type:'bar',data:{labels:losOrder,datasets:[{label:'Revenue',data:losValues,backgroundColor:'rgba(17,141,255,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatRevenue(v),'Revenue')});
+  createChart('losDistributionChart',{type:'bar',data:{labels:losOrder,datasets:[{label:'Revenue',data:losValues,backgroundColor:'rgba(61,90,254,.55)',borderRadius:9,maxBarThickness:22}]},options:horizontalChartOptions(v=>formatRevenue(v),'Revenue')});
 }
 
 let lastFutureMatrixFullRows=[];
@@ -806,7 +807,7 @@ function renderFutureGeoTable(view){
   if(!tbody)return;
   if(!topRows.length){tbody.innerHTML='<tr><td colspan="14">No future pipeline data available.</td></tr>';return;}
   const monthTotals={};months.forEach(m=>{monthTotals[m]=allRows.reduce((sum,r)=>sum+(((r.months[m]||{}).revenue)||0),0);});
-  const bodyHtml=topRows.map(r=>{const monthCells=months.map(m=>{const revenue=(r.months[m]||{}).revenue||0,intensity=Math.max(0,Math.min(1,revenue/maxCellRevenue)),alpha=revenue?(0.10+intensity*0.72):0,textColor=intensity>0.58?'#ffffff':'#10213f',bg=revenue?'background:rgba(17,141,255,'+alpha.toFixed(2)+');color:'+textColor+';':'';return'<td class="heat-cell" data-month="'+m+'" style="'+bg+'">'+(revenue?formatCompact(revenue):'–')+'</td>';}).join('');return'<tr><td class="market-col"><strong>'+marketLabelHtml(r.market)+'</strong></td>'+monthCells+'<td class="money total-col"><strong>'+formatRevenue(r.totalRevenue)+'</strong></td></tr>';}).join('');
+  const bodyHtml=topRows.map(r=>{const monthCells=months.map(m=>{const revenue=(r.months[m]||{}).revenue||0,intensity=Math.max(0,Math.min(1,revenue/maxCellRevenue)),alpha=revenue?(0.10+intensity*0.72):0,textColor=intensity>0.58?'#ffffff':'#10213f',bg=revenue?'background:rgba(61,90,254,'+alpha.toFixed(2)+');color:'+textColor+';':'';return'<td class="heat-cell" data-month="'+m+'" style="'+bg+'">'+(revenue?formatCompact(revenue):'–')+'</td>';}).join('');return'<tr><td class="market-col"><strong>'+marketLabelHtml(r.market)+'</strong></td>'+monthCells+'<td class="money total-col"><strong>'+formatRevenue(r.totalRevenue)+'</strong></td></tr>';}).join('');
   const totalRow='<tr class="matrix-total-row"><td class="market-col"><strong>Grand Total</strong></td>'+months.map(m=>{const revenue=monthTotals[m]||0,share=totalRevenue?revenue/totalRevenue*100:0;return'<td class="heat-cell" data-month="'+m+'"><div class="matrix-total-cell"><b>'+(revenue?formatCompact(revenue):'–')+'</b><span>'+(revenue?formatDecimal(share,1)+'%':'')+'</span></div></td>';}).join('')+'<td class="money total-col"><div class="matrix-total-cell"><b>'+formatRevenue(totalRevenue)+'</b><span>100%</span></div></td></tr>';
   tbody.innerHTML=bodyHtml+totalRow;
   applyMatrixHighlight();
@@ -828,7 +829,7 @@ function buildBenchmarkResultHtml(){
   const geo=parseManualGeoTable(),_selM=getSelectedMonths(),activeMonth=_selM.length===1?_selM[0]:'';
   const d=getBenchmarkDestinationSummary(dest,activeMonth);
   const bench={revenue:numVal(d.Revenue),bookings:numVal(d.Bookings),nights:numVal(d['Room Nights']),abv:numVal(d['Avg Booking Value']),los:numVal(d['Avg LOS']),blt:numVal(d['Avg BLT'])};
-  return'<div class="metric-grid">'+metricCard('Revenue',revenue,bench.revenue,'revenue',null)+metricCard('Bookings',bookings,bench.bookings,'number',null)+metricCard('Room Nights',nights,bench.nights,'number',null)+metricCard('Avg. Booking Value',abv,bench.abv,'revenue',null)+metricCard('Avg. Length of Stay',los,bench.los,'los',null)+metricCard('Avg. Lead Time',blt,bench.blt,'blt',null)+'</div><div class="metric-card"><div class="metric-label">Source Market Mix Gap</div><div class="table-wrap no-inner-scroll mix-gap-table"><table><thead><tr><th>Market</th><th>Property</th><th>Destination Avg</th><th>Gap</th></tr></thead><tbody>'+marketMixRows(dest,geo,activeMonth)+'</tbody></table></div></div>';
+  return'<div class="metric-grid">'+metricCard('Revenue',revenue,bench.revenue,'revenue',null)+metricCard('Bookings',bookings,bench.bookings,'number',null)+metricCard('Room Nights',nights,bench.nights,'number',null)+metricCard('Avg. Booking Value',abv,bench.abv,'revenue',null)+metricCard('Avg. Length of Stay',los,bench.los,'los',null)+metricCard('Avg. Lead Time',blt,bench.blt,'blt',null)+'</div><div class="metric-card"><div class="metric-label">Source Market Mix</div><div class="table-wrap no-inner-scroll mix-gap-table"><table><thead><tr><th>Market</th><th>Property</th><th>Destination Avg</th></tr></thead><tbody>'+marketMixRows(dest,geo,activeMonth)+'</tbody></table></div></div>';
 }
 function metricCard(label,property,benchmark,type,prevBenchmark){
   const diff=property-benchmark,pct=benchmark?diff/Math.abs(benchmark)*100:null,cls=Math.abs(diff)<0.0001?'neutral':(diff>=0?'good':'bad');
@@ -844,12 +845,12 @@ function marketMixRows(dest,geo,activeMonth){
   const destinationTopMarkets=allDestMarkets.slice(0,10);
   const destTotalRevenue=allDestMarkets.reduce((sum,row)=>sum+(row.revenue||0),0);
   const benchShareMap={};allDestMarkets.forEach(row=>{if(row.market)benchShareMap[row.market]=destTotalRevenue?row.revenue/destTotalRevenue*100:0;});
-  if(!hasPropertyGeo){return destinationTopMarkets.length?destinationTopMarkets.map(row=>{const market=row.market,benchmarkShare=benchShareMap[market]||0;return'<tr><td><strong>'+marketLabelHtml(market)+'</strong></td><td>-</td><td>'+formatDecimal(benchmarkShare,1)+'%</td><td>-</td></tr>';}).join(''):'<tr><td colspan="4">No destination source market data</td></tr>';}
+  if(!hasPropertyGeo){return destinationTopMarkets.length?destinationTopMarkets.map(row=>{const market=row.market,benchmarkShare=benchShareMap[market]||0;return'<tr><td><strong>'+marketLabelHtml(market)+'</strong></td><td>-</td><td>'+formatDecimal(benchmarkShare,1)+'%</td></tr>';}).join(''):'<tr><td colspan="3">No destination source market data</td></tr>';}
   const baseMarkets=destinationTopMarkets.map(row=>row.market).filter(Boolean);
   const additionalPropertyMarkets=geo.map(row=>row.country).filter(country=>country&&!baseMarkets.includes(country));
   const markets=unique(baseMarkets.concat(additionalPropertyMarkets));
-  const rows=markets.map(market=>{const propertyRevenue=(geo.find(g=>g.country===market)||{}).revenue||0,propertyShare=propTotal?propertyRevenue/propTotal*100:0,benchmarkShare=benchShareMap[market]||0;return{market,pShare:propertyShare,bShare:benchmarkShare,gap:propertyShare-benchmarkShare};});
-  return rows.length?rows.map(r=>'<tr><td><strong>'+marketLabelHtml(r.market)+'</strong></td><td>'+formatDecimal(r.pShare,1)+'%</td><td>'+formatDecimal(r.bShare,1)+'%</td><td>'+(r.gap>=0?'+':'')+formatDecimal(r.gap,1)+' pts</td></tr>').join(''):'<tr><td colspan="4">Add Top 10 Geo with Revenue to calculate mix gap.</td></tr>';
+  const rows=markets.map(market=>{const propertyRevenue=(geo.find(g=>g.country===market)||{}).revenue||0,propertyShare=propTotal?propertyRevenue/propTotal*100:0,benchmarkShare=benchShareMap[market]||0;return{market,pShare:propertyShare,bShare:benchmarkShare};});
+  return rows.length?rows.map(r=>'<tr><td><strong>'+marketLabelHtml(r.market)+'</strong></td><td>'+formatDecimal(r.pShare,1)+'%</td><td>'+formatDecimal(r.bShare,1)+'%</td></tr>').join(''):'<tr><td colspan="3">Add Top 10 Geo with Revenue to calculate mix gap.</td></tr>';
 }
 function getBenchmarkTopSourceMarkets(dest,activeMonth){
   let sourceRows=[];
