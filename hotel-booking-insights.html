@@ -42,7 +42,7 @@
     .matrix-table th,.matrix-table td{padding:8px 6px!important;text-align:center;font-size:12px!important;line-height:1.2!important;white-space:nowrap;}
     .matrix-table .market-col{width:150px;text-align:left!important;}
     .matrix-table .total-col{width:86px;text-align:right!important;}
-    .heat-cell{border-radius:8px;background-clip:padding-box;font-weight:750;color:#10213f;}
+    .heat-cell{border-radius:0;background-clip:padding-box;font-weight:750;color:#10213f;}
     @media(max-width:1100px){.matrix-wrap{overflow-x:auto!important;}.matrix-table{min-width:980px;}.no-inner-scroll.matrix-wrap{overflow-x:auto!important;}}
 
     .geo-entry-wrap{border:1px solid #e7ecf4;border-radius:16px;background:#fff;overflow:hidden}
@@ -741,7 +741,7 @@ function renderFutureCharts(rows){
   createChart('futureRevenueChart',{type:'line',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Revenue',data:sorted.map(r=>r.revenue),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:revenueOptions});
   const nightsOptions=chartOptions(v=>formatNumber(v),'Room Nights');
   nightsOptions.plugins.tooltip={enabled:false,external:function(context){externalFutureTooltip(context,'nights',formatNumber,'Room Nights by Country');}};
-  createChart('roomNightsChart',{type:'bar',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Room Nights',data:sorted.map(r=>r.nights),backgroundColor:'rgba(61,90,254,.55)',borderColor:'rgba(61,90,254,.85)',borderWidth:1,borderRadius:10,maxBarThickness:28}]},options:nightsOptions});
+  createChart('roomNightsChart',{type:'line',data:{labels:sorted.map(r=>r.month),datasets:[{label:'Room Nights',data:sorted.map(r=>r.nights),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:nightsOptions});
 }
 function getBehaviorRows(view,type){
   const dest=view.dest,month=view.month;
