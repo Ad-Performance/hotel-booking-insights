@@ -730,9 +730,44 @@ function renderCorrelationChart(rows){
     }
   });
 }
+function getBookingMonthTopMarkets(rawMonth,metric){
+  const view=currentView||getFilteredView(),dest=view.dest;
+  const raw=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest):(payload.sourceMarketMonth||[]);
+  const filtered=raw.filter(r=>String(r.Month)===String(rawMonth));
+  const byMarket={};
+  filtered.forEach(r=>{const market=r['Source Market']||'Unknown';if(!byMarket[market])byMarket[market]={market,revenue:0,nights:0};byMarket[market].revenue+=numVal(r.Revenue);byMarket[market].nights+=numVal(r['Room Nights']);});
+  const rows=Object.values(byMarket);
+  rows.sort((a,b)=>metric==='nights'?b.nights-a.nights:b.revenue-a.revenue);
+  return rows.slice(0,10).map(r=>({market:r.market,value:metric==='nights'?r.nights:r.revenue}));
+}
+let lastMonthlySortedRows=[];
+function externalMonthlyTooltip(context,metric,formatter,label){
+  const el=getChartHoverPopover(),tooltip=context.tooltip;
+  if(!tooltip||tooltip.opacity===0){el.classList.remove('open');return;}
+  const dp=tooltip.dataPoints&&tooltip.dataPoints[0];
+  if(!dp){el.classList.remove('open');return;}
+  const rowRef=lastMonthlySortedRows[dp.dataIndex];
+  const rawMonth=rowRef?rowRef.Month:dp.label,displayMonth=dp.label;
+  const top=getBookingMonthTopMarkets(rawMonth,metric);
+  const max=Math.max.apply(null,top.map(r=>r.value).concat([1]));
+  const bars=top.length?top.map(function(r){return'<div class="chv-row"><div class="chv-label">'+marketLabelHtml(r.market)+'</div><div class="chv-bar-track"><div class="chv-bar" style="width:'+Math.max(4,r.value/max*100)+'%"></div></div><div class="chv-value">'+formatter(r.value)+'</div></div>';}).join(''):'<div class="chv-empty">No market breakdown available</div>';
+  el.innerHTML='<div class="chart-hover-title">'+escapeHtml(displayMonth)+'</div><div class="chart-hover-subtitle">'+label+' [Top 10]</div><div class="chart-hover-bars">'+bars+'</div>';
+  const rect=context.chart.canvas.getBoundingClientRect();
+  let x=rect.left+tooltip.caretX+16,y=rect.top+tooltip.caretY-16;
+  el.classList.add('open');
+  const elRect=el.getBoundingClientRect();
+  if(x+elRect.width>window.innerWidth-16)x=rect.left+tooltip.caretX-elRect.width-16;
+  if(x<16)x=16;
+  if(y+elRect.height>window.innerHeight-16)y=window.innerHeight-elRect.height-16;
+  if(y<16)y=16;
+  el.style.left=x+'px';el.style.top=y+'px';
+}
 function renderMonthlyChart(rows){
   const sorted=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
-  createChart('monthlyRevenueChart',{type:'line',data:{labels:sorted.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:sorted.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:chartOptions(v=>formatRevenue(v),'Revenue')});
+  lastMonthlySortedRows=sorted;
+  const opts=chartOptions(v=>formatRevenue(v),'Revenue');
+  opts.plugins.tooltip={enabled:false,external:function(context){externalMonthlyTooltip(context,'revenue',formatRevenue,'Revenue by Country');}};
+  createChart('monthlyRevenueChart',{type:'line',data:{labels:sorted.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:sorted.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.10)',fill:true,tension:.36,pointRadius:3,borderWidth:2.3}]},options:opts});
 }
 function renderCountryMonthlyChart(){
   const input=document.getElementById('countryMonthlyFilter'),box=document.getElementById('countryMonthlyChartBox'),empty=document.getElementById('countryMonthlyEmpty'),summaryWrap=document.getElementById('countryMonthlySummary');
@@ -898,7 +933,7 @@ function toggleMatrixMonthHighlight(month){
   const idx=highlightedMatrixMonths.indexOf(month);
   if(idx>=0)highlightedMatrixMonths.splice(idx,1);
   else highlightedMatrixMonths.push(month);
-  applyMatrixHighlight();
+  renderFutureGeoTable(currentView||getFilteredView());
 }
 function applyMatrixHighlight(){
   const table=document.getElementById('futureMatrixTable');
@@ -915,18 +950,32 @@ function applyMatrixHighlight(){
     th.classList.toggle('month-th-active',highlightedMatrixMonths.includes(th.getAttribute('data-month')));
   });
 }
+function formatMatrixPeriodLabel(selected,allMonths){
+  if(!selected.length)return'Jan – Dec';
+  const indices=selected.map(m=>allMonths.indexOf(m)).sort((a,b)=>a-b);
+  let contiguous=true;
+  for(let i=1;i<indices.length;i++){if(indices[i]!==indices[i-1]+1){contiguous=false;break;}}
+  if(contiguous&&indices.length>1)return allMonths[indices[0]]+' – '+allMonths[indices[indices.length-1]];
+  return indices.map(i=>allMonths[i]).join(', ');
+}
 function renderFutureGeoTable(view){
   const dest=view.dest,months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   let raw=dest?(payload.destinationFutureSourceMarket||[]).filter(r=>r.Destination===dest):(payload.futureSourceMarket||[]);
   const byMarket={};
   raw.forEach(r=>{const market=r['Source Market']||'Unknown',month=String(r['Check-in Month']||'').slice(0,3);if(!months.includes(month))return;if(!byMarket[market])byMarket[market]={market,totalRevenue:0,totalNights:0,totalBookings:0,months:{}};if(!byMarket[market].months[month])byMarket[market].months[month]={revenue:0,nights:0,bookings:0};const revenue=numVal(r.Revenue),nights=numVal(r['Room Nights']),bookings=numVal(r.Bookings);byMarket[market].months[month].revenue+=revenue;byMarket[market].months[month].nights+=nights;byMarket[market].months[month].bookings+=bookings;byMarket[market].totalRevenue+=revenue;byMarket[market].totalNights+=nights;byMarket[market].totalBookings+=bookings;});
-  const allRows=Object.values(byMarket).sort((a,b)=>b.totalRevenue-a.totalRevenue);
+  const activeMonths=highlightedMatrixMonths.length?highlightedMatrixMonths:months;
+  const periodRevenueFor=r=>activeMonths.reduce((sum,m)=>sum+(((r.months[m]||{}).revenue)||0),0);
+  const periodNightsFor=r=>activeMonths.reduce((sum,m)=>sum+(((r.months[m]||{}).nights)||0),0);
+  const periodBookingsFor=r=>activeMonths.reduce((sum,m)=>sum+(((r.months[m]||{}).bookings)||0),0);
+  const allRows=Object.values(byMarket).sort((a,b)=>periodRevenueFor(b)-periodRevenueFor(a));
   lastFutureMatrixFullRows=allRows;
   const topRows=matrixShowAll?allRows:allRows.slice(0,10);
-  const totalRevenue=allRows.reduce((sum,r)=>sum+r.totalRevenue,0),totalNights=allRows.reduce((sum,r)=>sum+r.totalNights,0),totalBookings=allRows.reduce((sum,r)=>sum+r.totalBookings,0);
+  const periodRevenue=allRows.reduce((sum,r)=>sum+periodRevenueFor(r),0),periodNights=allRows.reduce((sum,r)=>sum+periodNightsFor(r),0),periodBookings=allRows.reduce((sum,r)=>sum+periodBookingsFor(r),0);
+  const grandTotalRevenue=allRows.reduce((sum,r)=>sum+r.totalRevenue,0);
   const maxCellRevenue=Math.max.apply(null,allRows.flatMap(r=>months.map(m=>(r.months[m]||{}).revenue||0)).concat([1]));
   const summary=document.getElementById('futureGeoSummary'),tbody=document.getElementById('futureGeoTableBody'),viewAllBtn=document.getElementById('matrixViewAllBtn');
-  if(summary)summary.innerHTML='<div class="future-geo-summary-card"><div class="future-geo-label">Matrix Period</div><div class="future-geo-value">Jan – Dec</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Total Pipeline Revenue</div><div class="future-geo-value">'+formatRevenue(totalRevenue)+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Room Nights</div><div class="future-geo-value">'+formatNumber(totalNights)+' RN</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Bookings</div><div class="future-geo-value">'+formatNumber(totalBookings)+'</div></div>';
+  const periodLabel=formatMatrixPeriodLabel(highlightedMatrixMonths,months);
+  if(summary)summary.innerHTML='<div class="future-geo-summary-card"><div class="future-geo-label">Matrix Period</div><div class="future-geo-value">'+periodLabel+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">'+(highlightedMatrixMonths.length?'Period Revenue':'Total Pipeline Revenue')+'</div><div class="future-geo-value">'+formatRevenue(periodRevenue)+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Room Nights</div><div class="future-geo-value">'+formatNumber(periodNights)+' RN</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Bookings</div><div class="future-geo-value">'+formatNumber(periodBookings)+'</div></div>';
   if(viewAllBtn){
     if(allRows.length<=10){viewAllBtn.style.display='none';}
     else{viewAllBtn.style.display='inline-flex';viewAllBtn.innerHTML=matrixShowAll?'Show Top 10 <span>&uarr;</span>':'View All <span>&rarr;</span>';}
@@ -935,7 +984,7 @@ function renderFutureGeoTable(view){
   if(!topRows.length){tbody.innerHTML='<tr><td colspan="14">No future pipeline data available.</td></tr>';return;}
   const monthTotals={};months.forEach(m=>{monthTotals[m]=allRows.reduce((sum,r)=>sum+(((r.months[m]||{}).revenue)||0),0);});
   const bodyHtml=topRows.map(r=>{const monthCells=months.map(m=>{const revenue=(r.months[m]||{}).revenue||0,intensity=Math.max(0,Math.min(1,revenue/maxCellRevenue)),alpha=revenue?(0.10+intensity*0.72):0,textColor=intensity>0.58?'#ffffff':'#10213f',bg=revenue?'background:rgba(61,90,254,'+alpha.toFixed(2)+');color:'+textColor+';':'';return'<td class="heat-cell" data-month="'+m+'" style="'+bg+'">'+(revenue?formatCompact(revenue):'–')+'</td>';}).join('');return'<tr><td class="market-col"><strong>'+marketLabelHtml(r.market)+'</strong></td>'+monthCells+'<td class="money total-col"><strong>'+formatRevenue(r.totalRevenue)+'</strong></td></tr>';}).join('');
-  const totalRow='<tr class="matrix-total-row"><td class="market-col"><strong>Grand Total</strong></td>'+months.map(m=>{const revenue=monthTotals[m]||0,share=totalRevenue?revenue/totalRevenue*100:0;return'<td class="heat-cell" data-month="'+m+'"><div class="matrix-total-cell"><b>'+(revenue?formatCompact(revenue):'–')+'</b><span>'+(revenue?formatDecimal(share,1)+'%':'')+'</span></div></td>';}).join('')+'<td class="money total-col"><div class="matrix-total-cell"><b>'+formatRevenue(totalRevenue)+'</b><span>100%</span></div></td></tr>';
+  const totalRow='<tr class="matrix-total-row"><td class="market-col"><strong>Grand Total</strong></td>'+months.map(m=>{const revenue=monthTotals[m]||0,share=grandTotalRevenue?revenue/grandTotalRevenue*100:0;return'<td class="heat-cell" data-month="'+m+'"><div class="matrix-total-cell"><b>'+(revenue?formatCompact(revenue):'–')+'</b><span>'+(revenue?formatDecimal(share,1)+'%':'')+'</span></div></td>';}).join('')+'<td class="money total-col"><div class="matrix-total-cell"><b>'+formatRevenue(grandTotalRevenue)+'</b><span>100%</span></div></td></tr>';
   tbody.innerHTML=bodyHtml+totalRow;
   applyMatrixHighlight();
 }
