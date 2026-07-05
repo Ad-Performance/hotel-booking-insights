@@ -597,7 +597,7 @@ function makeChangeHtml(current,previous,reverseGood){
 function renderKpis(view){
   const t=view.totals||{};
   setText('kpiRevenue',formatRevenue(t.revenue)); setText('kpiNights',formatNumber(t.nights)); setText('kpiBookings',formatNumber(t.bookings));
-  setText('kpiAbv',formatRevenue(t.abv)); setText('kpiBlt',formatDecimal(t.blt,0)); setText('kpiLos',formatDecimal(t.los,0));
+  setText('kpiAbv',formatRevenue(t.abv)); setText('kpiBlt',formatDecimal(t.blt,0)); setText('kpiLos',formatDecimal(t.los,1));
   const month=view.month||'',prevMonth=getPreviousMonthLabel(month),prevTotals=prevMonth?getTotalsForMonth(view.dest,prevMonth):null;
   const subs=document.querySelectorAll('.kpi-sub');
   if(!month||!prevTotals){const defaults=['Selected view','Total stay volume','Attributed bookings','Revenue / bookings','Booking window','Stay pattern'];subs.forEach((el,i)=>{el.innerHTML=defaults[i]||'Selected view';});return;}
@@ -620,7 +620,7 @@ function renderInsights(view){
   const highestAbv=validMarkets.slice().sort((a,b)=>Number(b.abv||0)-Number(a.abv||0))[0]||null;
   const longestStay=validMarkets.slice().sort((a,b)=>Number(b.los||0)-Number(a.los||0))[0]||null;
   setText('insightRisingMarket',highestAbv?highestAbv.market:'-'); setText('insightRisingMarketDesc',highestAbv?formatRevenue(highestAbv.abv)+' average booking value.':'-');
-  setText('insightFallenMarket',longestStay?longestStay.market:'-'); setText('insightFallenMarketDesc',longestStay?formatDecimal(longestStay.los,0)+' nights average length of stay.':'-');
+  setText('insightFallenMarket',longestStay?longestStay.market:'-'); setText('insightFallenMarketDesc',longestStay?formatDecimal(longestStay.los,1)+' nights average length of stay.':'-');
 }
 function getSourceMarketTrend(view){
   const dest=view.dest;
@@ -814,7 +814,7 @@ function renderBehaviorSourceTable(rows){
     return dir*((Number(a[behaviorSortField])||0)-(Number(b[behaviorSortField])||0));
   });
   const data=behaviorShowAll?sorted:sorted.slice(0,10);
-  tbody.innerHTML=data.length?data.map(r=>'<tr class="source-row" onmouseenter="showSourceHover(event,\''+escapeJs(r.market)+'\')" onmousemove="moveSourceHover(event)" onmouseleave="hideSourceHover()"><td><strong>'+marketLabelHtml(r.market)+'</strong></td><td class="money">'+formatNumber(r.bookings)+'</td><td class="money">'+formatFullCurrency(r.revenue)+'</td><td class="money">'+formatFullCurrency(r.abv)+'</td><td class="money">'+formatNumber(r.nights)+'</td><td class="money">'+formatDecimal(r.los,0)+' nights</td><td class="money">'+formatDecimal(r.blt,0)+' days</td></tr>').join(''):'<tr><td colspan="7">No source market data</td></tr>';
+  tbody.innerHTML=data.length?data.map(r=>'<tr class="source-row" onmouseenter="showSourceHover(event,\''+escapeJs(r.market)+'\')" onmousemove="moveSourceHover(event)" onmouseleave="hideSourceHover()"><td><strong>'+marketLabelHtml(r.market)+'</strong></td><td class="money">'+formatNumber(r.bookings)+'</td><td class="money">'+formatFullCurrency(r.revenue)+'</td><td class="money">'+formatFullCurrency(r.abv)+'</td><td class="money">'+formatNumber(r.nights)+'</td><td class="money">'+formatDecimal(r.los,1)+' nights</td><td class="money">'+formatDecimal(r.blt,0)+' days</td></tr>').join(''):'<tr><td colspan="7">No source market data</td></tr>';
   document.querySelectorAll('.behavior-source-table th[data-sort]').forEach(function(th){
     const f=th.getAttribute('data-sort');
     th.classList.toggle('sorted-asc',behaviorSortField===f&&behaviorSortDir==='asc');
@@ -827,7 +827,7 @@ function renderBehaviorSourceTable(rows){
 }
 function showSourceHover(event,market){
   const r=currentSourceRows.find(x=>x.market===market); if(!r) return;
-  setText('hoverMarket',marketLabelText(r.market)); setText('hoverRevenue',formatRevenue(r.revenue)); setText('hoverBookings',formatNumber(r.bookings)); setText('hoverNights',formatNumber(r.nights)); setText('hoverAbv',formatRevenue(r.abv)); setText('hoverLos',formatDecimal(r.los,0)+' nights'); setText('hoverBlt',formatDecimal(r.blt,0)+' days');
+  setText('hoverMarket',marketLabelText(r.market)); setText('hoverRevenue',formatRevenue(r.revenue)); setText('hoverBookings',formatNumber(r.bookings)); setText('hoverNights',formatNumber(r.nights)); setText('hoverAbv',formatRevenue(r.abv)); setText('hoverLos',formatDecimal(r.los,1)+' nights'); setText('hoverBlt',formatDecimal(r.blt,0)+' days');
   renderSourceHoverTrend(r.market); document.getElementById('sourceHover').classList.add('open'); moveSourceHover(event);
 }
 function moveSourceHover(event){const pop=document.getElementById('sourceHover');let x=event.clientX+22,y=event.clientY+18;const rect=pop.getBoundingClientRect();if(x+rect.width>window.innerWidth-18)x=event.clientX-rect.width-22;if(y+rect.height>window.innerHeight-18)y=window.innerHeight-rect.height-18;pop.style.left=x+'px';pop.style.top=Math.max(18,y)+'px';}
@@ -1195,8 +1195,8 @@ function formatCompact(v){v=Number(v||0);const sign=v<0?'-':'';v=Math.abs(v);if(
 function formatNumber(v){return Math.round(Number(v||0)).toLocaleString('en-US');}
 function formatDecimal(v,d){return Number(v||0).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
 function percentDecimal(v){return formatDecimal(Number(v||0)*100,1)+'%';}
-function formatMetric(v,type){if(type==='revenue')return formatRevenue(v);if(type==='los')return formatDecimal(v,0)+' nights';if(type==='blt')return formatDecimal(v,0)+' days';return formatNumber(v);}
-function formatGap(diff,pct,type){const prefix=diff>0?'+':'';let main=type==='revenue'?prefix+formatRevenue(diff):type==='los'?prefix+formatDecimal(diff,0)+' nights':type==='blt'?prefix+formatDecimal(diff,0)+' days':prefix+formatNumber(diff);return main+(pct==null?'':' · '+prefix+formatDecimal(pct,1)+'%');}
+function formatMetric(v,type){if(type==='revenue')return formatRevenue(v);if(type==='los')return formatDecimal(v,1)+' nights';if(type==='blt')return formatDecimal(v,0)+' days';return formatNumber(v);}
+function formatGap(diff,pct,type){const prefix=diff>0?'+':'';let main=type==='revenue'?prefix+formatRevenue(diff):type==='los'?prefix+formatDecimal(diff,1)+' nights':type==='blt'?prefix+formatDecimal(diff,0)+' days':prefix+formatNumber(diff);return main+(pct==null?'':' · '+prefix+formatDecimal(pct,1)+'%');}
 
 // ─── MULTI-SELECT MONTH FILTER ────────────────────────────────────────────────
 let _selectedMonths = [];
