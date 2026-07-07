@@ -188,6 +188,20 @@
   .chv-bar{height:100%;background:var(--pbi-blue);border-radius:2px}
   .chv-value{color:var(--pbi-text);font-weight:700;font-size:11px;text-align:right;white-space:nowrap}
   .chv-empty{font-size:12px;color:var(--pbi-text-sub)}
+
+  .compare-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+  .compare-best{background:#E6F7EE;border-radius:4px;font-weight:700}
+  .movers-market-row td{background:#F8F9FC;font-weight:800;color:#111827;padding:12px 12px 8px;border-bottom:1px solid #EEF0F5;font-size:13px}
+  .movers-period-row td{color:var(--pbi-text-sub);font-size:12.5px;padding-top:6px;padding-bottom:6px}
+  .movers-period-row td:first-child{font-weight:600;color:var(--pbi-text)}
+  .movers-change-row td{font-weight:500;font-size:12.5px;border-bottom:2px solid #E4E7F1;padding-top:6px;padding-bottom:10px}
+  .movers-change-row td:first-child{color:var(--pbi-text-sub);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em}
+  #dashboard .movers-change-cell.good{color:#0F7B3E}
+  #dashboard .movers-change-cell.bad{color:#C4314B}
+  #dashboard .movers-change-cell.neutral{color:var(--pbi-text-sub);font-weight:600}
+  @media(max-width:1024px){.compare-inputs{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.compare-inputs{grid-template-columns:1fr}}
+
   .chart-empty-msg{height:250px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--pbi-text-sub);font-size:13px;border:1px dashed var(--pbi-border);border-radius:8px;padding:20px;background:#FAFAFA}
   .insight-callout{display:none;align-items:flex-start;gap:10px;background:#F5F7FF;border:1px solid #E4E7F1;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px;line-height:1.55;color:#3A3F55}
   .insight-callout svg{flex:0 0 16px;width:16px;height:16px;color:var(--pbi-blue);margin-top:2px}
@@ -223,6 +237,32 @@
   .view-all-link:hover{text-decoration:underline}
   .view-all-link span{font-size:14px;line-height:1}
   @media(max-width:900px){.mini-filter{flex-wrap:wrap}.top10-table table{table-layout:auto}}
+
+  /* ============ RESPONSIVE PATCH: laptop / desktop / iPad / mobile ============ */
+  .topbar-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end}
+  @media(max-width:1024px){
+    .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .chart-pair-head{flex-wrap:wrap;height:auto}
+    .chart-pair-head .mini-filter{width:100%;justify-content:flex-start;margin-top:6px}
+  }
+  @media(max-width:768px){
+    .topbar{flex-wrap:wrap;height:auto;padding:12px 16px;gap:10px}
+    .topbar-actions{width:100%;justify-content:flex-start}
+    .topbar-actions .btn{flex:1 1 auto;text-align:center;padding:0 12px}
+    .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .kpi-head-row{flex-wrap:nowrap}
+    .kpi-label{font-size:11px}
+    .bi-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .chv-row{grid-template-columns:56px 1fr 40px;gap:6px}
+    .chart-hover-popover{max-width:240px;min-width:0}
+  }
+  @media(max-width:480px){
+    .kpi-grid{grid-template-columns:1fr}
+    .logo-text{font-size:10px}
+    .topbar-actions .btn{font-size:12px;height:38px}
+    .chart-hover-popover{max-width:200px;padding:10px 12px}
+    .chv-row{grid-template-columns:50px 1fr 36px}
+  }
   </style>
 </head>
 <body>
@@ -230,7 +270,7 @@
   <div id="app" class="app">
     <header class="topbar">
       <div class="logo"><img src="data:image/png;base64,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" alt="Media Console" style="height:36px;width:auto;object-fit:contain;display:block"><div id="logoText" class="logo-text">MEDIA<br>CONSOLE</div></div>
-      <div style="display:flex;align-items:center;gap:16px">
+      <div class="topbar-actions">
         <button type="button" id="coverToggleBtn" class="btn" onclick="toggleCoverSection()">Hide Cover</button>
         <div class="confidential">© 2026 MEDIA CONSOLE<br>PRIVATE &amp; CONFIDENTIAL</div>
       </div>
@@ -261,7 +301,7 @@
         <div class="dashboard-head">
           <div><div class="dash-title-small">HOSPITALITY INTELLIGENCE</div><div class="dash-title">Hotel Booking Performance Dashboard</div></div>
           <div class="filters">
-            <div class="filter-group"><label>Destination</label><input id="destinationFilter" list="destinationOptions" placeholder="All Destinations" oninput="scheduleRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="destinationOptions"></datalist></div>
+            <div class="filter-group"><label>Destination</label><input id="destinationFilter" list="destinationOptions" placeholder="All Destinations" oninput="scheduleRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="destinationOptions"></datalist></div>
             <div class="filter-group" style="position:relative">
   <label>Booking Month</label>
   <input id="monthFilterBtn" readonly placeholder="All Months" value="" onclick="toggleMonthDropdown()" style="cursor:pointer;caret-color:transparent;" autocomplete="off">
@@ -296,7 +336,7 @@
                 <div class="card">
                   <div class="card-head chart-pair-head">
                     <div><div class="card-kicker">Booking Performance</div><div class="card-title">Revenue by Booking Month — By Country</div></div>
-                    <div class="mini-filter"><span>Country</span><input id="countryMonthlyFilter" list="sourceMarketOptions" placeholder="Type or select" oninput="scheduleCountryMonthlyRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="sourceMarketOptions"></datalist></div>
+                    <div class="mini-filter"><span>Country</span><input id="countryMonthlyFilter" list="sourceMarketOptions" placeholder="Type or select" oninput="scheduleCountryMonthlyRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><datalist id="sourceMarketOptions"></datalist></div>
                   </div>
                   <div class="chart-box" id="countryMonthlyChartBox"><canvas id="countryMonthlyRevenueChart"></canvas></div>
                   <div id="countryMonthlySummary" class="summary-strip booking-summary-bottom"></div>
@@ -309,10 +349,14 @@
                 <div class="card"><div class="card-head"><div><div class="card-kicker">Stay Pattern</div><div class="card-title">Revenue by Length of Stay</div></div></div><div class="chart-box"><canvas id="losDistributionChart"></canvas></div><div class="insight-callout" id="losInsight"></div></div>
               </div>
               <div class="card">
+                <div class="card-head"><div><div class="card-kicker">Market Behavior</div><div class="card-title">Lead Time vs Revenue by Source Market</div></div></div>
+                <div class="chart-box"><canvas id="leadTimeRevenueScatterChart"></canvas></div>
+              </div>
+              <div class="card">
                 <div class="card-head chart-pair-head">
                   <div><div class="card-kicker">Booking Detail</div><div class="card-title">Source Market Detail — All Markets</div></div>
                   <div style="display:flex;align-items:center;gap:16px">
-                    <div class="mini-filter"><span>Country</span><input id="behaviorCountryFilter" list="sourceMarketOptions" placeholder="Search country" oninput="scheduleBehaviorTableRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                    <div class="mini-filter"><span>Country</span><input id="behaviorCountryFilter" list="sourceMarketOptions" placeholder="Search country" oninput="scheduleBehaviorTableRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
                     <a href="javascript:void(0)" class="view-all-link" id="behaviorViewAllBtn" onclick="toggleBehaviorViewAll()">View All <span>&rarr;</span></a>
                   </div>
                 </div>
@@ -320,8 +364,32 @@
                 <div class="insight-callout" id="marketConcentrationInsight"></div>
               </div>
               <div class="card">
-                <div class="card-head"><div><div class="card-kicker">Correlation Analysis</div><div class="card-title">Lead Time vs Revenue by Source Market</div></div></div>
-                <div class="chart-box"><canvas id="leadTimeRevenueScatterChart"></canvas></div>
+                <div class="card-head"><div><div class="card-kicker">Booking Performance</div><div class="card-title">Compare Markets</div></div><a href="javascript:void(0)" class="view-all-link" onclick="clearCompareMarkets()">Clear <span>&times;</span></a></div>
+                <div class="compare-inputs">
+                  <div class="field"><label>Market 1</label><input id="compareMarket1" list="sourceMarketOptions" placeholder="Type or select" oninput="scheduleCompareRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                  <div class="field"><label>Market 2</label><input id="compareMarket2" list="sourceMarketOptions" placeholder="Type or select" oninput="scheduleCompareRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                  <div class="field"><label>Market 3 (optional)</label><input id="compareMarket3" list="sourceMarketOptions" placeholder="Type or select" oninput="scheduleCompareRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                  <div class="field"><label>Market 4 (optional)</label><input id="compareMarket4" list="sourceMarketOptions" placeholder="Type or select" oninput="scheduleCompareRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                  <div class="field"><label>Market 5 (optional)</label><input id="compareMarket5" list="sourceMarketOptions" placeholder="Type or select" oninput="scheduleCompareRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                </div>
+                <div id="compareEmpty" class="chart-empty-msg">Select at least 2 markets above to compare.</div>
+                <div id="compareOutput" style="display:none">
+                  <div class="table-wrap no-inner-scroll behavior-source-table"><table id="compareMetricsTable"></table></div>
+                  <div class="chart-box" style="margin-top:18px"><canvas id="compareTrendChart"></canvas></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><div class="card-kicker">Booking Performance</div><div class="card-title">Compare Months</div></div><a href="javascript:void(0)" class="view-all-link" onclick="clearCompareMonths()">Clear <span>&times;</span></a></div>
+                <div class="compare-inputs" style="grid-template-columns:repeat(auto-fit,minmax(150px,220px))">
+                  <div class="field"><label>Month A</label><select id="compareMonthA" onchange="renderCompareMonths()"><option value="">Select month</option></select></div>
+                  <div class="field"><label>Month B</label><select id="compareMonthB" onchange="renderCompareMonths()"><option value="">Select month</option></select></div>
+                </div>
+                <div id="compareMonthsEmpty" class="chart-empty-msg">Select two months above to see what changed.</div>
+                <div id="compareMonthsOutput" style="display:none">
+                  <div class="table-wrap no-inner-scroll behavior-source-table"><table id="compareMonthsSummaryTable"></table></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:22px;margin-bottom:12px"><div class="card-title" style="font-size:15px" id="marketMoversTitle">Market Movers</div><a href="javascript:void(0)" class="view-all-link" id="marketMoversViewAllBtn" onclick="toggleMarketMoversViewAll()">View All <span>&rarr;</span></a></div>
+                  <div class="table-wrap no-inner-scroll behavior-source-table compare-movers-table"><table id="compareMoversTable"></table></div>
+                </div>
               </div>
             </div>
             <div class="bi-page" data-page="pipeline">
@@ -340,7 +408,7 @@
                 <div class="card-head"><div><div class="card-kicker">Property Benchmark</div><div class="card-title">Property vs Destination Benchmark</div></div></div>
                 <div class="benchmark-layout">
                   <div class="form-card">
-                    <div class="field"><label>Benchmark Destination</label><input id="benchmarkDestination" list="destinationOptions" placeholder="Search / select destination" oninput="scheduleBenchmarkRender()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+                    <div class="field"><label>Benchmark Destination</label><input id="benchmarkDestination" list="destinationOptions" placeholder="Search / select destination" oninput="scheduleBenchmarkRender()" onfocus="this.select()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
                     <div class="field"><label>Hotel Name</label><input id="manualHotelName" placeholder="Enter hotel name" oninput="renderManualBenchmark()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
                     <div class="form-grid-2">
                       <div class="field"><label>Revenue</label><input id="manualRevenue" type="number" placeholder="0" oninput="renderManualBenchmark()" autocomplete="off"></div>
@@ -502,6 +570,10 @@ function setupFilters() {
   if (monthList) {
     monthList.innerHTML = months.map(v => '<div class="month-item" data-month="' + escapeAttr(v) + '" onclick="toggleMonth(\'' + escapeJs(v) + '\')"> ' + escapeHtml(v) + '</div>').join('');
   }
+  const monthSelectOptionsHtml = '<option value="">Select month</option>' + months.map(v => '<option value="' + escapeAttr(v) + '">' + escapeHtml(formatMonthShort(v)) + '</option>').join('');
+  const compareMonthA = document.getElementById('compareMonthA'), compareMonthB = document.getElementById('compareMonthB');
+  if (compareMonthA) compareMonthA.innerHTML = monthSelectOptionsHtml;
+  if (compareMonthB) compareMonthB.innerHTML = monthSelectOptionsHtml;
   const markets = unique((payload.sourceMarketMonth || []).map(r => r['Source Market']).concat((payload.destinationSourceMarketMonth || []).map(r => r['Source Market']))).filter(Boolean).sort((a,b)=>String(a).localeCompare(String(b)));
   const marketOptions = document.getElementById('sourceMarketOptions');
   if (marketOptions) {
@@ -529,6 +601,8 @@ function render() {
   renderBehaviorSourceTable(view.sourceRows);
   setInsightCallout('marketConcentrationInsight', computeMarketConcentrationInsight(view.sourceRows));
   renderCorrelationChart(view.sourceRows);
+  renderCompareMarkets();
+  renderCompareMonths();
   renderFutureCharts(view.futureRows);
   setInsightCallout('pipelineInsight', computePipelineInsight(view.futureRows));
   setInsightCallout('roomNightsInsight', computeRoomNightsInsight(view.futureRows));
@@ -728,6 +802,254 @@ function renderCorrelationChart(rows){
         y:{title:{display:true,text:'Revenue',color:'#605E5C',font:{size:11,weight:'700'}},grid:{color:'#F0F0F0'},ticks:{color:'#374151',callback:function(v){return formatRevenue(v);}}}
       }
     }
+  });
+}
+
+// ─── COMPARE MARKETS ────────────────────────────────────────────────────────
+let compareDebounceTimer=null;
+function scheduleCompareRender(){
+  clearTimeout(compareDebounceTimer);
+  compareDebounceTimer=setTimeout(renderCompareMarkets,250);
+}
+function clearCompareMarkets(){
+  ['compareMarket1','compareMarket2','compareMarket3','compareMarket4','compareMarket5'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
+  renderCompareMarkets();
+}
+function getCompareSelections(){
+  return['compareMarket1','compareMarket2','compareMarket3','compareMarket4','compareMarket5']
+    .map(function(id){const el=document.getElementById(id);return el?el.value.trim():'';})
+    .filter(Boolean);
+}
+function renderCompareMarkets(){
+  const empty=document.getElementById('compareEmpty'),output=document.getElementById('compareOutput');
+  if(!empty||!output)return;
+  const names=unique(getCompareSelections());
+  if(names.length<2){
+    empty.style.display='flex';
+    empty.textContent='Select at least 2 markets above to compare.';
+    output.style.display='none';
+    if(charts['compareTrendChart']){charts['compareTrendChart'].destroy();delete charts['compareTrendChart'];}
+    return;
+  }
+  const view=currentView||getFilteredView();
+  const rows=names.map(function(name){
+    return(view.sourceRows||[]).find(function(r){return String(r.market||'').toLowerCase()===name.toLowerCase();})||null;
+  });
+  const missing=names.filter(function(name,i){return!rows[i];});
+  if(missing.length){
+    empty.style.display='flex';
+    empty.textContent='No data found for: '+missing.join(', ');
+    output.style.display='none';
+    if(charts['compareTrendChart']){charts['compareTrendChart'].destroy();delete charts['compareTrendChart'];}
+    return;
+  }
+  empty.style.display='none';
+  output.style.display='block';
+  renderCompareTable(rows);
+  renderCompareTrendChart(rows,view);
+}
+function renderCompareTable(rows){
+  const table=document.getElementById('compareMetricsTable');
+  if(!table)return;
+  const metrics=[
+    {key:'bookings',label:'Bookings',fmt:formatNumber,highlight:true},
+    {key:'revenue',label:'Revenue',fmt:formatFullCurrency,highlight:true},
+    {key:'abv',label:'Avg. Booking Value',fmt:formatFullCurrency,highlight:true},
+    {key:'nights',label:'Room Nights',fmt:formatNumber,highlight:true},
+    {key:'los',label:'Avg. Length of Stay',fmt:function(v){return formatDecimal(v,1)+' nights';},highlight:true},
+    {key:'blt',label:'Avg. Lead Time',fmt:function(v){return formatDecimal(v,0)+' days';},highlight:false}
+  ];
+  const maxByMetric={};
+  metrics.forEach(function(m){if(m.highlight)maxByMetric[m.key]=Math.max.apply(null,rows.map(function(r){return r[m.key]||0;}));});
+  const thead='<thead><tr><th>Source Market</th>'+metrics.map(function(m){return'<th class="money">'+m.label+'</th>';}).join('')+'</tr></thead>';
+  const tbody='<tbody>'+rows.map(function(r){
+    const cells=metrics.map(function(m){
+      const v=r[m.key]||0,isBest=m.highlight&&v===maxByMetric[m.key]&&maxByMetric[m.key]>0;
+      return'<td class="money'+(isBest?' compare-best':'')+'">'+m.fmt(v)+'</td>';
+    }).join('');
+    return'<tr><td><strong>'+marketLabelHtml(r.market)+'</strong></td>'+cells+'</tr>';
+  }).join('')+'</tbody>';
+  table.innerHTML=thead+tbody;
+}
+function renderCompareTrendChart(rows,view){
+  const dest=view.dest;
+  const monthRows=(view.monthlyRows||[]).slice().sort(function(a,b){return monthIndex(a.Month)-monthIndex(b.Month);});
+  const months=monthRows.map(function(r){return r.Month;});
+  const labels=months.map(function(m){return formatMonthShort(m);});
+  const colors=['#6690FF','#FFA45C','#4CC988','#F472B6','#B39DFA'];
+  const datasets=rows.map(function(r,i){
+    const raw=dest?(payload.destinationSourceMarketMonth||[]).filter(function(x){return x.Destination===dest&&x['Source Market']===r.market;}):(payload.sourceMarketMonth||[]).filter(function(x){return x['Source Market']===r.market;});
+    const byMonth={};
+    raw.forEach(function(x){byMonth[x.Month]=(byMonth[x.Month]||0)+numVal(x.Revenue);});
+    const data=months.map(function(m){return byMonth[m]||0;});
+    const color=colors[i%colors.length];
+    return{label:r.market,data:data,borderColor:color,backgroundColor:color+'1A',fill:false,tension:.35,pointRadius:3,borderWidth:2.3};
+  });
+  const opts=chartOptions(function(v){return formatRevenue(v);},'Revenue');
+  opts.plugins.legend={display:true,position:'top',labels:{boxWidth:10,usePointStyle:true,font:{size:11},color:'#374151'}};
+  createChart('compareTrendChart',{type:'line',data:{labels:labels,datasets:datasets},options:opts});
+}
+
+// ─── COMPARE MONTHS ─────────────────────────────────────────────────────────
+function clearCompareMonths(){
+  ['compareMonthA','compareMonthB'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
+  marketMoversShowAll=false;
+  marketMoversManualSort=false;
+  renderCompareMonths();
+}
+function renderCompareMonths(){
+  const empty=document.getElementById('compareMonthsEmpty'),output=document.getElementById('compareMonthsOutput');
+  if(!empty||!output)return;
+  const inputA=document.getElementById('compareMonthA'),inputB=document.getElementById('compareMonthB');
+  const a=inputA?inputA.value.trim():'',b=inputB?inputB.value.trim():'';
+  if(!a||!b){
+    empty.style.display='flex';
+    empty.textContent='Select two months above to see what changed.';
+    output.style.display='none';
+    return;
+  }
+  if(a.toLowerCase()===b.toLowerCase()){
+    empty.style.display='flex';
+    empty.textContent='Please select two different months.';
+    output.style.display='none';
+    return;
+  }
+  const view=currentView||getFilteredView(),dest=view.dest;
+  const totalsA=getTotalsForMonth(dest,a),totalsB=getTotalsForMonth(dest,b);
+  if(!totalsA||!totalsB){
+    empty.style.display='flex';
+    empty.textContent='No data found for one or both months.';
+    output.style.display='none';
+    return;
+  }
+  empty.style.display='none';
+  output.style.display='block';
+  const entries=[{month:a,bookings:totalsA.bookings,revenue:totalsA.revenue,abv:totalsA.abv,nights:totalsA.nights,los:totalsA.los,blt:totalsA.blt},
+                 {month:b,bookings:totalsB.bookings,revenue:totalsB.revenue,abv:totalsB.abv,nights:totalsB.nights,los:totalsB.los,blt:totalsB.blt}]
+    .sort(function(x,y){return monthIndex(x.month)-monthIndex(y.month);});
+  renderCompareMonthsSummaryTable(entries);
+  const overallDeclined=totalsB.revenue<totalsA.revenue;
+  renderMarketMoversTable(dest,a,b,overallDeclined);
+}
+function renderCompareMonthsSummaryTable(entries){
+  const table=document.getElementById('compareMonthsSummaryTable');
+  if(!table)return;
+  const metrics=[
+    {key:'bookings',label:'Bookings',fmt:formatNumber},
+    {key:'revenue',label:'Revenue',fmt:formatFullCurrency},
+    {key:'abv',label:'Avg. Booking Value',fmt:formatFullCurrency},
+    {key:'nights',label:'Room Nights',fmt:formatNumber},
+    {key:'los',label:'Avg. Length of Stay',fmt:function(v){return formatDecimal(v,1)+' nights';}},
+    {key:'blt',label:'Avg. Lead Time',fmt:function(v){return formatDecimal(v,0)+' days';}}
+  ];
+  const thead='<thead><tr><th>Booking Month</th>'+metrics.map(function(m){return'<th class="money">'+m.label+'</th>';}).join('')+'</tr></thead>';
+  const bodyRows=entries.map(function(e){
+    const cells=metrics.map(function(m){return'<td class="money">'+m.fmt(e[m.key]||0)+'</td>';}).join('');
+    return'<tr><td><strong>'+escapeHtml(formatMonthShort(e.month))+'</strong></td>'+cells+'</tr>';
+  }).join('');
+  const rowA=entries[0]||{},rowB=entries[1]||{};
+  const changeCells=metrics.map(function(m){
+    const a=rowA[m.key]||0,b=rowB[m.key]||0,pct=a?(b-a)/Math.abs(a)*100:null;
+    return moversChangeCell(pct);
+  }).join('');
+  const changeRow='<tr class="movers-change-row"><td>% Change</td>'+changeCells+'</tr>';
+  table.innerHTML=thead+'<tbody>'+bodyRows+changeRow+'</tbody>';
+}
+function getMarketMoversBetweenMonths(dest,monthA,monthB,overallDeclined){
+  const rawA=dest?(payload.destinationSourceMarketMonth||[]).filter(function(r){return r.Destination===dest&&r.Month===monthA;}):(payload.sourceMarketMonth||[]).filter(function(r){return r.Month===monthA;});
+  const rawB=dest?(payload.destinationSourceMarketMonth||[]).filter(function(r){return r.Destination===dest&&r.Month===monthB;}):(payload.sourceMarketMonth||[]).filter(function(r){return r.Month===monthB;});
+  const byMarket={};
+  function ensure(m){if(!byMarket[m])byMarket[m]={market:m,aRevenue:0,bRevenue:0,aBookings:0,bBookings:0,aNights:0,bNights:0,aBltTotal:0,bBltTotal:0};return byMarket[m];}
+  rawA.forEach(function(r){const e=ensure(r['Source Market']||'Unknown'),bk=numVal(r.Bookings);e.aRevenue+=numVal(r.Revenue);e.aBookings+=bk;e.aNights+=numVal(r['Room Nights']);e.aBltTotal+=numVal(r['Avg BLT'])*bk;});
+  rawB.forEach(function(r){const e=ensure(r['Source Market']||'Unknown'),bk=numVal(r.Bookings);e.bRevenue+=numVal(r.Revenue);e.bBookings+=bk;e.bNights+=numVal(r['Room Nights']);e.bBltTotal+=numVal(r['Avg BLT'])*bk;});
+  function pct(a,b){return a?(b-a)/Math.abs(a)*100:null;}
+  function pctOrNew(a,b){if(a>0)return(b-a)/Math.abs(a)*100;if(b>0)return Infinity;return null;}
+  const rows=Object.values(byMarket).filter(function(r){return r.aRevenue>0||r.bRevenue>0;}).map(function(r){
+    const aAbv=r.aBookings?r.aRevenue/r.aBookings:0,bAbv=r.bBookings?r.bRevenue/r.bBookings:0;
+    const aLos=r.aBookings?r.aNights/r.aBookings:0,bLos=r.bBookings?r.bNights/r.bBookings:0;
+    const aBlt=r.aBookings?r.aBltTotal/r.aBookings:0,bBlt=r.bBookings?r.bBltTotal/r.bBookings:0;
+    return{
+      market:r.market,
+      aRevenue:r.aRevenue,bRevenue:r.bRevenue,revenueDiff:r.bRevenue-r.aRevenue,revenuePct:pctOrNew(r.aRevenue,r.bRevenue),
+      aBookings:r.aBookings,bBookings:r.bBookings,bookingsDiff:r.bBookings-r.aBookings,bookingsPct:pct(r.aBookings,r.bBookings),
+      aAbv:aAbv,bAbv:bAbv,abvDiff:bAbv-aAbv,abvPct:pct(aAbv,bAbv),
+      aNights:r.aNights,bNights:r.bNights,nightsDiff:r.bNights-r.aNights,nightsPct:pct(r.aNights,r.bNights),
+      aLos:aLos,bLos:bLos,losDiff:bLos-aLos,losPct:pct(aLos,bLos),
+      aBlt:aBlt,bBlt:bBlt,bltDiff:bBlt-aBlt,bltPct:pct(aBlt,bBlt)
+    };
+  });
+  const sortedRows=sortMarketMoversRows(rows,overallDeclined);
+  return sortedRows;
+}
+const MARKET_MOVERS_FIELD_MAP={bookings:'bookingsDiff',revenue:'revenueDiff',abv:'abvDiff',nights:'nightsDiff',los:'losDiff',blt:'bltDiff'};
+let marketMoversSortField='revenue',marketMoversSortDir='desc',marketMoversManualSort=false;
+function sortMarketMoversRows(rows,overallDeclined){
+  const field=marketMoversManualSort?marketMoversSortField:'revenue';
+  const dir=marketMoversManualSort?marketMoversSortDir:(overallDeclined?'asc':'desc');
+  const key=MARKET_MOVERS_FIELD_MAP[field]||'revenueDiff';
+  const sorted=rows.slice();
+  sorted.sort(function(x,y){
+    const xv=x[key]||0,yv=y[key]||0;
+    if(xv!==yv)return dir==='asc'?xv-yv:yv-xv;
+    return y.bRevenue-x.bRevenue;
+  });
+  return sorted;
+}
+function sortMarketMoversBy(field){
+  if(marketMoversManualSort&&marketMoversSortField===field){
+    marketMoversSortDir=marketMoversSortDir==='desc'?'asc':'desc';
+  }else{
+    marketMoversSortField=field;
+    marketMoversSortDir='desc';
+  }
+  marketMoversManualSort=true;
+  renderCompareMonths();
+}
+function moversChangeCell(pct){
+  if(pct==null)return'<td class="money movers-change-cell neutral">–</td>';
+  if(pct===Infinity)return'<td class="money movers-change-cell good">▲ New</td>';
+  const cls=pct>0?'good':pct<0?'bad':'neutral',arrow=pct>0?'▲':pct<0?'▼':'–';
+  return'<td class="money movers-change-cell '+cls+'">'+arrow+' '+(pct>=0?'+':'')+formatDecimal(pct,1)+'%</td>';
+}
+let marketMoversShowAll=false;
+let lastMarketMoversContext=null;
+function toggleMarketMoversViewAll(){
+  marketMoversShowAll=!marketMoversShowAll;
+  renderCompareMonths();
+}
+function renderMarketMoversTable(dest,monthA,monthB,overallDeclined){
+  const table=document.getElementById('compareMoversTable'),viewAllBtn=document.getElementById('marketMoversViewAllBtn'),titleEl=document.getElementById('marketMoversTitle');
+  if(!table)return;
+  lastMarketMoversContext={dest:dest,monthA:monthA,monthB:monthB,overallDeclined:overallDeclined};
+  const allRows=getMarketMoversBetweenMonths(dest,monthA,monthB,overallDeclined);
+  const rows=marketMoversShowAll?allRows:allRows.slice(0,10);
+  if(titleEl)titleEl.textContent=overallDeclined?'Market Movers — Biggest Declines First':'Market Movers — Biggest Gains First';
+  if(viewAllBtn){
+    if(allRows.length<=10){viewAllBtn.style.display='none';}
+    else{viewAllBtn.style.display='inline-flex';viewAllBtn.innerHTML=marketMoversShowAll?'Show Top 10 <span>&uarr;</span>':'View All <span>&rarr;</span>';}
+  }
+  const labelA=formatMonthShort(monthA),labelB=formatMonthShort(monthB);
+  const cols=[{f:'bookings',l:'Bookings'},{f:'revenue',l:'Revenue'},{f:'abv',l:'Avg. Booking Value'},{f:'nights',l:'Room Nights'},{f:'los',l:'Avg. Length of Stay'},{f:'blt',l:'Avg. Lead Time'}];
+  const thead='<thead><tr><th>Source Market / Period</th>'+cols.map(function(c){return'<th class="money sortable-th" data-sort="'+c.f+'" onclick="sortMarketMoversBy(\''+c.f+'\')">'+c.l+'</th>';}).join('')+'</tr></thead>';
+  const body=rows.length?rows.map(function(r){
+    return'<tr class="movers-market-row"><td colspan="7">'+marketLabelHtml(r.market)+'</td></tr>'
+      +'<tr class="movers-period-row"><td>'+escapeHtml(labelA)+'</td><td class="money">'+formatNumber(r.aBookings)+'</td><td class="money">'+formatFullCurrency(r.aRevenue)+'</td><td class="money">'+formatFullCurrency(r.aAbv)+'</td><td class="money">'+formatNumber(r.aNights)+'</td><td class="money">'+formatDecimal(r.aLos,1)+' nights</td><td class="money">'+formatDecimal(r.aBlt,0)+' days</td></tr>'
+      +'<tr class="movers-period-row"><td>'+escapeHtml(labelB)+'</td><td class="money">'+formatNumber(r.bBookings)+'</td><td class="money">'+formatFullCurrency(r.bRevenue)+'</td><td class="money">'+formatFullCurrency(r.bAbv)+'</td><td class="money">'+formatNumber(r.bNights)+'</td><td class="money">'+formatDecimal(r.bLos,1)+' nights</td><td class="money">'+formatDecimal(r.bBlt,0)+' days</td></tr>'
+      +'<tr class="movers-change-row"><td>% change</td>'+moversChangeCell(r.bookingsPct)+moversChangeCell(r.revenuePct)+moversChangeCell(r.abvPct)+moversChangeCell(r.nightsPct)+moversChangeCell(r.losPct)+moversChangeCell(r.bltPct)+'</tr>';
+  }).join(''):'<tr><td colspan="7">No market-level data available.</td></tr>';
+  table.innerHTML=thead+'<tbody>'+body+'</tbody>';
+  const activeField=marketMoversManualSort?marketMoversSortField:'revenue';
+  const activeDir=marketMoversManualSort?marketMoversSortDir:(overallDeclined?'asc':'desc');
+  table.querySelectorAll('.sortable-th').forEach(function(th){
+    const f=th.getAttribute('data-sort');
+    th.classList.toggle('sorted-asc',f===activeField&&activeDir==='asc');
+    th.classList.toggle('sorted-desc',f===activeField&&activeDir==='desc');
   });
 }
 function getBookingMonthTopMarkets(rawMonth,metric){
