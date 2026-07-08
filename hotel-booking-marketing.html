@@ -617,7 +617,10 @@ function setupFilters() {
   const destinations = ALLOWED_DESTINATIONS.length ? allDestinations.filter(d => ALLOWED_DESTINATIONS.some(a => a.toLowerCase() === String(d).toLowerCase())) : allDestinations;
   MARKETING_DESTINATIONS = destinations;
   const destInput = document.getElementById('destinationFilter');
-  if (destInput) { destInput.innerHTML = destinations.map(v => '<option value="' + escapeAttr(v) + '">' + escapeHtml(v) + '</option>').join(''); }
+  if (destInput) {
+    destInput.innerHTML = '<option value="' + ALL_DESTINATIONS_VALUE + '">All Destinations</option>' +
+      destinations.map(v => '<option value="' + escapeAttr(v) + '">' + escapeHtml(v) + '</option>').join('');
+  }
   const destOptionsList = document.getElementById('destinationOptions');
   if (destOptionsList) { destOptionsList.innerHTML = destinations.map(v => '<option value="' + escapeAttr(v) + '"></option>').join(''); }
   const months = unique((payload.monthly || []).map(r => r.Month)).sort((a,b)=>monthIndex(a)-monthIndex(b));
@@ -642,7 +645,7 @@ let benchmarkDebounceTimer = null;
 function scheduleBenchmarkRender() { clearTimeout(benchmarkDebounceTimer); benchmarkDebounceTimer = setTimeout(renderManualBenchmark, 250); }
 let countryMonthlyDebounceTimer = null;
 function scheduleCountryMonthlyRender() { clearTimeout(countryMonthlyDebounceTimer); countryMonthlyDebounceTimer = setTimeout(renderCountryMonthlyChart, 250); }
-function resetFilters() { document.getElementById('destinationFilter').value = MARKETING_DESTINATIONS[0]||''; clearAllMonths(); render(); }
+function resetFilters() { document.getElementById('destinationFilter').value = ALL_DESTINATIONS_VALUE; clearAllMonths(); render(); }
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function render() {
@@ -668,29 +671,25 @@ function render() {
 }
 
 let MARKETING_DESTINATIONS=[];
+const ALL_DESTINATIONS_VALUE='__ALL_ALLOWED__';
+function matchesDest(rowDestination,dest){
+  if(dest===ALL_DESTINATIONS_VALUE)return MARKETING_DESTINATIONS.indexOf(rowDestination)!==-1;
+  return rowDestination===dest;
+}
 function resolveAllowedDestination(raw){
   if(!MARKETING_DESTINATIONS.length)return raw;
+  if(raw===ALL_DESTINATIONS_VALUE)return raw;
   const match=MARKETING_DESTINATIONS.find(function(d){return d.toLowerCase()===String(raw||'').toLowerCase();});
-  return match||MARKETING_DESTINATIONS[0];
+  return match||ALL_DESTINATIONS_VALUE;
 }
 function getFilteredView() {
   const dest = resolveAllowedDestination(document.getElementById('destinationFilter').value);
   const selectedMonths = getSelectedMonths();
   const month = selectedMonths.length === 1 ? selectedMonths[0] : '';
   let monthlyRows = [], sourceRows = [], futureRows = [];
-  if (dest) {
-    monthlyRows = (payload.destinationMonth || []).filter(r => r.Destination === dest && (!selectedMonths.length || selectedMonths.includes(r.Month)));
-    sourceRows = (payload.destinationSourceMarketMonth || []).filter(r => r.Destination === dest && (!selectedMonths.length || selectedMonths.includes(r.Month))).map(toSourceRow);
-    futureRows = (payload.destinationFuturePipeline || []).filter(r => r.Destination === dest).map(toFutureRow);
-  } else if (selectedMonths.length) {
-    monthlyRows = (payload.monthly || []).filter(r => selectedMonths.includes(r.Month));
-    sourceRows = (payload.sourceMarketMonth || []).filter(r => selectedMonths.includes(r.Month)).map(toSourceRow);
-    futureRows = (payload.futurePipeline || []).map(toFutureRow);
-  } else {
-    monthlyRows = (payload.monthly || []);
-    sourceRows = (payload.sourceMarket || []).map(toSourceRow);
-    futureRows = (payload.futurePipeline || []).map(toFutureRow);
-  }
+  monthlyRows = (payload.destinationMonth || []).filter(r => matchesDest(r.Destination,dest) && (!selectedMonths.length || selectedMonths.includes(r.Month)));
+  sourceRows = (payload.destinationSourceMarketMonth || []).filter(r => matchesDest(r.Destination,dest) && (!selectedMonths.length || selectedMonths.includes(r.Month))).map(toSourceRow);
+  futureRows = (payload.destinationFuturePipeline || []).filter(r => matchesDest(r.Destination,dest)).map(toFutureRow);
   sourceRows = combineSourceRows(sourceRows).sort((a,b)=>b.revenue-a.revenue);
   const totals = rowsToTotals(monthlyRows);
   return { dest, month, monthlyRows, sourceRows, futureRows, totals };
@@ -709,7 +708,7 @@ function rowsToTotals(rows){
 }
 function getTotalsForMonth(dest,month){
   if(!month) return null;
-  let rows=dest?(payload.destinationMonth||[]).filter(r=>r.Destination===dest&&r.Month===month):(payload.monthly||[]).filter(r=>r.Month===month);
+  let rows=(payload.destinationMonth||[]).filter(r=>matchesDest(r.Destination,dest)&&r.Month===month);
   if(!rows.length) return null;
   return rowsToTotals(rows);
 }
@@ -763,7 +762,7 @@ function getSourceMarketTrend(view){
   if(!currentMonth){const monthRows=(view.monthlyRows||[]).slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));currentMonth=monthRows.length?monthRows[monthRows.length-1].Month:'';}
   const prevMonth=getPreviousMonthLabel(currentMonth);
   if(!currentMonth||!prevMonth) return{rising:null,fallen:null,hasPrevious:false};
-  const rows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest):(payload.sourceMarketMonth||[]);
+  const rows=(payload.destinationSourceMarketMonth||[]).filter(r=>matchesDest(r.Destination,dest));
   const cur={},prev={};
   rows.forEach(r=>{const market=r['Source Market']||'Unknown',revenue=numVal(r.Revenue);if(r.Month===currentMonth)cur[market]=(cur[market]||0)+revenue;if(r.Month===prevMonth)prev[market]=(prev[market]||0)+revenue;});
   const hasPrevious=Object.keys(prev).length>0;
@@ -942,7 +941,7 @@ function renderCompareTrendChart(rows,view){
   const labels=months.map(function(m){return formatMonthShort(m);});
   const colors=['#6690FF','#FFA45C','#4CC988','#F472B6','#B39DFA'];
   const datasets=rows.map(function(r,i){
-    const raw=dest?(payload.destinationSourceMarketMonth||[]).filter(function(x){return x.Destination===dest&&x['Source Market']===r.market;}):(payload.sourceMarketMonth||[]).filter(function(x){return x['Source Market']===r.market;});
+    const raw=(payload.destinationSourceMarketMonth||[]).filter(function(x){return matchesDest(x.Destination,dest)&&x['Source Market']===r.market;});
     const byMonth={};
     raw.forEach(function(x){byMonth[x.Month]=(byMonth[x.Month]||0)+numVal(x.Revenue);});
     const data=months.map(function(m){return byMonth[m]||0;});
@@ -1023,8 +1022,8 @@ function renderCompareMonthsSummaryTable(entries){
   table.innerHTML=thead+'<tbody>'+bodyRows+changeRow+'</tbody>';
 }
 function getMarketMoversBetweenMonths(dest,monthA,monthB,overallDeclined){
-  const rawA=dest?(payload.destinationSourceMarketMonth||[]).filter(function(r){return r.Destination===dest&&r.Month===monthA;}):(payload.sourceMarketMonth||[]).filter(function(r){return r.Month===monthA;});
-  const rawB=dest?(payload.destinationSourceMarketMonth||[]).filter(function(r){return r.Destination===dest&&r.Month===monthB;}):(payload.sourceMarketMonth||[]).filter(function(r){return r.Month===monthB;});
+  const rawA=(payload.destinationSourceMarketMonth||[]).filter(function(r){return matchesDest(r.Destination,dest)&&r.Month===monthA;});
+  const rawB=(payload.destinationSourceMarketMonth||[]).filter(function(r){return matchesDest(r.Destination,dest)&&r.Month===monthB;});
   const byMarket={};
   function ensure(m){if(!byMarket[m])byMarket[m]={market:m,aRevenue:0,bRevenue:0,aBookings:0,bBookings:0,aNights:0,bNights:0,aBltTotal:0,bBltTotal:0};return byMarket[m];}
   rawA.forEach(function(r){const e=ensure(r['Source Market']||'Unknown'),bk=numVal(r.Bookings);e.aRevenue+=numVal(r.Revenue);e.aBookings+=bk;e.aNights+=numVal(r['Room Nights']);e.aBltTotal+=numVal(r['Avg BLT'])*bk;});
@@ -1115,7 +1114,7 @@ function renderMarketMoversTable(dest,monthA,monthB,overallDeclined){
 }
 function getBookingMonthTopMarkets(rawMonth,metric){
   const view=currentView||getFilteredView(),dest=view.dest;
-  const raw=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest):(payload.sourceMarketMonth||[]);
+  const raw=(payload.destinationSourceMarketMonth||[]).filter(r=>matchesDest(r.Destination,dest));
   const filtered=raw.filter(r=>String(r.Month)===String(rawMonth));
   const byMarket={};
   filtered.forEach(r=>{const market=r['Source Market']||'Unknown';if(!byMarket[market])byMarket[market]={market,revenue:0,nights:0};byMarket[market].revenue+=numVal(r.Revenue);byMarket[market].nights+=numVal(r['Room Nights']);});
@@ -1158,7 +1157,7 @@ function renderCountryMonthlyChart(){
   const market=input.value.trim();
   if(!market){box.style.display='none';empty.style.display='flex';empty.textContent='Type or select a country above to see its monthly revenue trend.';if(summaryWrap)summaryWrap.innerHTML='';setInsightCallout('countryRevenueInsight','');if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
   const view=currentView||getFilteredView(),dest=view.dest;
-  let rows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest&&r['Source Market']===market):(payload.sourceMarketMonth||[]).filter(r=>r['Source Market']===market);
+  let rows=(payload.destinationSourceMarketMonth||[]).filter(r=>matchesDest(r.Destination,dest)&&r['Source Market']===market);
   rows=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
   if(!rows.length){box.style.display='none';empty.style.display='flex';empty.textContent='No data found for "'+market+'".';if(summaryWrap)summaryWrap.innerHTML='';setInsightCallout('countryRevenueInsight','');if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
   box.style.display='block';empty.style.display='none';
@@ -1217,7 +1216,7 @@ function moveSourceHover(event){const pop=document.getElementById('sourceHover')
 function hideSourceHover(){const pop=document.getElementById('sourceHover');if(pop)pop.classList.remove('open');}
 function renderSourceHoverTrend(market){
   const view=currentView||getFilteredView(),dest=view.dest,selectedMonth=view.month;
-  let trendRows=dest?(payload.destinationSourceMarketMonth||[]).filter(r=>r.Destination===dest&&r['Source Market']===market):(payload.sourceMarketMonth||[]).filter(r=>r['Source Market']===market);
+  let trendRows=(payload.destinationSourceMarketMonth||[]).filter(r=>matchesDest(r.Destination,dest)&&r['Source Market']===market);
   if(selectedMonth) trendRows=trendRows.filter(r=>r.Month===selectedMonth);
   trendRows=trendRows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
   createHoverChart('hoverRevenueTrendChart',{type:'line',data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',displayColors:false,padding:6,cornerRadius:8,titleFont:{size:11,weight:'700'},bodyFont:{size:11},callbacks:{label:function(c){return'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86',font:{size:10}}},y:{grid:{color:'#e3eefd'},ticks:{color:'#374151',font:{size:10},callback:function(v){return formatRevenue(v)}}}}}});
@@ -1226,7 +1225,7 @@ function createHoverChart(id,config){const ctx=document.getElementById(id);if(!c
 
 function getFutureMonthTopMarkets(month,metric){
   const view=currentView||getFilteredView(),dest=view.dest;
-  const raw=dest?(payload.destinationFutureSourceMarket||[]).filter(r=>r.Destination===dest):(payload.futureSourceMarket||[]);
+  const raw=(payload.destinationFutureSourceMarket||[]).filter(r=>matchesDest(r.Destination,dest));
   const filtered=raw.filter(r=>String(r['Check-in Month']||'').slice(0,3)===String(month||'').slice(0,3));
   const byMarket={};
   filtered.forEach(r=>{const market=r['Source Market']||'Unknown';if(!byMarket[market])byMarket[market]={market,revenue:0,nights:0};byMarket[market].revenue+=numVal(r.Revenue);byMarket[market].nights+=numVal(r['Room Nights']);});
@@ -1270,7 +1269,7 @@ function getBehaviorRows(view,type){
   const dest=view.dest,month=view.month;
   const source=type==='blt'?(dest?(payload.destinationBltDistribution||[]):(payload.bltDistribution||[])):(dest?(payload.destinationLosRevenueDistribution||[]):(payload.losRevenueDistribution||[]));
   const selMonths=getSelectedMonths();
-  return source.filter(r=>(!dest||r.Destination===dest)&&(!selMonths.length||selMonths.includes(r.Month)));
+  return source.filter(r=>matchesDest(r.Destination,dest)&&(!selMonths.length||selMonths.includes(r.Month)));
 }
 function computeBltInsight(order,values){
   const total=values.reduce((a,b)=>a+b,0);
@@ -1339,7 +1338,7 @@ function formatMatrixPeriodLabel(selected,allMonths){
 }
 function renderFutureGeoTable(view){
   const dest=view.dest,months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  let raw=dest?(payload.destinationFutureSourceMarket||[]).filter(r=>r.Destination===dest):(payload.futureSourceMarket||[]);
+  let raw=(payload.destinationFutureSourceMarket||[]).filter(r=>matchesDest(r.Destination,dest));
   const byMarket={};
   raw.forEach(r=>{const market=r['Source Market']||'Unknown',month=String(r['Check-in Month']||'').slice(0,3);if(!months.includes(month))return;if(!byMarket[market])byMarket[market]={market,totalRevenue:0,totalNights:0,totalBookings:0,months:{}};if(!byMarket[market].months[month])byMarket[market].months[month]={revenue:0,nights:0,bookings:0};const revenue=numVal(r.Revenue),nights=numVal(r['Room Nights']),bookings=numVal(r.Bookings);byMarket[market].months[month].revenue+=revenue;byMarket[market].months[month].nights+=nights;byMarket[market].months[month].bookings+=bookings;byMarket[market].totalRevenue+=revenue;byMarket[market].totalNights+=nights;byMarket[market].totalBookings+=bookings;});
   const activeMonths=highlightedMatrixMonths.length?highlightedMatrixMonths:months;
@@ -1460,6 +1459,24 @@ function closeLeadModal(){ const modal=document.getElementById('leadModal');if(m
 function clearLeadMessages(){ const err=document.getElementById('leadError'),success=document.getElementById('leadSuccess');if(err){err.textContent='';err.classList.remove('open');}if(success)success.classList.remove('open'); }
 function showLeadError(msg){ const e=document.getElementById('leadError');if(e){e.textContent=msg;e.classList.add('open');} }
 
+const DISPOSABLE_EMAIL_DOMAINS=['mailinator.com','guerrillamail.com','10minutemail.com','tempmail.com','temp-mail.org','throwawaymail.com','yopmail.com','trashmail.com','fakeinbox.com','getnada.com','sharklasers.com','maildrop.cc','mintemail.com','dispostable.com','mailnesia.com','moakt.com','emailondeck.com'];
+function checkEmailDomain(email){
+  const domain=(email.split('@')[1]||'').toLowerCase().trim();
+  if(!domain)return Promise.reject(new Error('Please enter a valid email address.'));
+  if(DISPOSABLE_EMAIL_DOMAINS.indexOf(domain)!==-1){
+    return Promise.reject(new Error('Please use a permanent work email address, not a temporary/disposable one.'));
+  }
+  return fetch('https://dns.google/resolve?name='+encodeURIComponent(domain)+'&type=MX',{cache:'no-store'})
+    .then(function(r){ if(!r.ok)throw new Error('__NETWORK_FAIL__'); return r.json(); })
+    .then(function(data){
+      if(data && data.Status===0 && Array.isArray(data.Answer) && data.Answer.length>0){ return true; }
+      throw new Error('This email domain does not appear to accept email. Please check for typos.');
+    })
+    .catch(function(err){
+      if(err && err.message==='__NETWORK_FAIL__')return true; // fail open on our own check's network issues
+      throw err;
+    });
+}
 function submitLeadForm(){
   clearLeadMessages();
   const btn=document.getElementById('leadSubmitBtn');
@@ -1511,8 +1528,17 @@ function submitLeadForm(){
   if(!emailOk){showLeadError('Please enter a valid email address.');return;}
   const honeypot=(document.getElementById('leadWebsite')?.value||'').trim();
   if(honeypot){showLeadError('Submission failed. Please try again.');return;}
-  if(btn){btn.disabled=true;btn.textContent='Submitting...';}
 
+  if(btn){btn.disabled=true;btn.textContent='Verifying email...';}
+  checkEmailDomain(lead.email).then(function(){
+    if(btn)btn.textContent='Submitting...';
+    submitLeadToBackend(lead,btn);
+  }).catch(function(err){
+    if(btn){btn.disabled=false;btn.textContent='Unlock Benchmark';}
+    showLeadError(err.message||'Please enter a valid, reachable email address.');
+  });
+}
+function submitLeadToBackend(lead,btn){
   // ── ส่งผ่าน JSONP (GET) — ไม่มี CORS issue ──
   lead.action = 'submitBenchmarkLead';
   const cbName = 'mcLead_' + Date.now();
