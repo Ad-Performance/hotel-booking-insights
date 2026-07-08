@@ -1186,6 +1186,7 @@ function renderCountryMonthlyChart(){
   if(!market){box.style.display='none';empty.style.display='flex';empty.textContent='Type or select a country above to see its monthly revenue trend.';if(summaryWrap)summaryWrap.innerHTML='';setInsightCallout('countryRevenueInsight','');if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
   const view=currentView||getFilteredView(),dest=view.dest;
   let rows=(payload.destinationSourceMarketMonth||[]).filter(r=>matchesDest(r.Destination,dest)&&r['Source Market']===market);
+  rows=combineMonthlyRows(rows);
   rows=rows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
   if(!rows.length){box.style.display='none';empty.style.display='flex';empty.textContent='No data found for "'+market+'".';if(summaryWrap)summaryWrap.innerHTML='';setInsightCallout('countryRevenueInsight','');if(charts['countryMonthlyRevenueChart']){charts['countryMonthlyRevenueChart'].destroy();delete charts['countryMonthlyRevenueChart'];}return;}
   box.style.display='block';empty.style.display='none';
@@ -1246,6 +1247,7 @@ function renderSourceHoverTrend(market){
   const view=currentView||getFilteredView(),dest=view.dest,selectedMonth=view.month;
   let trendRows=(payload.destinationSourceMarketMonth||[]).filter(r=>matchesDest(r.Destination,dest)&&r['Source Market']===market);
   if(selectedMonth) trendRows=trendRows.filter(r=>r.Month===selectedMonth);
+  trendRows=combineMonthlyRows(trendRows);
   trendRows=trendRows.slice().sort((a,b)=>monthIndex(a.Month)-monthIndex(b.Month));
   createHoverChart('hoverRevenueTrendChart',{type:'line',data:{labels:trendRows.map(r=>formatMonthShort(r.Month)),datasets:[{label:'Revenue',data:trendRows.map(r=>numVal(r.Revenue)),borderColor:'#3D5AFE',backgroundColor:'rgba(61,90,254,.14)',fill:true,tension:.42,pointRadius:0,borderWidth:2.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#07153a',titleColor:'#fff',bodyColor:'#e5edff',displayColors:false,padding:6,cornerRadius:8,titleFont:{size:11,weight:'700'},bodyFont:{size:11},callbacks:{label:function(c){return'Revenue: '+formatRevenue(c.raw)}}}},scales:{x:{grid:{display:false},ticks:{color:'#646f86',font:{size:10}}},y:{grid:{color:'#e3eefd'},ticks:{color:'#374151',font:{size:10},callback:function(v){return formatRevenue(v)}}}}}});
 }
