@@ -690,9 +690,37 @@ function getFilteredView() {
   monthlyRows = (payload.destinationMonth || []).filter(r => matchesDest(r.Destination,dest) && (!selectedMonths.length || selectedMonths.includes(r.Month)));
   sourceRows = (payload.destinationSourceMarketMonth || []).filter(r => matchesDest(r.Destination,dest) && (!selectedMonths.length || selectedMonths.includes(r.Month))).map(toSourceRow);
   futureRows = (payload.destinationFuturePipeline || []).filter(r => matchesDest(r.Destination,dest)).map(toFutureRow);
+  monthlyRows = combineMonthlyRows(monthlyRows);
+  futureRows = combineFutureRows(futureRows);
   sourceRows = combineSourceRows(sourceRows).sort((a,b)=>b.revenue-a.revenue);
   const totals = rowsToTotals(monthlyRows);
   return { dest, month, monthlyRows, sourceRows, futureRows, totals };
+}
+function combineMonthlyRows(rows){
+  const map={};
+  rows.forEach(function(r){
+    const k=r.Month;
+    if(!map[k])map[k]={Month:k,Revenue:0,Nights:0,Bookings:0,bltTotal:0};
+    map[k].Revenue+=numVal(r.Revenue);
+    map[k].Nights+=numVal(r['Room Nights']);
+    map[k].Bookings+=numVal(r.Bookings);
+    map[k].bltTotal+=numVal(r['Avg BLT'])*numVal(r.Bookings);
+  });
+  return Object.keys(map).map(function(k){
+    const r=map[k];
+    return {Month:r.Month,Revenue:r.Revenue,'Room Nights':r.Nights,Bookings:r.Bookings,'Avg BLT':r.Bookings?r.bltTotal/r.Bookings:0};
+  });
+}
+function combineFutureRows(rows){
+  const map={};
+  rows.forEach(function(r){
+    const k=r.month;
+    if(!map[k])map[k]={month:k,revenue:0,nights:0,bookings:0};
+    map[k].revenue+=r.revenue||0;
+    map[k].nights+=r.nights||0;
+    map[k].bookings+=r.bookings||0;
+  });
+  return Object.values(map);
 }
 
 function toSourceRow(r){ return { market: r['Source Market'], revenue: numVal(r.Revenue), nights: numVal(r['Room Nights']), bookings: numVal(r.Bookings), abv: numVal(r['Avg Booking Value']), los: numVal(r['Avg LOS']), blt: numVal(r['Avg BLT']) }; }
