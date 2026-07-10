@@ -234,6 +234,9 @@
   .mini-filter span{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--pbi-text-sub)}
   .mini-filter input{height:34px;padding:0 10px;min-width:170px;font-size:13px}
   .view-all-link{color:var(--pbi-blue);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+  .matrix-metric-toggle{display:flex;background:#F0F1F7;border-radius:8px;padding:3px;gap:2px}
+  .matrix-metric-btn{border:0;background:transparent;color:var(--pbi-text-sub);font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap}
+  .matrix-metric-btn.active{background:#fff;color:var(--pbi-blue);box-shadow:0 1px 2px rgba(16,24,40,.08)}
   .view-all-link:hover{text-decoration:underline}
   .view-all-link span{font-size:14px;line-height:1}
   @media(max-width:900px){.mini-filter{flex-wrap:wrap}.top10-table table{table-layout:auto}}
@@ -398,7 +401,7 @@
                 <div class="card"><div class="card-head"><div><div class="card-kicker">Room Night Contribution</div><div class="card-title">Room Nights by Check-in Month</div></div></div><div class="chart-box"><canvas id="roomNightsChart"></canvas></div><div class="insight-callout" id="roomNightsInsight"></div></div>
               </div>
               <div class="card future-matrix-card">
-                <div class="card-head chart-pair-head"><div><div class="card-kicker">Future Pipeline Planning</div><div class="card-title">Source Market Monthly Matrix — All Markets</div></div><a href="javascript:void(0)" class="view-all-link" id="matrixViewAllBtn" onclick="toggleMatrixViewAll()">View All <span>&rarr;</span></a></div>
+                <div class="card-head chart-pair-head"><div><div class="card-kicker">Future Pipeline Planning</div><div class="card-title" id="matrixTitle">Source Market Monthly Matrix — All Markets</div></div><div style="display:flex;align-items:center;gap:14px"><div class="matrix-metric-toggle"><button type="button" class="matrix-metric-btn active" id="matrixMetricRevenueBtn" onclick="setMatrixMetric('revenue')">Revenue</button><button type="button" class="matrix-metric-btn" id="matrixMetricNightsBtn" onclick="setMatrixMetric('nights')">Room Nights</button></div><a href="javascript:void(0)" class="view-all-link" id="matrixViewAllBtn" onclick="toggleMatrixViewAll()">View All <span>&rarr;</span></a></div></div>
                 <div id="futureGeoSummary" class="future-geo-summary matrix-summary"></div>
                 <div class="table-wrap no-inner-scroll matrix-wrap"><table id="futureMatrixTable" class="matrix-table"><thead><tr><th class="market-col">Source Market</th><th class="month-th" data-month="Jan" onclick="toggleMatrixMonthHighlight('Jan')">Jan</th><th class="month-th" data-month="Feb" onclick="toggleMatrixMonthHighlight('Feb')">Feb</th><th class="month-th" data-month="Mar" onclick="toggleMatrixMonthHighlight('Mar')">Mar</th><th class="month-th" data-month="Apr" onclick="toggleMatrixMonthHighlight('Apr')">Apr</th><th class="month-th" data-month="May" onclick="toggleMatrixMonthHighlight('May')">May</th><th class="month-th" data-month="Jun" onclick="toggleMatrixMonthHighlight('Jun')">Jun</th><th class="month-th" data-month="Jul" onclick="toggleMatrixMonthHighlight('Jul')">Jul</th><th class="month-th" data-month="Aug" onclick="toggleMatrixMonthHighlight('Aug')">Aug</th><th class="month-th" data-month="Sep" onclick="toggleMatrixMonthHighlight('Sep')">Sep</th><th class="month-th" data-month="Oct" onclick="toggleMatrixMonthHighlight('Oct')">Oct</th><th class="month-th" data-month="Nov" onclick="toggleMatrixMonthHighlight('Nov')">Nov</th><th class="month-th" data-month="Dec" onclick="toggleMatrixMonthHighlight('Dec')">Dec</th><th class="money total-col">Total</th></tr></thead><tbody id="futureGeoTableBody"></tbody></table></div>
               </div>
@@ -438,6 +441,7 @@
         <button type="button" class="lead-close" onclick="closeLeadModal()">×</button>
       </div>
       <div class="lead-form-grid">
+        <div class="field" style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden" aria-hidden="true"><label>Website</label><input id="leadWebsite" tabindex="-1" autocomplete="off"></div>
         <div class="field"><label>Name</label><input id="leadName" placeholder="Your name" autocomplete="off"></div>
         <div class="field"><label>Hotel</label><input id="leadHotel" placeholder="Hotel / property name" autocomplete="off"></div>
         <div class="field"><label>Work Email</label><input id="leadEmail" type="email" placeholder="name@hotel.com" autocomplete="off"></div>
@@ -1250,6 +1254,14 @@ function toggleMatrixViewAll(){
   matrixShowAll=!matrixShowAll;
   renderFutureGeoTable(currentView||getFilteredView());
 }
+let matrixMetric='revenue';
+function setMatrixMetric(metric){
+  matrixMetric=metric;
+  const revBtn=document.getElementById('matrixMetricRevenueBtn'),nightsBtn=document.getElementById('matrixMetricNightsBtn');
+  if(revBtn)revBtn.classList.toggle('active',metric==='revenue');
+  if(nightsBtn)nightsBtn.classList.toggle('active',metric==='nights');
+  renderFutureGeoTable(currentView||getFilteredView());
+}
 let highlightedMatrixMonths=[];
 function toggleMatrixMonthHighlight(month){
   const idx=highlightedMatrixMonths.indexOf(month);
@@ -1285,28 +1297,40 @@ function renderFutureGeoTable(view){
   let raw=dest?(payload.destinationFutureSourceMarket||[]).filter(r=>r.Destination===dest):(payload.futureSourceMarket||[]);
   const byMarket={};
   raw.forEach(r=>{const market=r['Source Market']||'Unknown',month=String(r['Check-in Month']||'').slice(0,3);if(!months.includes(month))return;if(!byMarket[market])byMarket[market]={market,totalRevenue:0,totalNights:0,totalBookings:0,months:{}};if(!byMarket[market].months[month])byMarket[market].months[month]={revenue:0,nights:0,bookings:0};const revenue=numVal(r.Revenue),nights=numVal(r['Room Nights']),bookings=numVal(r.Bookings);byMarket[market].months[month].revenue+=revenue;byMarket[market].months[month].nights+=nights;byMarket[market].months[month].bookings+=bookings;byMarket[market].totalRevenue+=revenue;byMarket[market].totalNights+=nights;byMarket[market].totalBookings+=bookings;});
+  const isNights=matrixMetric==='nights';
+  const metricKey=isNights?'nights':'revenue';
+  const totalKey=isNights?'totalNights':'totalRevenue';
+  const formatCell=isNights?formatNumber:formatCompact;
+  const formatTotal=isNights?formatNumber:formatRevenue;
   const activeMonths=highlightedMatrixMonths.length?highlightedMatrixMonths:months;
   const periodRevenueFor=r=>activeMonths.reduce((sum,m)=>sum+(((r.months[m]||{}).revenue)||0),0);
   const periodNightsFor=r=>activeMonths.reduce((sum,m)=>sum+(((r.months[m]||{}).nights)||0),0);
   const periodBookingsFor=r=>activeMonths.reduce((sum,m)=>sum+(((r.months[m]||{}).bookings)||0),0);
-  const allRows=Object.values(byMarket).sort((a,b)=>periodRevenueFor(b)-periodRevenueFor(a));
+  const periodMetricFor=isNights?periodNightsFor:periodRevenueFor;
+  const allRows=Object.values(byMarket).sort((a,b)=>periodMetricFor(b)-periodMetricFor(a));
   lastFutureMatrixFullRows=allRows;
   const topRows=matrixShowAll?allRows:allRows.slice(0,10);
   const periodRevenue=allRows.reduce((sum,r)=>sum+periodRevenueFor(r),0),periodNights=allRows.reduce((sum,r)=>sum+periodNightsFor(r),0),periodBookings=allRows.reduce((sum,r)=>sum+periodBookingsFor(r),0);
-  const grandTotalRevenue=allRows.reduce((sum,r)=>sum+r.totalRevenue,0);
-  const maxCellRevenue=Math.max.apply(null,allRows.flatMap(r=>months.map(m=>(r.months[m]||{}).revenue||0)).concat([1]));
+  const grandTotalMetric=allRows.reduce((sum,r)=>sum+r[totalKey],0);
+  const maxCellMetric=Math.max.apply(null,allRows.flatMap(r=>months.map(m=>(r.months[m]||{})[metricKey]||0)).concat([1]));
+  const titleEl=document.getElementById('matrixTitle');
+  if(titleEl)titleEl.textContent=isNights?'Source Market Monthly Matrix — Room Nights':'Source Market Monthly Matrix — All Markets';
   const summary=document.getElementById('futureGeoSummary'),tbody=document.getElementById('futureGeoTableBody'),viewAllBtn=document.getElementById('matrixViewAllBtn');
   const periodLabel=formatMatrixPeriodLabel(highlightedMatrixMonths,months);
-  if(summary)summary.innerHTML='<div class="future-geo-summary-card"><div class="future-geo-label">Matrix Period</div><div class="future-geo-value">'+periodLabel+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">'+(highlightedMatrixMonths.length?'Period Revenue':'Total Pipeline Revenue')+'</div><div class="future-geo-value">'+formatRevenue(periodRevenue)+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Room Nights</div><div class="future-geo-value">'+formatNumber(periodNights)+' RN</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Bookings</div><div class="future-geo-value">'+formatNumber(periodBookings)+'</div></div>';
+  const periodMetricLabel=isNights?(highlightedMatrixMonths.length?'Period Room Nights':'Total Pipeline Room Nights'):(highlightedMatrixMonths.length?'Period Revenue':'Total Pipeline Revenue');
+  const periodMetricValue=isNights?formatNumber(periodNights)+' RN':formatRevenue(periodRevenue);
+  const crossRefLabel=isNights?'Revenue':'Room Nights';
+  const crossRefValue=isNights?formatRevenue(periodRevenue):formatNumber(periodNights)+' RN';
+  if(summary)summary.innerHTML='<div class="future-geo-summary-card"><div class="future-geo-label">Matrix Period</div><div class="future-geo-value">'+periodLabel+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">'+periodMetricLabel+'</div><div class="future-geo-value">'+periodMetricValue+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">'+crossRefLabel+'</div><div class="future-geo-value">'+crossRefValue+'</div></div><div class="future-geo-summary-card"><div class="future-geo-label">Bookings</div><div class="future-geo-value">'+formatNumber(periodBookings)+'</div></div>';
   if(viewAllBtn){
     if(allRows.length<=10){viewAllBtn.style.display='none';}
     else{viewAllBtn.style.display='inline-flex';viewAllBtn.innerHTML=matrixShowAll?'Show Top 10 <span>&uarr;</span>':'View All <span>&rarr;</span>';}
   }
   if(!tbody)return;
   if(!topRows.length){tbody.innerHTML='<tr><td colspan="14">No future pipeline data available.</td></tr>';return;}
-  const monthTotals={};months.forEach(m=>{monthTotals[m]=allRows.reduce((sum,r)=>sum+(((r.months[m]||{}).revenue)||0),0);});
-  const bodyHtml=topRows.map(r=>{const monthCells=months.map(m=>{const revenue=(r.months[m]||{}).revenue||0,intensity=Math.max(0,Math.min(1,revenue/maxCellRevenue)),alpha=revenue?(0.10+intensity*0.72):0,textColor=intensity>0.58?'#ffffff':'#10213f',bg=revenue?'background:rgba(61,90,254,'+alpha.toFixed(2)+');color:'+textColor+';':'';return'<td class="heat-cell" data-month="'+m+'" style="'+bg+'">'+(revenue?formatCompact(revenue):'–')+'</td>';}).join('');return'<tr><td class="market-col"><strong>'+marketLabelHtml(r.market)+'</strong></td>'+monthCells+'<td class="money total-col"><strong>'+formatRevenue(r.totalRevenue)+'</strong></td></tr>';}).join('');
-  const totalRow='<tr class="matrix-total-row"><td class="market-col"><strong>Grand Total</strong></td>'+months.map(m=>{const revenue=monthTotals[m]||0,share=grandTotalRevenue?revenue/grandTotalRevenue*100:0;return'<td class="heat-cell" data-month="'+m+'"><div class="matrix-total-cell"><b>'+(revenue?formatCompact(revenue):'–')+'</b><span>'+(revenue?formatDecimal(share,1)+'%':'')+'</span></div></td>';}).join('')+'<td class="money total-col"><div class="matrix-total-cell"><b>'+formatRevenue(grandTotalRevenue)+'</b><span>100%</span></div></td></tr>';
+  const monthTotals={};months.forEach(m=>{monthTotals[m]=allRows.reduce((sum,r)=>sum+(((r.months[m]||{})[metricKey])||0),0);});
+  const bodyHtml=topRows.map(r=>{const monthCells=months.map(m=>{const val=(r.months[m]||{})[metricKey]||0,intensity=Math.max(0,Math.min(1,val/maxCellMetric)),alpha=val?(0.10+intensity*0.72):0,textColor=intensity>0.58?'#ffffff':'#10213f',bg=val?'background:rgba(61,90,254,'+alpha.toFixed(2)+');color:'+textColor+';':'';return'<td class="heat-cell" data-month="'+m+'" style="'+bg+'">'+(val?formatCell(val):'–')+'</td>';}).join('');return'<tr><td class="market-col"><strong>'+marketLabelHtml(r.market)+'</strong></td>'+monthCells+'<td class="money total-col"><strong>'+formatTotal(r[totalKey])+'</strong></td></tr>';}).join('');
+  const totalRow='<tr class="matrix-total-row"><td class="market-col"><strong>Grand Total</strong></td>'+months.map(m=>{const val=monthTotals[m]||0,share=grandTotalMetric?val/grandTotalMetric*100:0;return'<td class="heat-cell" data-month="'+m+'"><div class="matrix-total-cell"><b>'+(val?formatCell(val):'–')+'</b><span>'+(val?formatDecimal(share,1)+'%':'')+'</span></div></td>';}).join('')+'<td class="money total-col"><div class="matrix-total-cell"><b>'+formatTotal(grandTotalMetric)+'</b><span>100%</span></div></td></tr>';
   tbody.innerHTML=bodyHtml+totalRow;
   applyMatrixHighlight();
 }
@@ -1446,9 +1470,14 @@ function submitLeadForm(){
   lead.utm_content  = params.get('utm_content')  || '';
   lead.utm_term     = params.get('utm_term')     || '';
 
-  if(!lead.name){showLeadError('Please enter your name.');return;}
-  if(!lead.hotel){showLeadError('Please enter your hotel name.');return;}
-  if(!lead.email){showLeadError('Please enter your work email.');return;}
+  const nameOk=lead.name.length>=2 && /[a-zA-Z\u00C0-\u024F\u0E00-\u0E7F]/.test(lead.name);
+  const hotelOk=lead.hotel.length>=2;
+  const emailOk=/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(lead.email);
+  if(!nameOk){showLeadError('Please enter your full name.');return;}
+  if(!hotelOk){showLeadError('Please enter your hotel or property name.');return;}
+  if(!emailOk){showLeadError('Please enter a valid email address.');return;}
+  const honeypot=(document.getElementById('leadWebsite')?.value||'').trim();
+  if(honeypot){showLeadError('Submission failed. Please try again.');return;}
   if(btn){btn.disabled=true;btn.textContent='Submitting...';}
 
   // ── ส่งผ่าน JSONP (GET) — ไม่มี CORS issue ──
