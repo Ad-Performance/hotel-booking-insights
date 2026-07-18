@@ -166,6 +166,8 @@
 
   .bi-tabs{display:flex;gap:28px;border-bottom:2px solid var(--pbi-border);margin:0 0 20px;padding:0 2px;overflow-x:auto}
   .bi-tab{background:transparent;border:0;padding:12px 2px;font-size:14px;font-weight:700;color:var(--pbi-text-sub);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;font-family:inherit}
+  .bi-tab-muted{color:#c2c8d2;font-weight:500;margin-left:18px}
+  .bi-tab-muted:hover{color:#9aa3b2}
   .bi-tab:hover{color:var(--pbi-blue)}
   .bi-tab.active{color:var(--pbi-blue);border-bottom-color:var(--pbi-blue)}
   .bi-content{width:100%}
@@ -295,6 +297,12 @@
   .op-month-chip.selected{background:var(--blue);color:#fff;border-color:var(--blue)}
   .op-generate-btn{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:13px 22px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
   .op-generate-btn:disabled{background:#c7d2fe;cursor:not-allowed}
+  .op-dir-table{width:100%;border-collapse:collapse;font-size:13px}
+  .op-dir-table th{background:#f7f9fc;color:var(--muted);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:9.5px;padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+  .op-dir-table th.op-right{text-align:right}
+  .op-dir-table td{padding:8px 10px;border-bottom:1px solid var(--line);color:#1f2937;font-weight:600}
+  .op-dir-table td.op-right{text-align:right;color:var(--navy);font-weight:800}
+  .op-dir-table tbody tr:last-child td{border-bottom:none}
   .op-dest-chip-grid{display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow:auto;padding:2px}
   .op-dest-chip{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-family:inherit;cursor:pointer;background:#fff;text-align:left;line-height:1.35;display:flex;flex-direction:column;min-width:118px}
   .op-dest-chip-name{font-size:12px;font-weight:800;color:#1f2937}
@@ -454,6 +462,7 @@
           <button type="button" class="bi-tab active" data-page="overview" onclick="switchBiPage('overview')">Overview</button>
           <button type="button" class="bi-tab" data-page="pipeline" onclick="switchBiPage('pipeline')">Future Pipeline</button>
           <button type="button" class="bi-tab" data-page="benchmark" onclick="switchBiPage('benchmark')">Property Benchmark</button>
+          <button type="button" class="bi-tab bi-tab-muted" onclick="openHotelDirectory()">Hotel Directory</button>
         </div>
         <div class="bi-content">
             <div class="bi-page active" data-page="overview">
@@ -2654,6 +2663,48 @@ function closeOnePager() {
   document.getElementById('onePagerOverlay').style.display = 'none';
   document.body.classList.remove('onepager-printing');
 }
+
+function getHotelDirectoryRows() {
+  const rows = (payload.destination || []).map(r => ({
+    destination: r.Destination || 'Unknown',
+    hotelCount: Math.round(numVal(r['Hotel Count']))
+  }));
+  return rows.sort((a, b) => a.destination.localeCompare(b.destination));
+}
+
+function renderHotelDirectory(filterText) {
+  const rows = getHotelDirectoryRows();
+  const q = (filterText || '').toLowerCase();
+  const filtered = q ? rows.filter(r => r.destination.toLowerCase().includes(q)) : rows;
+  const totalHotels = rows.reduce((s, r) => s + r.hotelCount, 0);
+
+  const body = filtered.map(r =>
+    '<tr><td>' + escapeHtml(r.destination) + '</td><td class="op-right">' + formatNumber(r.hotelCount) + '</td></tr>'
+  ).join('') || '<tr><td colspan="2" style="color:var(--muted)">No destinations match \u201c' + escapeHtml(filterText || '') + '\u201d.</td></tr>';
+
+  const html =
+    '<div class="op-setup-panel">' +
+      '<div class="op-setup-title">Hotel Directory</div>' +
+      '<div class="op-setup-sub">' + rows.length + ' destinations \u00b7 ' + formatNumber(totalHotels) + ' hotels total</div>' +
+      '<div class="op-combo" style="margin-bottom:16px">' +
+        '<input type="text" id="hotelDirSearch" placeholder="Search destination..." value="' + escapeHtml(filterText || '') + '" oninput="renderHotelDirectory(this.value)">' +
+      '</div>' +
+      '<table class="op-dir-table"><thead><tr><th>Destination</th><th class="op-right">Hotels</th></tr></thead><tbody>' + body + '</tbody></table>' +
+    '</div>';
+
+  document.getElementById('hotelDirSheet').innerHTML = html;
+  const input = document.getElementById('hotelDirSearch');
+  if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+}
+
+function openHotelDirectory() {
+  renderHotelDirectory('');
+  document.getElementById('hotelDirOverlay').style.display = 'block';
+}
+
+function closeHotelDirectory() {
+  document.getElementById('hotelDirOverlay').style.display = 'none';
+}
 </script>
 
 
@@ -2833,6 +2884,15 @@ function closeOnePager() {
     </div>
   </div>
   <div class="onepager-sheet" id="onePagerSheet"></div>
+</div>
+<div class="onepager-overlay" id="hotelDirOverlay">
+  <div class="onepager-toolbar">
+    <div class="op-hint">Read-only reference \u2014 hotel counts per destination, pulled live from the connected data.</div>
+    <div class="op-actions">
+      <button class="btn" onclick="closeHotelDirectory()">Close</button>
+    </div>
+  </div>
+  <div class="onepager-sheet" id="hotelDirSheet" style="max-width:520px"></div>
 </div>
 </body>
 </html>
